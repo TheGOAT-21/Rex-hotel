@@ -31,7 +31,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'reservations',
-        loadComponent: () => import('../features/admin/reservations/reservations.component').then(m => m.ReservationsComponent),
+loadComponent: () => import('../features/admin/client-management/client-management.component').then(m => m.ClientManagementComponent),
         title: 'Réservations | Administration REX HOTEL'
       },
       {
@@ -41,12 +41,12 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'clients',
-        loadComponent: () => import('../features/admin/clients/clients.component').then(m => m.ClientsComponent),
+        loadComponent: () => import('../features/admin/client-management/client-management.component').then(m => m.ClientManagementComponent),
         title: 'Clients | Administration REX HOTEL'
       },
       {
         path: 'user-management',
-        canActivate: [SuperAdminGuard],
+        canActivate: [superAdminGuard],
         loadComponent: () => import('../features/admin/user-management/user-management.component').then(m => m.UserManagementComponent),
         title: 'Gestion des utilisateurs | Administration REX HOTEL'
       },
@@ -57,7 +57,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'settings',
-        canActivate: [SuperAdminGuard],
+        canActivate: [superAdminGuard],
         loadComponent: () => import('../features/admin/settings/settings-manager/settings-manager.component').then(m => m.SettingsManagerComponent),
         title: 'Paramètres | Administration REX HOTEL'
       },

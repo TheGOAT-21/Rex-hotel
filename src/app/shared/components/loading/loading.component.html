@@ -1,1 +1,34 @@
-<p>loading works!</p>
+<div 
+  class="loading-container"
+  [ngClass]="{
+    'full-screen': fullScreen,
+    'with-overlay': overlay,
+    'small': size === 'small',
+    'medium': size === 'medium',
+    'large': size === 'large'
+  }"
+  role="alert"
+  aria-live="assertive"
+>
+  <div class="loading-content">
+    <!-- Spinner Animation -->
+    <div *ngIf="type === 'spinner'" class="spinner-loader">
+      <div class="spinner-inner"></div>
+    </div>
+
+    <!-- Dots Animation -->
+    <div *ngIf="type === 'dots'" class="dots-loader">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <!-- Bar Animation -->
+    <div *ngIf="type === 'bar'" class="bar-loader">
+      <div class="bar-inner"></div>
+    </div>
+
+    <!-- Loading Message -->
+    <div *ngIf="showMessage" class="loading-message">{{ message }}</div>
+  </div>
+</div>

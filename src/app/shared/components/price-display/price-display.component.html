@@ -1,1 +1,25 @@
-<p>price-display works!</p>
+<div class="price-display" [ngClass]="size">
+    <!-- Discount Badge (if applicable) -->
+    <div *ngIf="isDiscounted && calculatedDiscount > 0" class="discount-badge">
+      -{{ calculatedDiscount }}%
+    </div>
+    
+    <div class="price-container">
+      <!-- Original Price (if discounted) -->
+      <div *ngIf="isDiscounted && originalPrice" class="original-price">
+        {{ formatPrice(originalPrice) }}{{ currency }}
+      </div>
+      
+      <!-- Current Price -->
+      <div class="current-price">
+        <span class="price-value">{{ priceDisplay }}</span>
+        <span class="currency">{{ currency }}</span>
+        <span *ngIf="periodicity !== 'none'" class="period">{{ getPeriodLabel() }}</span>
+      </div>
+      
+      <!-- Optional Label -->
+      <div *ngIf="showLabel" class="price-label">
+        {{ getDisplayLabel() }}
+      </div>
+    </div>
+  </div>

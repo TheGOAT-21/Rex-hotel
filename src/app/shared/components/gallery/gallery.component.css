@@ -1,0 +1,93 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+  }
+  
+  .gallery-container {
+    width: 100%;
+  }
+  
+  .main-image-container {
+    height: 50vh;
+    min-height: 300px;
+    max-height: 600px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .main-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .nav-arrow {
+    z-index: 10;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-arrow:hover {
+    opacity: 1;
+    background-color: var(--rex-gold);
+    color: var(--rex-black);
+  }
+  
+  .thumbnail-item {
+    position: relative;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
+  
+  .active-thumbnail {
+    border-color: var(--rex-gold);
+  }
+  
+  .thumbnail-item:hover {
+    transform: translateY(-2px);
+  }
+  
+  .lightbox {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .bg-gold, .hover\:bg-gold:hover {
+    background-color: var(--rex-gold);
+  }
+  
+  .text-gold, .hover\:text-gold:hover {
+    color: var(--rex-gold);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .main-image-container {
+      height: 40vh;
+      min-height: 200px;
+    }
+    
+    .thumbnails-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .nav-arrow svg {
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .image-counter {
+      bottom: 2px;
+      right: 2px;
+      font-size: 0.75rem;
+    }
+  }

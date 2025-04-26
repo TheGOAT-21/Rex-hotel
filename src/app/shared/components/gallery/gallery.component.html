@@ -1,1 +1,87 @@
-<p>gallery works!</p>
+<div class="gallery-container">
+    <!-- Main Image -->
+    <div class="main-image-container relative overflow-hidden rounded-sm">
+      <div class="main-image-overlay absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-40"></div>
+      <img 
+        [src]="images[currentIndex]" 
+        alt="Gallery image" 
+        class="main-image w-full object-cover cursor-pointer transition-transform duration-500 hover:scale-105"
+        (click)="openLightbox()"
+      >
+      
+      <!-- Navigation Arrows -->
+      <button 
+        (click)="prevSlide()" 
+        class="nav-arrow left-arrow absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-gold hover:text-black transition-colors duration-300"
+        aria-label="Previous image"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <button 
+        (click)="nextSlide()" 
+        class="nav-arrow right-arrow absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-gold hover:text-black transition-colors duration-300"
+        aria-label="Next image"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      
+      <!-- Image Counter -->
+      <div class="image-counter absolute bottom-4 right-4 bg-black bg-opacity-75 text-white px-3 py-1 rounded-full text-sm">
+        {{ currentIndex + 1 }}/{{ images.length }}
+      </div>
+    </div>
+    
+    <!-- Thumbnails -->
+    <div *ngIf="showThumbnails && images.length > 1" class="thumbnails-container mt-2 grid grid-cols-4 gap-2">
+      <div 
+        *ngFor="let image of images; let i = index" 
+        class="thumbnail-item cursor-pointer overflow-hidden rounded-sm"
+        [ngClass]="{'active-thumbnail': i === currentIndex}"
+        (click)="setCurrentSlide(i)"
+      >
+        <img [src]="image" alt="Thumbnail" class="w-full h-16 object-cover transition-transform duration-300 hover:scale-110">
+      </div>
+    </div>
+    
+    <!-- Lightbox -->
+    <div *ngIf="lightboxOpen" class="lightbox fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+      <button 
+        (click)="closeLightbox()" 
+        class="absolute top-4 right-4 text-white hover:text-gold z-10"
+        aria-label="Close lightbox"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      
+      <div class="lightbox-content relative w-full max-w-5xl">
+        <img [src]="images[currentIndex]" alt="Lightbox image" class="max-h-screen mx-auto">
+        
+        <button 
+          (click)="prevSlide()" 
+          class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gold"
+          aria-label="Previous image"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        <button 
+          (click)="nextSlide()" 
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gold"
+          aria-label="Next image"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>

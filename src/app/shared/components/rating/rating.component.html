@@ -1,1 +1,72 @@
-<p>rating works!</p>
+<div class="rating-container" [ngClass]="size">
+    <!-- Star rating -->
+    <div 
+      class="stars-container"
+      [class.interactive]="!readonly"
+      role="img"
+      [attr.aria-label]="readonly ? 'Note: ' + rating + ' sur ' + maxRating + ' étoiles' : 'Sélectionnez une note de 1 à ' + maxRating"
+    >
+      <div 
+        *ngFor="let star of stars; let i = index" 
+        class="star"
+        [class.filled]="star.filled || isStarActive(i)"
+        [class.half]="star.half && !isStarActive(i)"
+        [style.color]="color ? color : ''"
+        [style.--empty-color]="emptyColor ? emptyColor : ''"
+        (click)="onStarClick(i)"
+        (mouseenter)="onStarHover(i)"
+        (mouseleave)="onStarLeave()"
+      >
+        <!-- Empty star -->
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="star-icon empty" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        
+        <!-- Half filled star -->
+        <svg 
+          *ngIf="star.half" 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="star-icon half" 
+          viewBox="0 0 24 24"
+        >
+          <defs>
+            <linearGradient id="halfGradient">
+              <stop offset="50%" stop-color="currentColor" />
+              <stop offset="50%" stop-color="transparent" />
+            </linearGradient>
+          </defs>
+          <polygon fill="url(#halfGradient)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        
+        <!-- Filled star -->
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="star-icon filled" 
+          viewBox="0 0 24 24" 
+          fill="currentColor"
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- Rating text display -->
+    <div *ngIf="showValue" class="rating-info">
+      <span class="rating-value">{{ formatRating(rating) }}</span>
+      
+      <span *ngIf="ratingText || rating > 0" class="rating-text">{{ getRatingText() }}</span>
+      
+      <span *ngIf="showReviewCount && reviewCount > 0" class="review-count">
+        ({{ reviewCount }} avis)
+      </span>
+    </div>
+  </div>

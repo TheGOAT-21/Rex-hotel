@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClientManagerComponent } from './client-manager.component';
+import { ProfileInfoComponent } from './profile-info.component';
 
-describe('ClientManagerComponent', () => {
-  let component: ClientManagerComponent;
-  let fixture: ComponentFixture<ClientManagerComponent>;
+describe('ProfileInfoComponent', () => {
+  let component: ProfileInfoComponent;
+  let fixture: ComponentFixture<ProfileInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClientManagerComponent]
+      imports: [ProfileInfoComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClientManagerComponent);
+    fixture = TestBed.createComponent(ProfileInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

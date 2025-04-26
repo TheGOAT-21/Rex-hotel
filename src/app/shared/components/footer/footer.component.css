@@ -1,0 +1,40 @@
+/* Custom colors */
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+  }
+  
+  /* Apply custom text color classes */
+  .text-gold {
+    color: var(--rex-gold);
+  }
+  
+  /* Custom border color */
+  .border-gold {
+    border-color: var(--rex-gold);
+  }
+  
+  /* Form input focus styles */
+  input:focus {
+    border-color: var(--rex-gold);
+    box-shadow: 0 0 0 1px var(--rex-gold);
+  }
+  
+  /* Hover effects for social icons */
+  .social-icon:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer-section {
+      margin-bottom: 2rem;
+    }
+    
+    .social-icons {
+      justify-content: center;
+    }
+  }
