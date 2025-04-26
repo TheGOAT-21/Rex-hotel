@@ -1,1 +1,143 @@
-<p>home-page works!</p>
+<!-- Loading Screen -->
+<app-loading *ngIf="isLoading" [fullScreen]="true" [overlay]="true" message="Chargement de vos espaces..."></app-loading>
+
+<div class="home-page">
+  <!-- Hero Section with Gallery -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">REX HOTEL</h1>
+      <p class="hero-subtitle">ÉLÉGANCE & CONFORT</p>
+      <p class="hero-description">Bénéficiez d'un traitement VIP grâce au service exclusif 4 étoiles</p>
+    </div>
+    <app-gallery [showThumbnails]="false"></app-gallery>
+  </section>
+  
+  <!-- Quick Booking Section -->
+  <section class="booking-section">
+    <div class="booking-container">
+      <h2 class="section-title">Réservez votre séjour</h2>
+      
+      <div class="booking-form">
+        <div class="date-range">
+          <app-datepicker 
+            [isRange]="true" 
+            [selectedDate]="startDate" 
+            [selectedEndDate]="endDate"
+            [rangeStartLabel]="'Arrivée'"
+            [rangeEndLabel]="'Départ'"
+            (rangeSelected)="onDateRangeSelected($event)"
+          ></app-datepicker>
+        </div>
+        
+        <div class="guests-selector">
+          <label for="guests" class="guests-label">Personnes</label>
+          <select 
+            id="guests" 
+            class="guests-input"
+            [ngModel]="selectedGuests"
+            (ngModelChange)="updateGuestCount($event)"
+          >
+            <option [value]="1">1 personne</option>
+            <option [value]="2">2 personnes</option>
+            <option [value]="3">3 personnes</option>
+            <option [value]="4">4 personnes</option>
+            <option [value]="5">5+ personnes</option>
+          </select>
+        </div>
+        
+        <button class="search-button" (click)="navigateToSearch()">
+          Rechercher
+        </button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Featured Spaces Section -->
+  <section class="featured-spaces">
+    <div class="container">
+      <h2 class="section-title">Nos espaces d'exception</h2>
+      <p class="section-subtitle">Découvrez l'élégance et le confort qui font la renommée du REX HOTEL</p>
+      
+      <div class="spaces-grid">
+        <div *ngFor="let space of featuredSpaces" class="space-item">
+          <app-space-card [space]="space" [isFeatured]="true"></app-space-card>
+        </div>
+      </div>
+      
+      <div class="view-all-container">
+        <a routerLink="/catalog" class="view-all-button">
+          Voir tous nos espaces
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Amenities Section -->
+  <section class="amenities-section">
+    <div class="container">
+      <h2 class="section-title">Nos services exclusifs</h2>
+      <p class="section-subtitle">Tout le nécessaire pour un séjour exceptionnel</p>
+      
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto">
+        <div *ngFor="let amenity of hotelAmenities" class="amenity-item">
+          <div class="amenity-icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path *ngIf="amenity.icon === 'wifi'" d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+              <path *ngIf="amenity.icon === 'parking'" d="M13 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2v-7M13 3l5 5m-5-5v5h5"></path>
+              <path *ngIf="amenity.icon === 'pool'" d="M2 12h20M7 21l5-5m-5 5l5 5m3-10l5-5m-5 5l5 5"></path>
+              <path *ngIf="amenity.icon === 'restaurant'" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <path *ngIf="amenity.icon === 'spa'" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path *ngIf="amenity.icon === 'gym'" d="M6 18L18 6M8 6h10v10"></path>
+            </svg>
+          </div>
+          <h3 class="amenity-name">{{ amenity.name }}</h3>
+          <app-amenity-badge [amenity]="amenity" [size]="'large'"></app-amenity-badge>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Promotional Banner -->
+  <section class="promo-banner">
+    <div class="promo-content">
+      <h2 class="promo-title">WIFI GRATUIT</h2>
+      <p class="promo-description">Profitez d'une connexion haut débit gratuite dans tout l'établissement</p>
+    </div>
+  </section>
+  
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">Ce que disent nos clients</h2>
+      
+      <div class="testimonials-grid">
+        <div *ngFor="let testimonial of testimonials" class="testimonial-card">
+          <div class="testimonial-rating">
+            <app-rating [rating]="testimonial.rating" [showValue]="true"></app-rating>
+          </div>
+          <p class="testimonial-comment">"{{ testimonial.comment }}"</p>
+          <div class="testimonial-author">
+            <p class="author-name">{{ testimonial.name }}</p>
+            <p class="testimonial-date">{{ testimonial.date | date:'MMM yyyy' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Une expérience unique vous attend</h2>
+        <p class="cta-description">Réservez dès maintenant et profitez d'un séjour inoubliable au cœur de Yamoussoukro</p>
+        <a routerLink="/reservation" class="cta-button">
+          Réserver maintenant
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

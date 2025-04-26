@@ -1,0 +1,79 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+    display: inline-block;
+  }
+  
+  .amenity-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--rex-dark-gray);
+    border: 1px solid var(--rex-gold);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .amenity-badge:hover {
+    background-color: rgba(224, 201, 137, 0.15);
+  }
+  
+  .amenity-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rex-gold);
+    margin-right: 0.5rem;
+  }
+  
+  .amenity-name {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  
+  /* Size variations */
+  .small .amenity-icon svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  
+  .small .amenity-name {
+    font-size: 0.7rem;
+  }
+  
+  .small {
+    padding: 0.15rem 0.35rem;
+  }
+  
+  .medium .amenity-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .large .amenity-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .large .amenity-name {
+    font-size: 0.875rem;
+  }
+  
+  .large {
+    padding: 0.35rem 0.65rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .large {
+      padding: 0.25rem 0.5rem;
+    }
+    
+    .large .amenity-name {
+      font-size: 0.8rem;
+    }
+  }

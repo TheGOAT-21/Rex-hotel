@@ -1,7 +1,7 @@
 // src/app/routes/admin.routes.ts
 
 import { Routes } from '@angular/router';
-import { superAdminGuard } from '../core/guards/super-admin.guard';
+//import { superAdminGuard } from '../core/guards/super-admin.guard';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -46,7 +46,7 @@ loadComponent: () => import('../features/admin/client-management/client-manageme
       },
       {
         path: 'user-management',
-        canActivate: [superAdminGuard],
+//        canActivate: [superAdminGuard],
         loadComponent: () => import('../features/admin/user-management/user-management.component').then(m => m.UserManagementComponent),
         title: 'Gestion des utilisateurs | Administration REX HOTEL'
       },
@@ -57,7 +57,7 @@ loadComponent: () => import('../features/admin/client-management/client-manageme
       },
       {
         path: 'settings',
-        canActivate: [superAdminGuard],
+//        canActivate: [superAdminGuard],
         loadComponent: () => import('../features/admin/settings/settings-manager/settings-manager.component').then(m => m.SettingsManagerComponent),
         title: 'Paramètres | Administration REX HOTEL'
       },

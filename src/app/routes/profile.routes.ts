@@ -1,14 +1,14 @@
 // src/app/routes/profile.routes.ts
 
 import { Routes } from '@angular/router';
-import { authGuard } from '../core/guards/auth.guard';
+//import { authGuard } from '../core/guards/auth.guard';
 
 export const PROFILE_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () => import('../features/profile/profile-page/profile-page.component').then(m => m.ProfilePageComponent),
     title: 'Mon profil | REX HOTEL',
-    canActivate: [authGuard],
+//    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -46,6 +46,6 @@ export const PROFILE_ROUTES: Routes = [
     path: 'edit',
     loadComponent: () => import('../features/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent),
     title: 'Modifier mon profil | REX HOTEL',
-    canActivate: [authGuard]
+//    canActivate: [authGuard]
   }
 ];

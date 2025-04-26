@@ -1,29 +1,14 @@
 // src/app/app.routes.ts
 
 import { Routes } from '@angular/router';
-import { AdminLayoutComponent } from './shared/layouts/admin-layout/admin-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { AdminLayoutComponent } from './shared/layouts/admin-layout/admin-layout.component';
 import { authGuard } from './core/guards/auth.guard';
-import { adminGuard } from './core/guards/admin.guard';
-import { superAdminGuard } from './core/guards/super-admin.guard';
+//import { adminGuard } from './core/guards/admin.guard';
+//import { superAdminGuard } from './core/guards/super-admin.guard';
 
 export const routes: Routes = [
-  // Routes Admin - Lazy Loading
-  {
-    path: 'admin',
-    component: AdminLayoutComponent,
-    canActivate: [authGuard, adminGuard],
-    loadChildren: () => import('./routes/admin.routes').then(m => m.ADMIN_ROUTES),
-    title: 'Administration | REX HOTEL'
-  },
-
-  // Route d'authentification
-  {
-    path: 'auth',
-    loadChildren: () => import('./routes/auth.routes').then(m => m.AUTH_ROUTES)
-  },
-
-  // Routes publiques
+  // Routes publiques avec le MainLayout
   {
     path: '',
     component: MainLayoutComponent,
@@ -93,6 +78,21 @@ export const routes: Routes = [
         loadChildren: () => import('./routes/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
       }
     ]
+  },
+
+  // Routes Admin - Lazy Loading
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    //canActivate: [authGuard, adminGuard],
+    loadChildren: () => import('./routes/admin.routes').then(m => m.ADMIN_ROUTES),
+    title: 'Administration | REX HOTEL'
+  },
+
+  // Route d'authentification
+  {
+    path: 'auth',
+    loadChildren: () => import('./routes/auth.routes').then(m => m.AUTH_ROUTES)
   },
 
   // Pages d'erreur

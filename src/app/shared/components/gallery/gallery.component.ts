@@ -19,10 +19,10 @@ export class GalleryComponent implements OnInit {
     // Set default images if none provided
     if (this.images.length === 0) {
       this.images = [
-        'assets/images/rooms/room1.jpg',
-        'assets/images/rooms/room2.jpg',
-        'assets/images/rooms/room3.jpg',
-        'assets/images/rooms/room4.jpg'
+        'assets/images/rooms/chambre.jpeg',
+        'assets/images/rooms/chambre.jepg',
+        'assets/images/rooms/chambre.jepg',
+        'assets/images/rooms/chambre.jpeg'
       ];
     }
   }
