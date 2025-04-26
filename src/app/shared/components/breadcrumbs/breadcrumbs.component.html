@@ -1,1 +1,42 @@
-<p>breadcrumbs works!</p>
+<nav aria-label="Fil d'Ariane" class="breadcrumbs-container" *ngIf="breadcrumbs.length > 0">
+    <ol class="breadcrumbs-list">
+      <li class="breadcrumb-item home">
+        <a routerLink="/" class="breadcrumb-link">
+          <svg xmlns="http://www.w3.org/2000/svg" class="home-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span class="sr-only">Accueil</span>
+        </a>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" class="separator-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </li>
+      
+      <li 
+        *ngFor="let breadcrumb of breadcrumbs; let last = last" 
+        class="breadcrumb-item"
+        [class.active]="breadcrumb.isActive"
+      >
+        <a 
+          *ngIf="!last" 
+          [routerLink]="breadcrumb.url" 
+          class="breadcrumb-link"
+        >
+          {{ breadcrumb.label }}
+        </a>
+        
+        <span *ngIf="last" class="current-page">{{ breadcrumb.label }}</span>
+        
+        <svg 
+          *ngIf="!last" 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="separator-icon" 
+          viewBox="0 0 20 20" 
+          fill="currentColor"
+        >
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </li>
+    </ol>
+  </nav>

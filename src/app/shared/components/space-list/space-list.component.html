@@ -1,1 +1,122 @@
-<p>space-list works!</p>
+<div class="space-list-container">
+    <!-- Title and View Toggle -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl text-gold font-semibold">{{ title }}</h2>
+      
+      <div class="flex items-center space-x-2">
+        <!-- Grid/List View Toggle -->
+        <button 
+          (click)="toggleViewMode()" 
+          class="view-toggle-btn" 
+          [ngClass]="{'active': viewMode === 'grid'}"
+          aria-label="Affichage en grille"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </button>
+        
+        <button 
+          (click)="toggleViewMode()" 
+          class="view-toggle-btn" 
+          [ngClass]="{'active': viewMode === 'list'}"
+          aria-label="Affichage en liste"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Filter Section (Optional) -->
+    <div *ngIf="showFilter" class="filter-section mb-8">
+      <app-filter 
+        [currentFilter]="currentFilter" 
+        (filterChange)="onFilterChange($event)"
+      ></app-filter>
+      
+      <!-- Active Filters and Reset -->
+      <div *ngIf="currentFilter && (currentFilter.search || currentFilter.priceMin || currentFilter.priceMax || currentFilter.capacityMin || (currentFilter.types && currentFilter.types.length) || (currentFilter.amenities && currentFilter.amenities.length))" class="active-filters mt-4 p-4 bg-gray-900 rounded-sm">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-sm text-white">Filtres actifs:</span>
+          
+          <div *ngIf="currentFilter.search" class="filter-tag">
+            Recherche: {{ currentFilter.search }}
+          </div>
+          
+          <div *ngIf="currentFilter.priceMin || currentFilter.priceMax" class="filter-tag">
+            Prix: {{ currentFilter.priceMin || 0 }}€ - {{ currentFilter.priceMax || '∞' }}€
+          </div>
+          
+          <div *ngIf="currentFilter.capacityMin" class="filter-tag">
+            Capacité: {{ currentFilter.capacityMin }}+ personnes
+          </div>
+          
+          <div *ngIf="currentFilter.types && currentFilter.types.length" class="filter-tag">
+            Types: {{ currentFilter.types.length }} sélectionnés
+          </div>
+          
+          <div *ngIf="currentFilter.amenities && currentFilter.amenities.length" class="filter-tag">
+            Équipements: {{ currentFilter.amenities.length }} sélectionnés
+          </div>
+          
+          <button 
+            (click)="resetFilters()" 
+            class="filter-reset-btn ml-auto"
+          >
+            Réinitialiser les filtres
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center my-12">
+      <app-loading [size]="'large'" [type]="'spinner'" [message]="'Chargement des espaces...'"></app-loading>
+    </div>
+    
+    <!-- Error State -->
+    <div *ngIf="error" class="error-container p-4 bg-red-900 text-white rounded-sm mb-6">
+      <p>{{ error }}</p>
+      <button (click)="loadSpaces()" class="mt-2 text-gold underline">Réessayer</button>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="!loading && !error && spaces.length === 0" class="empty-state p-8 text-center mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gold opacity-50" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+      <h3 class="text-xl text-gold font-semibold mb-2">Aucun espace trouvé</h3>
+      <p class="text-gray-400 mb-4">Aucun espace ne correspond à vos critères de recherche.</p>
+      <button (click)="resetFilters()" class="btn-gold">Réinitialiser les filtres</button>
+    </div>
+    
+    <!-- Grid View -->
+    <div *ngIf="!loading && !error && spaces.length > 0 && viewMode === 'grid'" class="grid-view">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let space of spaces" class="space-card-wrapper">
+          <app-space-card [space]="space"></app-space-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- List View -->
+    <div *ngIf="!loading && !error && spaces.length > 0 && viewMode === 'list'" class="list-view">
+      <div class="space-y-4">
+        <div *ngFor="let space of spaces" class="list-item">
+          <app-space-card [space]="space" [showDetails]="true"></app-space-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pagination -->
+    <div *ngIf="!loading && !error && totalItems > itemsPerPage" class="pagination-container mt-8 flex justify-center">
+      <app-pagination 
+        [currentPage]="currentPage" 
+        [totalItems]="totalItems" 
+        [itemsPerPage]="itemsPerPage"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
+    </div>
+  </div>
