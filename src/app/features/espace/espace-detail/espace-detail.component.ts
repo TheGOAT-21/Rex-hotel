@@ -1,11 +1,142 @@
-import { Component } from '@angular/core';
+// src/app/features/espace/espace-detail/espace-detail.component.ts
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { 
+  GalleryComponent, 
+  PriceDisplayComponent,
+  RatingComponent,
+  AmenityBadgeComponent,
+  BreadcrumbsComponent,
+  DatepickerComponent,
+  LoadingComponent
+} from '../../../shared/components';
+import { Space, SpaceAvailability } from '../../../core/models';
+import { EspaceService } from '../../../core/services/espace.service';
 
 @Component({
   selector: 'app-espace-detail',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    GalleryComponent,
+    PriceDisplayComponent,
+    RatingComponent,
+    AmenityBadgeComponent,
+    BreadcrumbsComponent,
+    DatepickerComponent,
+    LoadingComponent
+  ],
   templateUrl: './espace-detail.component.html',
   styleUrl: './espace-detail.component.css'
 })
-export class EspaceDetailComponent {
-
+export class EspaceDetailComponent implements OnInit {
+  espace: Space | null = null;
+  isLoading = true;
+  error: string | null = null;
+  
+  // Pour la réservation
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  guestCount = 1;
+  
+  // Disponibilité
+  availability: SpaceAvailability | null = null;
+  checkingAvailability = false;
+  
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private espaceService: EspaceService
+  ) {}
+  
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      if (id) {
+        this.loadEspaceDetails(id);
+      } else {
+        this.error = "Identifiant de l'espace non trouvé.";
+        this.isLoading = false;
+      }
+    });
+    
+    // Initialiser les dates
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.startDate = tomorrow;
+    
+    const dayAfter = new Date(tomorrow);
+    dayAfter.setDate(dayAfter.getDate() + 1);
+    this.endDate = dayAfter;
+  }
+  
+  loadEspaceDetails(id: string): void {
+    this.isLoading = true;
+    this.error = null;
+    
+    this.espaceService.getSpaceById(id).subscribe({
+      next: (space) => {
+        this.espace = space;
+        this.isLoading = false;
+        this.checkAvailability();
+      },
+      error: (err) => {
+        this.error = "Une erreur est survenue lors du chargement des détails de l'espace.";
+        this.isLoading = false;
+        console.error('Erreur lors du chargement des détails:', err);
+      }
+    });
+  }
+  
+  checkAvailability(): void {
+    if (!this.espace || !this.startDate || !this.endDate) return;
+    
+    this.checkingAvailability = true;
+    
+    this.espaceService.checkAvailability(this.espace.id!, this.startDate, this.endDate).subscribe({
+      next: (availability) => {
+        this.availability = availability;
+        this.checkingAvailability = false;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la vérification de disponibilité:', err);
+        this.checkingAvailability = false;
+        this.availability = null;
+      }
+    });
+  }
+  
+  onDateRangeSelected(range: {start: Date, end: Date}): void {
+    this.startDate = range.start;
+    this.endDate = range.end;
+    this.checkAvailability();
+  }
+  
+  updateGuestCount(event: Event): void {
+    this.guestCount = parseInt((event.target as HTMLSelectElement).value);
+  }
+  
+  proceedToReservation(): void {
+    if (!this.espace || !this.startDate || !this.endDate) return;
+    
+    this.router.navigate(['/reservation/create', this.espace.id], {
+      queryParams: {
+        startDate: this.startDate.toISOString(),
+        endDate: this.endDate.toISOString(),
+        guests: this.guestCount
+      }
+    });
+  }
+  
+  // Méthodes d'affichage
+  getSpaceTypeLabel(type: string): string {
+    return type
+      .replace(/_/g, ' ')
+      .replace(/-/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
 }
