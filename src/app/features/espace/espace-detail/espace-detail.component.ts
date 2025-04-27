@@ -12,7 +12,7 @@ import {
   LoadingComponent
 } from '../../../shared/components';
 import { Space, SpaceAvailability } from '../../../core/models';
-import { EspaceService } from '../../../core/services/espace.service';
+import { SpaceService } from '../../../core/services/space.service';
 
 @Component({
   selector: 'app-espace-detail',
@@ -48,7 +48,7 @@ export class EspaceDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private espaceService: EspaceService
+    private spaceService: SpaceService
   ) {}
   
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class EspaceDetailComponent implements OnInit {
     this.isLoading = true;
     this.error = null;
     
-    this.espaceService.getSpaceById(id).subscribe({
+    this.spaceService.getSpaceById(id).subscribe({
       next: (space) => {
         this.espace = space;
         this.isLoading = false;
@@ -95,7 +95,7 @@ export class EspaceDetailComponent implements OnInit {
     
     this.checkingAvailability = true;
     
-    this.espaceService.checkAvailability(this.espace.id!, this.startDate, this.endDate).subscribe({
+    this.spaceService.checkAvailability(this.espace.id!, this.startDate, this.endDate).subscribe({
       next: (availability) => {
         this.availability = availability;
         this.checkingAvailability = false;
@@ -108,10 +108,12 @@ export class EspaceDetailComponent implements OnInit {
     });
   }
   
-  onDateRangeSelected(range: {start: Date, end: Date}): void {
+  onDateRangeSelected(range: {start: Date, end: Date | null}): void {
     this.startDate = range.start;
-    this.endDate = range.end;
-    this.checkAvailability();
+    if (range.end) {
+      this.endDate = range.end;
+      this.checkAvailability();
+    }
   }
   
   updateGuestCount(event: Event): void {

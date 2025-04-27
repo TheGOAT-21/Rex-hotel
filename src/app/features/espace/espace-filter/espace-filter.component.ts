@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilterComponent } from '../../../shared/components';
 import { SpaceFilter, SpaceType, Amenity } from '../../../core/models';
-import { EspaceService } from '../../../core/services/espace.service';
+import { SpaceService } from '../../../core/services/space.service';
 
 @Component({
   selector: 'app-espace-filter',
@@ -28,7 +28,7 @@ export class EspaceFilterComponent implements OnInit {
   
   isLoading = true;
   
-  constructor(private espaceService: EspaceService) {}
+  constructor(private spaceService: SpaceService) {}
   
   ngOnInit(): void {
     this.currentFilter = { ...this.initialFilter };
@@ -41,16 +41,16 @@ export class EspaceFilterComponent implements OnInit {
     this.isLoading = true;
     
     // Charger les types d'espaces
-    this.espaceService.getSpaceTypes().subscribe({
-      next: (types) => {
+    this.spaceService.getSpaceTypes().subscribe({
+      next: (types: { id: string; name: string; }[]) => {
         this.spaceTypes = types.map(t => ({
-          id: t.id as SpaceType,
+          id: t.id as unknown as SpaceType,
           name: t.name
         }));
         
         this.loadAmenities();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erreur lors du chargement des types d\'espaces:', err);
         this.isLoading = false;
       }
@@ -58,12 +58,12 @@ export class EspaceFilterComponent implements OnInit {
   }
   
   loadAmenities(): void {
-    this.espaceService.getAmenities().subscribe({
-      next: (amenities) => {
+    this.spaceService.getAmenities().subscribe({
+      next: (amenities: Amenity[]) => {
         this.amenities = amenities;
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Erreur lors du chargement des aménités:', err);
         this.isLoading = false;
       }
