@@ -19,10 +19,5 @@ export const CATALOG_ROUTES: Routes = [
     loadComponent: () => import('../features/catalog/catalog-page/catalog-page.component').then(m => m.CatalogPageComponent),
     title: 'Espaces événementiels | REX HOTEL',
     data: { filter: { types: ['salle_conference', 'salle_reunion', 'restaurant', 'lounge'] } }
-  },
-  {
-    path: 'amenities',
-    loadComponent: () => import('../features/catalog/amenities-page/amenities-page.component').then(m => m.AmenitiesPageComponent),
-    title: 'Équipements & Services | REX HOTEL'
   }
 ];
