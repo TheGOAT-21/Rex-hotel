@@ -1,20 +1,19 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { NotificationBellComponent } from '../notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterLink, NotificationBellComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn = false;
-  isMobileMenuOpen = false;
   isScrolled = false;
+  isMobileMenuOpen = false;
+  isLoggedIn = false;
   userName = '';
 
   constructor(public authService: AuthService) {}

@@ -1,86 +1,132 @@
-<nav [ngClass]="{'bg-black shadow-md': true, 'bg-opacity-90 fixed w-full z-50': isScrolled}" class="transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-20">
-        <!-- Logo -->
-        <div class="flex-shrink-0 flex items-center">
-          <a routerLink="/" class="flex items-center">
-            <img class="h-12 w-auto" src="assets/logos/rexhotel-icone.svg" alt="REX HOTEL">
-            <div class="ml-3 text-white">
-              <div class="font-bold text-xl">REX HOTEL</div>
-              <div class="text-xs text-gold">ÉLÉGANCE & CONFORT</div>
-            </div>
-          </a>
-        </div>
-  
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-8">
-          <a routerLink="/" routerLinkActive="text-gold" [routerLinkActiveOptions]="{exact: true}" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">Accueil</a>
-          <a routerLink="/catalog" routerLinkActive="text-gold" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">Espaces</a>
-          <a routerLink="/services" routerLinkActive="text-gold" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">Services</a>
-          <a routerLink="/about" routerLinkActive="text-gold" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">À propos</a>
-          <a routerLink="/contact" routerLinkActive="text-gold" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">Contact</a>
-          
-          <!-- Auth Navigation -->
-          <div class="flex items-center space-x-4">
-            <ng-container *ngIf="!isLoggedIn">
-              <a routerLink="/auth/login" class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider">Connexion</a>
-              <a routerLink="/auth/register" class="bg-gold text-black px-4 py-2 rounded-sm hover:bg-opacity-80 transition-colors duration-200 text-sm uppercase tracking-wider font-medium">Inscription</a>
-            </ng-container>
-            
-            <ng-container *ngIf="isLoggedIn">
-              <app-notification-bell></app-notification-bell>
-              
-              <!-- User Menu -->
-              <div class="relative group">
-                <button class="flex items-center text-white hover:text-gold focus:outline-none">
-                  <span class="mr-2 text-sm uppercase tracking-wider">{{ userName }}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-                
-                <!-- Dropdown Menu -->
-                <div class="absolute right-0 mt-2 w-48 bg-black border border-gold shadow-lg rounded-sm z-50 hidden group-hover:block">
-                  <a routerLink="/profile" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black">Mon profil</a>
-                  <a routerLink="/reservation/list" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black">Mes réservations</a>
-                  <a routerLink="/invoice" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black">Mes factures</a>
-                  <a *ngIf="authService.isAdmin()" routerLink="/admin" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black">Administration</a>
-                  <button (click)="logout()" class="w-full text-left px-4 py-2 text-sm text-white hover:bg-gold hover:text-black">Déconnexion</button>
-                </div>
-              </div>
-            </ng-container>
+<nav [ngClass]="{'bg-black shadow-md transition-all duration-300': true, 'bg-opacity-90 sticky top-0 w-full z-50': isScrolled}">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20">
+      <!-- Logo -->
+      <div class="flex-shrink-0 flex items-center">
+        <a routerLink="/" class="flex items-center group">
+          <img class="h-12 w-auto transition-all duration-300 group-hover:scale-105" src="assets/logos/rexhotel-icone.svg" alt="REX HOTEL">
+          <div class="ml-3 text-white">
+            <div class="font-bold text-xl">REX HOTEL</div>
+            <div class="text-xs text-gold">ÉLÉGANCE & CONFORT</div>
           </div>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a routerLink="/" routerLinkActive="text-gold" [routerLinkActiveOptions]="{exact: true}" 
+           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
+          Accueil
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a routerLink="/catalog" routerLinkActive="text-gold" 
+           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
+          Espaces
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a routerLink="/services" routerLinkActive="text-gold" 
+           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
+          Services
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a routerLink="/about" routerLinkActive="text-gold" 
+           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
+          À propos
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a routerLink="/contact" routerLinkActive="text-gold" 
+           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
+          Contact
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
+        </a>
+        
+        <!-- Auth Button -->
+        <div class="flex items-center">
+          <ng-container *ngIf="!isLoggedIn">
+            <a routerLink="/auth/login" 
+               class="bg-gold text-black px-4 py-2 rounded-sm hover:bg-opacity-80 transition-colors duration-200 text-sm uppercase tracking-wider font-medium">
+              Connexion
+            </a>
+          </ng-container>
+          
+          <ng-container *ngIf="isLoggedIn">
+            <!-- User Menu -->
+            <div class="relative group">
+              <button class="flex items-center text-white hover:text-gold focus:outline-none transition-colors duration-200">
+                <span class="mr-2 text-sm uppercase tracking-wider">{{ userName }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300 group-hover:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              
+              <!-- Dropdown Menu -->
+              <div class="absolute right-0 mt-2 w-48 bg-black border border-gold shadow-lg rounded-sm z-50 hidden group-hover:block
+                          opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                <a routerLink="/profile" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black transition-colors duration-200">Mon profil</a>
+                <a routerLink="/reservation/list" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black transition-colors duration-200">Mes réservations</a>
+                <a routerLink="/invoice" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black transition-colors duration-200">Mes factures</a>
+                <a *ngIf="authService.isAdmin()" routerLink="/admin" class="block px-4 py-2 text-sm text-white hover:bg-gold hover:text-black transition-colors duration-200">Administration</a>
+                <button (click)="logout()" class="w-full text-left px-4 py-2 text-sm text-white hover:bg-gold hover:text-black transition-colors duration-200">Déconnexion</button>
+              </div>
+            </div>
+          </ng-container>
         </div>
-  
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden flex items-center">
-          <button (click)="toggleMobileMenu()" type="button" class="text-gold hover:text-white focus:outline-none">
-            <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex items-center">
+        <button (click)="toggleMobileMenu()" type="button" class="text-gold hover:text-white focus:outline-none
+                     transition-all duration-300 group">
+          <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all duration-300 group-hover:-rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
     </div>
-  
-    <!-- Mobile Menu -->
-    <div [ngClass]="{'block': isMobileMenuOpen, 'hidden': !isMobileMenuOpen}" class="md:hidden bg-black border-t border-gold">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <a routerLink="/" routerLinkActive="bg-gold text-black" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm uppercase tracking-wider">Accueil</a>
-        <a routerLink="/catalog" routerLinkActive="bg-gold text-black" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm uppercase tracking-wider">Espaces</a>
-        <a routerLink="/services" routerLinkActive="bg-gold text-black" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm uppercase tracking-wider">Services</a>
-        <a routerLink="/about" routerLinkActive="bg-gold text-black" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm uppercase tracking-wider">À propos</a>
-        <a routerLink="/contact" routerLinkActive="bg-gold text-black" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm uppercase tracking-wider">Contact</a>
-      </div>
-  
-      <div class="pt-4 pb-3 border-t border-gold">
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="md:hidden overflow-hidden transition-all duration-500"
+       [ngClass]="{'max-h-[32rem] opacity-100': isMobileMenuOpen, 'max-h-0 opacity-0': !isMobileMenuOpen}">
+    <div class="py-3 gap-y-1 mx-4 mt-2 bg-gradient-to-b from-gray-800 to-gray-900 
+                rounded-lg mb-6 border border-gray-700 shadow-xl">
+      <a routerLink="/" routerLinkActive="text-gold bg-gray-700" [routerLinkActiveOptions]="{exact: true}" 
+         (click)="closeMobileMenu()" 
+         class="block px-6 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-gold transition-all duration-300 first:rounded-t-lg">
+        Accueil
+      </a>
+      <a routerLink="/catalog" routerLinkActive="text-gold bg-gray-700" 
+         (click)="closeMobileMenu()" 
+         class="block px-6 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-gold transition-all duration-300">
+        Espaces
+      </a>
+      <a routerLink="/services" routerLinkActive="text-gold bg-gray-700" 
+         (click)="closeMobileMenu()" 
+         class="block px-6 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-gold transition-all duration-300">
+        Services
+      </a>
+      <a routerLink="/about" routerLinkActive="text-gold bg-gray-700" 
+         (click)="closeMobileMenu()" 
+         class="block px-6 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-gold transition-all duration-300">
+        À propos
+      </a>
+      <a routerLink="/contact" routerLinkActive="text-gold bg-gray-700" 
+         (click)="closeMobileMenu()" 
+         class="block px-6 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-gold transition-all duration-300">
+        Contact
+      </a>
+      
+      <!-- Mobile Auth -->
+      <div class="pt-4 pb-3 border-t border-gray-700">
         <ng-container *ngIf="!isLoggedIn">
           <div class="flex items-center justify-center space-x-4 px-5 py-3">
-            <a routerLink="/auth/login" (click)="closeMobileMenu()" class="text-white hover:text-gold text-sm uppercase tracking-wider">Connexion</a>
-            <a routerLink="/auth/register" (click)="closeMobileMenu()" class="bg-gold text-black px-4 py-2 rounded-sm hover:bg-opacity-80 text-sm uppercase tracking-wider font-medium">Inscription</a>
+            <a routerLink="/auth/login" (click)="closeMobileMenu()" 
+               class="bg-gold text-black px-4 py-2 rounded-sm hover:bg-opacity-80 transition-colors duration-200 text-sm uppercase tracking-wider font-medium">
+              Connexion
+            </a>
           </div>
         </ng-container>
         
@@ -92,14 +138,30 @@
               </div>
             </div>
             <div class="mt-3 space-y-1">
-              <a routerLink="/profile" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm">Mon profil</a>
-              <a routerLink="/reservation/list" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm">Mes réservations</a>
-              <a routerLink="/invoice" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm">Mes factures</a>
-              <a *ngIf="authService.isAdmin()" routerLink="/admin" (click)="closeMobileMenu()" class="block px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm">Administration</a>
-              <button (click)="logout()" class="w-full text-left px-3 py-2 text-white hover:bg-gold hover:text-black rounded-sm text-sm">Déconnexion</button>
+              <a routerLink="/profile" (click)="closeMobileMenu()" 
+                 class="block px-3 py-2 text-white hover:bg-gray-700 hover:text-gold rounded-sm text-sm transition-colors duration-200">
+                Mon profil
+              </a>
+              <a routerLink="/reservation/list" (click)="closeMobileMenu()" 
+                 class="block px-3 py-2 text-white hover:bg-gray-700 hover:text-gold rounded-sm text-sm transition-colors duration-200">
+                Mes réservations
+              </a>
+              <a routerLink="/invoice" (click)="closeMobileMenu()" 
+                 class="block px-3 py-2 text-white hover:bg-gray-700 hover:text-gold rounded-sm text-sm transition-colors duration-200">
+                Mes factures
+              </a>
+              <a *ngIf="authService.isAdmin()" routerLink="/admin" (click)="closeMobileMenu()" 
+                 class="block px-3 py-2 text-white hover:bg-gray-700 hover:text-gold rounded-sm text-sm transition-colors duration-200">
+                Administration
+              </a>
+              <button (click)="logout()" 
+                      class="w-full text-left px-3 py-2 text-white hover:bg-gray-700 hover:text-gold rounded-sm text-sm transition-colors duration-200">
+                Déconnexion
+              </button>
             </div>
           </div>
         </ng-container>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>

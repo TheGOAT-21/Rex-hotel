@@ -35,16 +35,6 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadChildren: () => import('./routes/profile.routes').then(m => m.PROFILE_ROUTES)
       },
-      {
-        path: 'payment',
-        canActivate: [authGuard],
-        loadChildren: () => import('./routes/payment.routes').then(m => m.PAYMENT_ROUTES)
-      },
-      {
-        path: 'invoice',
-        canActivate: [authGuard],
-        loadChildren: () => import('./routes/invoice.routes').then(m => m.INVOICE_ROUTES)
-      },
       // Pages statiques
       {
         path: 'about',
@@ -65,11 +55,6 @@ export const routes: Routes = [
         path: 'services',
         loadComponent: () => import('./features/static/services-page/services-page.component').then(m => m.ServicesPageComponent),
         title: 'Services | REX HOTEL'
-      },
-      // Pages légales
-      {
-        path: 'legal',
-        loadChildren: () => import('./routes/legal.routes').then(m => m.LEGAL_ROUTES)
       },
       // Notifications
       {

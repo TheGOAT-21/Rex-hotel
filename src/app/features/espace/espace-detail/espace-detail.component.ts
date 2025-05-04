@@ -1,4 +1,3 @@
-// src/app/features/espace/espace-detail/espace-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -22,7 +21,6 @@ import { SpaceService } from '../../../core/services/space.service';
     RouterModule,
     GalleryComponent,
     PriceDisplayComponent,
-    RatingComponent,
     AmenityBadgeComponent,
     BreadcrumbsComponent,
     DatepickerComponent,
@@ -44,6 +42,10 @@ export class EspaceDetailComponent implements OnInit {
   // Disponibilité
   availability: SpaceAvailability | null = null;
   checkingAvailability = false;
+  
+  // Pour les avis
+  averageRating: number = 4.5; // Exemple de note moyenne
+  reviewCount: number = 12; // Exemple de nombre d'avis
   
   constructor(
     private route: ActivatedRoute,
@@ -140,5 +142,17 @@ export class EspaceDetailComponent implements OnInit {
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+  
+  getNights(): number {
+    if (!this.startDate || !this.endDate) return 1;
+    
+    const timeDiff = this.endDate.getTime() - this.startDate.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  }
+  
+  calculateTotalPrice(): number {
+    if (!this.espace) return 0;
+    return this.espace.price * this.getNights();
   }
 }
