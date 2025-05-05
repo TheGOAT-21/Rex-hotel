@@ -1,1 +1,132 @@
-<p>reservation-form works!</p>
+<div class="reservation-form-container bg-black text-white p-6 rounded-sm border border-gray-800">
+    <h2 class="text-xl font-semibold text-gold mb-4">{{ formTitle }}</h2>
+    
+    <!-- Space Information (if space is provided) -->
+    <div *ngIf="space" class="space-info mb-6 p-4 bg-gray-900 rounded-sm">
+      <div class="flex flex-wrap items-center gap-4">
+        <img *ngIf="space.mainImage" [src]="space.mainImage" alt="{{ space.name }}" class="w-20 h-20 object-cover rounded-sm">
+        <div>
+          <h3 class="font-medium text-gold">{{ space.name }}</h3>
+          <p class="text-sm text-gray-300">{{ getSpaceTypeLabel(space.type) }}</p>
+          <div class="mt-1">
+            <app-price-display 
+              [price]="space.price" 
+              [periodicity]="'night'"
+              [size]="'small'"
+            ></app-price-display>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Date Range -->
+      <div class="form-group">
+        <label class="block text-gold text-sm mb-2">Dates de séjour*</label>
+        <app-datepicker
+          [isRange]="true"
+          [selectedDate]="startDate"
+          [selectedEndDate]="endDate"
+          [minDate]="minDate"
+          [disabledDates]="disabledDates"
+          [rangeStartLabel]="'Arrivée'"
+          [rangeEndLabel]="'Départ'"
+          (rangeSelected)="onDateRangeSelected($event)"
+        ></app-datepicker>
+        <div *ngIf="dateRangeInvalid" class="text-red-500 text-xs mt-1">
+          Veuillez sélectionner des dates valides
+        </div>
+      </div>
+      
+      <!-- Number of Guests -->
+      <div class="form-group">
+        <label for="guestCount" class="block text-gold text-sm mb-2">Nombre de personnes*</label>
+        <select 
+          id="guestCount" 
+          formControlName="guestCount"
+          class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none"
+        >
+          <option *ngFor="let i of getGuestCountOptions()" [value]="i" [disabled]="i > maxGuests">
+            {{ i }} personne{{ i > 1 ? 's' : '' }}
+          </option>
+        </select>
+        <div *ngIf="reservationForm.get('guestCount')?.invalid && reservationForm.get('guestCount')?.touched" class="text-red-500 text-xs mt-1">
+          Veuillez sélectionner un nombre de personnes
+        </div>
+      </div>
+      
+      <!-- Special Requests -->
+      <div class="form-group">
+        <label for="specialRequests" class="block text-gold text-sm mb-2">Demandes spéciales</label>
+        <textarea 
+          id="specialRequests" 
+          formControlName="specialRequests"
+          rows="3" 
+          class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none"
+          placeholder="Précisez vos demandes particulières (lit bébé, chambre non-fumeur, etc.)"
+        ></textarea>
+      </div>
+      
+      <!-- Price Summary -->
+      <div *ngIf="showPriceSummary && calculateTotalPrice() > 0" class="price-summary p-4 bg-gray-900 rounded-sm">
+        <h3 class="font-medium text-gold mb-3">Résumé du prix</h3>
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm">{{ getNights() }} nuit{{ getNights() > 1 ? 's' : '' }} x {{ formatPrice(getBasePrice()) }}</span>
+          <span>{{ formatPrice(getBasePrice() * getNights()) }}</span>
+        </div>
+        <div *ngIf="showTaxes" class="flex justify-between items-center mb-2 text-sm">
+          <span>Taxes et frais</span>
+          <span>{{ formatPrice(calculateTaxes()) }}</span>
+        </div>
+        <div class="border-t border-gray-700 my-2 pt-2 flex justify-between items-center font-medium">
+          <span>Total</span>
+          <span class="text-gold">{{ formatPrice(calculateTotalPrice()) }}</span>
+        </div>
+        <p *ngIf="showPaymentInfo" class="mt-2 text-xs text-gray-400">
+          Aucun prélèvement ne sera effectué à cette étape.
+        </p>
+      </div>
+      
+      <!-- Availability Status -->
+      <div *ngIf="checkingAvailability" class="text-center">
+        <app-loading [size]="'small'" [type]="'dots'" [message]="'Vérification de la disponibilité...'"></app-loading>
+      </div>
+      
+      <div *ngIf="availability && !checkingAvailability" class="mb-4">
+        <div *ngIf="availability.isAvailable" class="text-green-500 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span>Disponible aux dates sélectionnées</span>
+        </div>
+        
+        <div *ngIf="!availability.isAvailable" class="text-red-500 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <span>Non disponible aux dates sélectionnées</span>
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="w-full bg-gold text-black py-3 font-semibold rounded-sm hover:bg-opacity-90 transition duration-300"
+        [disabled]="reservationForm.invalid || checkingAvailability || (availability && !availability.isAvailable)"
+        [ngClass]="{'opacity-50 cursor-not-allowed': reservationForm.invalid || checkingAvailability || (availability && !availability.isAvailable)}"
+      >
+        {{ submitButtonText }}
+      </button>
+      
+      <!-- Form is in edit mode -->
+      <div *ngIf="isEditMode" class="flex justify-center mt-4">
+        <button 
+          type="button" 
+          (click)="onCancel()" 
+          class="text-white hover:text-gold transition-colors duration-200"
+        >
+          Annuler les modifications
+        </button>
+      </div>
+    </form>
+  </div>

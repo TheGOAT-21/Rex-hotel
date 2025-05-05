@@ -13,30 +13,18 @@
         </svg>
       </li>
       
-      <li 
-        *ngFor="let breadcrumb of breadcrumbs; let last = last" 
-        class="breadcrumb-item"
-        [class.active]="breadcrumb.isActive"
-      >
+      <li *ngFor="let breadcrumb of breadcrumbs; let last = last" class="breadcrumb-item">
         <a 
-          *ngIf="!last" 
+          *ngIf="!last && breadcrumb.url" 
           [routerLink]="breadcrumb.url" 
           class="breadcrumb-link"
         >
           {{ breadcrumb.label }}
         </a>
-        
-        <span *ngIf="last" class="current-page">{{ breadcrumb.label }}</span>
-        
-        <svg 
-          *ngIf="!last" 
-          xmlns="http://www.w3.org/2000/svg" 
-          class="separator-icon" 
-          viewBox="0 0 20 20" 
-          fill="currentColor"
-        >
-          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-        </svg>
+        <span *ngIf="last || !breadcrumb.url" class="breadcrumb-current">
+          {{ breadcrumb.label }}
+        </span>
+        <span *ngIf="!last" class="breadcrumb-separator">/</span>
       </li>
     </ol>
   </nav>

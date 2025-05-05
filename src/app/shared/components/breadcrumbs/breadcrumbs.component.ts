@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd, ActivatedRoute, RouterLink } from '@angular/router';
 import { filter, distinctUntilChanged } from 'rxjs/operators';
@@ -9,6 +9,11 @@ interface Breadcrumb {
   isActive: boolean;
 }
 
+interface BreadcrumbItem {
+  label: string;
+  path: string | null;
+}
+
 @Component({
   selector: 'app-breadcrumbs',
   standalone: true,
@@ -17,6 +22,7 @@ interface Breadcrumb {
   styleUrl: './breadcrumbs.component.css'
 })
 export class BreadcrumbsComponent implements OnInit {
+  @Input() items: BreadcrumbItem[] = [];
   breadcrumbs: Breadcrumb[] = [];
   
   constructor(
@@ -25,15 +31,23 @@ export class BreadcrumbsComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      distinctUntilChanged()
-    ).subscribe(() => {
+    if (this.items.length > 0) {
+      this.breadcrumbs = this.items.map((item, index) => ({
+        label: item.label,
+        url: item.path || '',
+        isActive: index === this.items.length - 1
+      }));
+    } else {
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        distinctUntilChanged()
+      ).subscribe(() => {
+        this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+      });
+      
+      // Initialize breadcrumbs on component init
       this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-    });
-    
-    // Initialize breadcrumbs on component init
-    this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+    }
   }
   
   private createBreadcrumbs(
@@ -98,21 +112,9 @@ export class BreadcrumbsComponent implements OnInit {
       'events': 'Événements',
       'restaurants': 'Restaurants',
       'reservation': 'Réservation',
-      'profile': 'Profil',
-      'payment': 'Paiement',
-      'invoice': 'Factures',
-      'legal': 'Mentions Légales'
+      'confirmation': 'Confirmation'
     };
     
-    // Check if there's a custom mapping
-    if (pathMap[path]) {
-      return pathMap[path];
-    }
-    
-    // Format the path: replace hyphens with spaces and capitalize
-    return path
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    return pathMap[path] || path.charAt(0).toUpperCase() + path.slice(1);
   }
 }

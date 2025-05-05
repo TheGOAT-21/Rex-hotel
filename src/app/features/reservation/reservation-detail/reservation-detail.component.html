@@ -1,1 +1,340 @@
-<p>reservation-detail works!</p>
+<!-- reservation-detail.component.html -->
+<div class="bg-black min-h-screen text-white">
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <!-- Fil d'Ariane -->
+      <app-breadcrumbs></app-breadcrumbs>
+      
+      <!-- Titre de la page -->
+      <h1 class="text-3xl font-bold text-gold mb-8">Détail de la réservation</h1>
+      
+      <!-- État de chargement -->
+      <div *ngIf="isLoading" class="flex justify-center py-12">
+        <app-loading [size]="'large'" [type]="'spinner'" [message]="'Chargement des détails...'"></app-loading>
+      </div>
+      
+      <!-- Erreur -->
+      <div *ngIf="error" class="bg-red-900 bg-opacity-30 border border-red-500 text-white p-4 rounded-sm mb-8">
+        <p>{{ error }}</p>
+        <button *ngIf="reservation?.id" (click)="reloadReservationDetails()" class="mt-2 text-gold underline">
+          Réessayer
+        </button>
+        <button *ngIf="!reservation?.id" routerLink="/reservation/list" class="mt-2 text-gold underline">
+          Retour à mes réservations
+        </button>
+      </div>
+      
+      <!-- Contenu principal -->
+      <div *ngIf="reservation && !isLoading" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Informations de réservation (2/3) -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Carte de statut -->
+          <div class="bg-gray-900 rounded-sm p-6 border-t-4" [ngClass]="getStatusColor(reservation.status)">
+            <div class="flex flex-wrap justify-between items-center">
+              <div>
+                <h2 class="text-xl font-semibold text-white">Statut: {{ getStatusLabel(reservation.status) }}</h2>
+                <p class="text-gray-300 mt-1">Réservation #{{ reservation.confirmationCode }}</p>
+              </div>
+              <div class="flex items-center space-x-4 mt-4 sm:mt-0">
+                <span class="px-3 py-1 rounded-full text-sm" [ngClass]="getPaymentStatusColor(reservation.paymentStatus)">
+                  {{ getPaymentStatusLabel(reservation.paymentStatus) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Détails de l'espace réservé -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Espace réservé</h2>
+            
+            <div *ngIf="reservation.space" class="flex flex-col md:flex-row gap-6">
+              <!-- Image de l'espace -->
+              <div class="md:w-1/3">
+                <div class="aspect-w-4 aspect-h-3 rounded-sm overflow-hidden">
+                  <img [src]="reservation.space.mainImage" [alt]="reservation.space.name" class="object-cover w-full h-full">
+                </div>
+              </div>
+              
+              <!-- Informations sur l'espace -->
+              <div class="md:w-2/3 flex flex-col">
+                <h3 class="text-lg font-semibold text-white">{{ reservation.space.name }}</h3>
+                <span class="text-sm text-gray-400 mb-4">{{ reservation.space.type }}</span>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                    </svg>
+                    <span>{{ reservation.numberOfGuests }} Personne{{ reservation.numberOfGuests > 1 ? 's' : '' }}</span>
+                  </div>
+                  <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ getNights() }} Nuit{{ getNights() > 1 ? 's' : '' }}</span>
+                  </div>
+                </div>
+                
+                <!-- Dates -->
+                <div class="mt-4 p-3 bg-black bg-opacity-30 rounded-sm">
+                  <div class="flex justify-between">
+                    <div>
+                      <span class="text-sm text-gold">Arrivée</span>
+                      <p class="text-white">{{ formatDate(reservation.startDate) }}</p>
+                    </div>
+                    <div class="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span class="text-sm text-gold">Départ</span>
+                      <p class="text-white">{{ formatDate(reservation.endDate) }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Demandes spéciales -->
+                <div *ngIf="reservation.specialRequests" class="mt-4">
+                  <h4 class="text-sm text-gold">Demandes spéciales</h4>
+                  <p class="text-gray-300">{{ reservation.specialRequests }}</p>
+                </div>
+                
+                <!-- Lien pour voir plus de détails sur l'espace -->
+                <a [routerLink]="['/spaces', reservation.spaceId]" class="mt-auto flex items-center text-gold hover:underline">
+                  Voir les détails de l'espace
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Informations de contact -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Informations de contact</h2>
+            
+            <div *ngIf="reservation.user" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-sm text-gold mb-1">Nom</h3>
+                <p class="text-white">{{ reservation.user.firstName }} {{ reservation.user.lastName }}</p>
+              </div>
+              <div>
+                <h3 class="text-sm text-gold mb-1">Email</h3>
+                <p class="text-white">{{ reservation.user.email }}</p>
+              </div>
+              <div>
+                <h3 class="text-sm text-gold mb-1">Téléphone</h3>
+                <p class="text-white">{{ reservation.user.phoneNumber }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Historique et notes -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Historique</h2>
+            
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="bg-gray-800 rounded-full p-2 mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-white">Réservation créée</p>
+                  <span class="text-sm text-gray-400">{{ formatDate(reservation.createdAt) }}</span>
+                </div>
+              </div>
+              
+              <div *ngIf="reservation.updatedAt && reservation.updatedAt !== reservation.createdAt" class="flex items-start">
+                <div class="bg-gray-800 rounded-full p-2 mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-white">Réservation mise à jour</p>
+                  <span class="text-sm text-gray-400">{{ formatDate(reservation.updatedAt) }}</span>
+                </div>
+              </div>
+              
+              <div *ngIf="reservation.contactedByCommercial" class="flex items-start">
+                <div class="bg-gray-800 rounded-full p-2 mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-white">Contacté par notre service commercial</p>
+                </div>
+              </div>
+              
+              <div *ngIf="reservation.status === 'annulee'" class="flex items-start">
+                <div class="bg-gray-800 rounded-full p-2 mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-white">Réservation annulée</p>
+                  <span *ngIf="reservation.cancellationReason" class="text-sm text-gray-400">Raison: {{ reservation.cancellationReason }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Panneau latéral (1/3) -->
+        <div class="space-y-8">
+          <!-- Récapitulatif de paiement -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Récapitulatif</h2>
+            
+            <div class="space-y-4">
+              <div class="flex justify-between">
+                <span>{{ getNights() }} nuit(s)</span>
+                <span>{{ reservation.totalPrice }} €</span>
+              </div>
+              <div class="border-t border-gray-700 pt-4 flex justify-between font-semibold">
+                <span>Total</span>
+                <span class="text-gold">{{ reservation.totalPrice }} €</span>
+              </div>
+            </div>
+            
+            <!-- Facture -->
+            <div *ngIf="invoice" class="mt-6">
+              <a (click)="downloadInvoice()" class="flex items-center justify-center text-gold hover:underline cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd" />
+                </svg>
+                Télécharger la facture
+              </a>
+            </div>
+            
+            <div *ngIf="loadingInvoice" class="mt-6 flex justify-center">
+              <app-loading [size]="'small'" [type]="'dots'" [message]="'Chargement de la facture...'"></app-loading>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Actions</h2>
+            
+            <div class="space-y-3">
+              <a *ngIf="canCancel()" (click)="openCancelModal()" class="w-full bg-transparent border border-red-500 text-red-500 py-2 rounded-sm hover:bg-red-500 hover:text-white transition duration-300 text-center block cursor-pointer">
+                Annuler la réservation
+              </a>
+              <a routerLink="/reservation/list" class="w-full bg-gold text-black py-2 rounded-sm hover:bg-opacity-90 transition duration-300 text-center block">
+                Retour à mes réservations
+              </a>
+            </div>
+          </div>
+          
+          <!-- Besoin d'aide -->
+          <div class="bg-gray-900 rounded-sm p-6">
+            <h2 class="text-xl font-semibold text-gold mb-4">Besoin d'aide ?</h2>
+            
+            <p class="text-gray-300 mb-4">Notre équipe est disponible 24/7 pour vous aider</p>
+            
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                <span>+225 XX XX XX XX</span>
+              </div>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                <span>contact&#64;rexhotel.com</span>
+              </div>
+              <a routerLink="/contact" class="text-gold hover:underline flex items-center">
+                Nous contacter
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal d'annulation -->
+  <div *ngIf="showCancelModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <!-- Background overlay -->
+      <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+  
+      <!-- Modal panel -->
+      <div class="inline-block align-bottom bg-gray-900 rounded-sm px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        <div class="absolute top-0 right-0 pt-4 pr-4">
+          <button type="button" (click)="closeCancelModal()" class="bg-transparent text-gray-400 hover:text-white">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="sm:flex sm:items-start">
+          <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
+              Annuler la réservation
+            </h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-300">
+                Êtes-vous sûr de vouloir annuler cette réservation ? Cette action ne peut pas être annulée.
+              </p>
+              
+              <div class="mt-4">
+                <label for="cancellationReason" class="block text-sm font-medium text-gray-300">
+                  Raison de l'annulation (optionnel)
+                </label>
+                <textarea
+                  id="cancellationReason"
+                  [(ngModel)]="cancellationReason"
+                  rows="3"
+                  class="mt-1 block w-full bg-black border border-gray-700 rounded-sm shadow-sm p-2 text-white"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <button
+            type="button"
+            (click)="cancelReservation()"
+            [disabled]="isProcessingCancel"
+            class="w-full inline-flex justify-center rounded-sm border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
+          >
+            <span *ngIf="isProcessingCancel" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Traitement...
+            </span>
+            <span *ngIf="!isProcessingCancel">Confirmer l'annulation</span>
+          </button>
+          <button
+            type="button"
+            (click)="closeCancelModal()"
+            [disabled]="isProcessingCancel"
+            class="mt-3 w-full inline-flex justify-center rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-transparent text-base font-medium text-white hover:bg-gray-800 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

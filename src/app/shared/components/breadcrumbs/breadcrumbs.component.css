@@ -7,39 +7,40 @@
   }
   
   .breadcrumbs-container {
-    padding: 0.75rem 0;
     margin-bottom: 1.5rem;
   }
   
   .breadcrumbs-list {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
+    list-style: none;
     padding: 0;
     margin: 0;
-    list-style-type: none;
   }
   
   .breadcrumb-item {
     display: flex;
     align-items: center;
-    color: white;
-    font-size: 0.875rem;
   }
   
   .breadcrumb-link {
-    color: #9e9e9e;
+    color: #4B5563;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
   }
   
   .breadcrumb-link:hover {
-    color: var(--rex-gold);
+    color: #1F2937;
   }
   
-  .current-page {
-    color: var(--rex-gold);
+  .breadcrumb-current {
+    color: #1F2937;
     font-weight: 500;
+  }
+  
+  .breadcrumb-separator {
+    color: #9CA3AF;
+    margin: 0 0.5rem;
   }
   
   .home-icon {
@@ -53,20 +54,13 @@
     color: var(--rex-gold);
   }
   
-  .separator-icon {
-    width: 1rem;
-    height: 1rem;
-    color: #5e5e5e;
-    margin: 0 0.5rem;
-  }
-  
   /* Responsive Adjustments */
   @media (max-width: 640px) {
     .breadcrumb-item {
       font-size: 0.8125rem;
     }
     
-    .separator-icon {
+    .breadcrumb-separator {
       width: 0.875rem;
       height: 0.875rem;
       margin: 0 0.25rem;

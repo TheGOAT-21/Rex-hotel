@@ -1,1 +1,117 @@
-<p>reservation-confirmation works!</p>
+<div class="container mx-auto px-4 py-8">
+  <app-breadcrumbs [items]="[
+    { label: 'Accueil', path: '/' },
+    { label: 'Confirmation de réservation', path: null }
+  ]"></app-breadcrumbs>
+
+  <div class="max-w-4xl mx-auto">
+    <app-loading *ngIf="isLoading"></app-loading>
+
+    <div *ngIf="!isLoading && error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-6">
+      {{ error }}
+    </div>
+
+    <div *ngIf="!isLoading && !error && reservation" class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <!-- Header -->
+      <div class="bg-primary-600 text-white px-6 py-4">
+        <h1 class="text-2xl font-bold">Réservation confirmée</h1>
+        <p class="text-primary-100">Code de confirmation: {{ reservation.confirmationCode }}</p>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6">
+        <!-- Space Details -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold mb-4">Détails de l'espace</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <img [src]="reservation.space?.mainImage" [alt]="reservation.space?.name" class="w-full h-64 object-cover rounded-lg">
+            </div>
+            <div>
+              <h3 class="text-lg font-medium">{{ reservation.space?.name }}</h3>
+              <p class="text-gray-600">{{ getSpaceTypeLabel(reservation.space?.type) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stay Details -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold mb-4">Détails du séjour</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-600">Date d'arrivée</p>
+              <p class="font-medium">{{ getFormattedDate(reservation.startDate) }}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Date de départ</p>
+              <p class="font-medium">{{ getFormattedDate(reservation.endDate) }}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Nombre de nuits</p>
+              <p class="font-medium">{{ getNights() }}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Nombre d'invités</p>
+              <p class="font-medium">{{ reservation.numberOfGuests }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest Details -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold mb-4">Détails de l'invité</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-600">Nom complet</p>
+              <p class="font-medium">{{ reservation.user?.firstName }} {{ reservation.user?.lastName }}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Email</p>
+              <p class="font-medium">{{ reservation.user?.email }}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Téléphone</p>
+              <p class="font-medium">{{ reservation.user?.phoneNumber }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Summary -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold mb-4">Récapitulatif des prix</h2>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-600">Prix total</span>
+              <span class="font-medium">{{ reservation.totalPrice | currency:'XOF':'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span class="text-gray-600">Taxes (18%)</span>
+              <span class="font-medium">{{ getTaxAmount() | currency:'XOF':'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="border-t border-gray-200 my-2"></div>
+            <div class="flex justify-between font-bold">
+              <span>Total à payer</span>
+              <span>{{ reservation.totalPrice + getTaxAmount() | currency:'XOF':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button 
+            (click)="viewReservationDetails()"
+            class="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            Voir les détails
+          </button>
+          <button 
+            (click)="downloadInvoice()"
+            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Télécharger la facture
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
