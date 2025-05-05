@@ -17,6 +17,15 @@
         <button (click)="goBack()" class="mt-2 text-gold underline">Retour</button>
       </div>
       
+      <!-- No Space Selected State -->
+      <div *ngIf="!isLoading && !space && !error" class="bg-gray-900 p-6 rounded-sm text-center my-12">
+        <h2 class="text-xl font-semibold text-gold mb-4">Aucun espace sélectionné</h2>
+        <p class="text-white mb-6">Veuillez sélectionner un espace à réserver depuis notre catalogue.</p>
+        <a routerLink="/catalog" class="bg-gold text-black px-6 py-3 rounded-sm hover:bg-opacity-90 transition duration-300">
+          Parcourir le catalogue
+        </a>
+      </div>
+      
       <!-- Reservation Content -->
       <div *ngIf="!isLoading && !error && space" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Reservation Form (2/3) -->

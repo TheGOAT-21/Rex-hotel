@@ -65,6 +65,9 @@ export class ReservationPageComponent implements OnInit {
       this.spaceId = params['spaceId'];
       if (this.spaceId) {
         this.loadSpaceDetails();
+      } else {
+        // Set isLoading to false when no spaceId is found
+        this.isLoading = false;
       }
     });
     
