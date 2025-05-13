@@ -21,7 +21,7 @@
         </a>
         <a routerLink="/catalog" routerLinkActive="text-gold" 
            class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
-          Espaces
+          Chambres
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
         </a>
         <a routerLink="/services" routerLinkActive="text-gold" 
@@ -29,23 +29,17 @@
           Services
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
         </a>
-        <a routerLink="/about" routerLinkActive="text-gold" 
-           class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
-          À propos
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
-        </a>
         <a routerLink="/contact" routerLinkActive="text-gold" 
            class="text-white hover:text-gold transition-colors duration-200 text-sm uppercase tracking-wider relative group">
           Contact
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300"></span>
         </a>
-        
-        <!-- Auth Button -->
+        <!-- Reservation Button -->
         <div class="flex items-center">
           <ng-container *ngIf="!isLoggedIn">
             <a routerLink="/auth/login" 
                class="bg-gold text-black px-4 py-2 rounded-sm hover:bg-opacity-80 transition-colors duration-200 text-sm uppercase tracking-wider font-medium">
-              Connexion
+              Réserver
             </a>
           </ng-container>
           
