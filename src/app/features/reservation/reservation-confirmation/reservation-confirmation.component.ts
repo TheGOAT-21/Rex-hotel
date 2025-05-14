@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { 
   BreadcrumbsComponent, 
-  LoadingComponent 
+  LoadingComponent,
+  PriceDisplayComponent,
+  AmenityBadgeComponent
 } from '../../../shared/components';
 import { ReservationService } from '../../../core/services/reservation.service';
-import { Reservation, ReservationWithDetails } from '../../../core/models';
+import { SettingsService } from '../../../core/services/settings.service';
+import { Reservation, Room } from '../../../core/models';
 
 @Component({
   selector: 'app-reservation-confirmation',
@@ -15,42 +18,40 @@ import { Reservation, ReservationWithDetails } from '../../../core/models';
     CommonModule,
     RouterModule,
     BreadcrumbsComponent,
-    LoadingComponent
+    LoadingComponent,
+    AmenityBadgeComponent
   ],
   templateUrl: './reservation-confirmation.component.html',
   styleUrl: './reservation-confirmation.component.css'
 })
 export class ReservationConfirmationComponent implements OnInit {
-  reservation: ReservationWithDetails | null = null;
-  isLoading = true;
+  reservation: Reservation | null = null;
+  isLoading: boolean = true;
   error: string | null = null;
-  confirmationCode: string = '';
   
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private settingsService: SettingsService
   ) {}
   
   ngOnInit(): void {
+    // Get reservation ID from route parameters
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
         this.loadReservation(id);
       } else {
-        this.error = "Identifiant de réservation introuvable.";
+        this.error = "Identifiant de réservation non trouvé.";
         this.isLoading = false;
-      }
-    });
-    
-    this.route.queryParams.subscribe(params => {
-      this.confirmationCode = params['code'] || '';
-      if (this.confirmationCode && !this.reservation) {
-        this.loadReservationByCode(this.confirmationCode);
       }
     });
   }
   
+  /**
+   * Load reservation details from service
+   */
   loadReservation(id: string): void {
     this.isLoading = true;
     this.error = null;
@@ -63,55 +64,14 @@ export class ReservationConfirmationComponent implements OnInit {
       error: (err) => {
         this.error = "Une erreur est survenue lors du chargement des détails de la réservation.";
         this.isLoading = false;
-        console.error('Erreur lors du chargement des détails:', err);
+        console.error('Error loading reservation details:', err);
       }
     });
   }
   
-  loadReservationByCode(code: string): void {
-    this.isLoading = true;
-    this.error = null;
-    
-    // Mock implementation for demonstration
-    setTimeout(() => {
-      this.reservation = {
-        id: 'res-' + Math.random().toString(36).substr(2, 9),
-        userId: 'user-123',
-        spaceId: 'space-123',
-        startDate: new Date(),
-        endDate: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000),
-        numberOfGuests: 2,
-        totalPrice: 180000,
-        status: 'confirmee',
-        confirmationCode: code,
-        createdAt: new Date(),
-        space: {
-          name: 'Suite Executive',
-          type: 'chambre_king_executive',
-          mainImage: '/assets/images/rooms/chambre.jpeg'
-        },
-        user: {
-          firstName: 'Jean',
-          lastName: 'Dupont',
-          email: 'jean.dupont@example.com',
-          phoneNumber: '+225 01 02 03 04'
-        }
-      } as ReservationWithDetails;
-      
-      this.isLoading = false;
-    }, 1000);
-  }
-  
-  getFormattedDate(date: Date | undefined): string {
-    if (!date) return '';
-    return new Date(date).toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-  
+  /**
+   * Calculate number of nights
+   */
   getNights(): number {
     if (!this.reservation?.startDate || !this.reservation?.endDate) return 0;
     
@@ -121,22 +81,39 @@ export class ReservationConfirmationComponent implements OnInit {
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
   }
   
-  viewReservationDetails(): void {
-    if (!this.reservation?.id) return;
-    this.router.navigate(['/reservation', this.reservation.id]);
+  /**
+   * Calculate taxes
+   */
+  calculateTaxes(): number {
+    const basePrice = this.reservation?.totalPrice || 0;
+    return basePrice * 0.18; // 18% tax rate
   }
   
-  downloadInvoice(): void {
-    if (!this.reservation?.id) return;
-    alert('Téléchargement de la facture en cours...');
+  /**
+   * Format price with hotel currency
+   */
+  formatPrice(price: number): string {
+    return this.settingsService.formatPrice(price);
   }
   
-  getTaxAmount(): number {
-    if (!this.reservation?.totalPrice) return 0;
-    return this.reservation.totalPrice * 0.18;
+  /**
+   * Format date to locale string
+   */
+  formatDate(date: Date | undefined): string {
+    if (!date) return '';
+    
+    return new Date(date).toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
   
-  getSpaceTypeLabel(type: string | undefined): string {
+  /**
+   * Get room type label
+   */
+  getRoomTypeLabel(type: string | undefined): string {
     if (!type) return '';
     
     return type
@@ -145,5 +122,27 @@ export class ReservationConfirmationComponent implements OnInit {
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+  
+  /**
+   * Print / download reservation
+   */
+  printReservation(): void {
+    window.print();
+  }
+  
+  /**
+   * Download invoice
+   */
+  downloadInvoice(): void {
+    // In a real application, this would call a service to generate and download an invoice
+    alert('Fonctionnalité de téléchargement de facture à implémenter.');
+  }
+  
+  /**
+   * Navigate to reservation management
+   */
+  viewReservations(): void {
+    this.router.navigate(['/user/reservations']);
   }
 }

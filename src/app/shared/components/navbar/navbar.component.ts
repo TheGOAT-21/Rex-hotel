@@ -21,21 +21,20 @@ export class NavbarComponent implements OnInit {
   isScrolled = false;
   isMobileMenuOpen = false;
   
-  // Définition des éléments du menu
+  // Définition des éléments du menu - UPDATED
   menuItems: MenuItem[] = [
     { label: 'Accueil', routerLink: '/', exact: true },
-    { label: 'Chambres', routerLink: '/catalog' },
+    { label: 'Chambres', routerLink: '/rooms' },
     { label: 'Services', routerLink: '/services' },
-    { label: 'Contacts', routerLink: '/contact' }
+    { label: 'Contact', routerLink: '/contact' }
   ];
   
-  // Bouton de réservation séparé (traitement spécial)
+  // Bouton de réservation séparé - UPDATED
   reservationButton: MenuItem = {
     label: 'Réserver',
-    routerLink: '/auth/login',
+    routerLink: '/reservation',
     isButton: true
   };
-
 
   ngOnInit(): void {
     // Si vous avez besoin d'initialiser quoi que ce soit

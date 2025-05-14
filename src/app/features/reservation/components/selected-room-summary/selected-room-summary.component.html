@@ -1,1 +1,115 @@
-<p>selected-room-summary works!</p>
+<div class="room-summary bg-gray-900">
+    <!-- Image de la chambre -->
+    <div class="room-image">
+      <img [src]="room.mainImage" [alt]="room.name" class="w-full h-full object-cover">
+    </div>
+    
+    <!-- Détails de la chambre -->
+    <div class="room-details">
+      <h3 class="room-name">{{ room.name }}</h3>
+      <p class="room-type">{{ getRoomTypeLabel(room.type) }}</p>
+      
+      <!-- Infos sur la capacité et la surface -->
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <div class="flex items-center text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+          </svg>
+          {{ room.capacity }} pers. (max {{ room.capacity }} pers.)
+        </div>
+        
+        <div class="flex items-center text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          {{ room.surface }} m²
+        </div>
+      </div>
+      
+      <!-- Dates de séjour -->
+      <div *ngIf="startDate && endDate" class="room-dates mt-4 grid grid-cols-2 gap-4">
+        <div>
+          <p class="date-label">Arrivée</p>
+          <p class="date-value">{{ formatDate(startDate) }}</p>
+        </div>
+        
+        <div>
+          <p class="date-label">Départ</p>
+          <p class="date-value">{{ formatDate(endDate) }}</p>
+        </div>
+        
+        <div>
+          <p class="date-label">Durée</p>
+          <p class="date-value">{{ numberOfNights }} nuit{{ numberOfNights > 1 ? 's' : '' }}</p>
+        </div>
+        
+        <div>
+          <p class="date-label">Voyageurs</p>
+          <p class="date-value">{{ guestCount }} personne{{ guestCount > 1 ? 's' : '' }}</p>
+        </div>
+      </div>
+      
+      <!-- Équipements principaux -->
+      <div *ngIf="showAmenities && selectedAmenities.length > 0" class="room-amenities">
+        <app-amenity-badge 
+          *ngFor="let amenity of selectedAmenities" 
+          [amenity]="amenity"
+          [size]="'small'"
+        ></app-amenity-badge>
+        
+        <span *ngIf="room.amenities && room.amenities.length > selectedAmenities.length" class="text-xs text-gray-400 flex items-center">
+          + {{ room.amenities.length - selectedAmenities.length }} plus
+        </span>
+      </div>
+      
+      <!-- Détails de prix -->
+      <div *ngIf="showPriceDetails" class="price-container">
+        <div class="price-row">
+          <span class="price-label">Prix par nuit</span>
+          <span class="price-value">{{ formatPrice(room.discountedPrice || room.price) }}</span>
+        </div>
+        
+        <div *ngIf="numberOfNights > 1" class="price-row">
+          <span class="price-label">{{ numberOfNights }} nuits</span>
+          <span class="price-value">{{ formatPrice((room.discountedPrice || room.price) * numberOfNights) }}</span>
+        </div>
+        
+        <div class="price-row">
+          <span class="price-label">Taxes ({{ taxRate }}%)</span>
+          <span class="price-value">{{ formatPrice(taxAmount) }}</span>
+        </div>
+        
+        <div class="total-row">
+          <span class="total-label">Total</span>
+          <span class="total-value">{{ formatPrice(totalPrice + taxAmount) }}</span>
+        </div>
+      </div>
+      
+      <!-- Boutons d'action -->
+      <div class="button-container">
+        <!-- Bouton de réservation -->
+        <a 
+          *ngIf="showReservationButton"
+          [routerLink]="['/reservation/form']" 
+          [queryParams]="{
+            roomId: room.id,
+            startDate: startDate ? startDate.toISOString() : null,
+            endDate: endDate ? endDate.toISOString() : null,
+            guests: guestCount
+          }"
+          class="reservation-button"
+        >
+          Réserver maintenant
+        </a>
+        
+        <!-- Lien vers les détails -->
+        <a 
+          *ngIf="showDetailLink" 
+          [routerLink]="['/rooms', room.id]"
+          class="detail-link"
+        >
+          Voir les détails de la chambre
+        </a>
+      </div>
+    </div>
+  </div>

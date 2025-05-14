@@ -1,115 +1,262 @@
-<div class="container mx-auto px-4 py-8">
-  <app-breadcrumbs [items]="[
-    { label: 'Accueil', path: '/' },
-    { label: 'Confirmation de réservation', path: null }
-  ]"></app-breadcrumbs>
+<div class="bg-black min-h-screen text-white py-8">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Fil d'Ariane -->
+    <app-breadcrumbs [items]="[
+      { label: 'Accueil', path: '/' },
+      { label: 'Confirmation de réservation', path: null }
+    ]"></app-breadcrumbs>
 
-  <div class="max-w-4xl mx-auto">
-    <app-loading *ngIf="isLoading"></app-loading>
-
-    <div *ngIf="!isLoading && error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-6">
-      {{ error }}
+    <!-- État de chargement -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <app-loading 
+        [size]="'large'" 
+        [type]="'spinner'" 
+        [message]="'Chargement des détails de la réservation...'"
+      ></app-loading>
     </div>
-
-    <div *ngIf="!isLoading && !error && reservation" class="bg-white rounded-lg shadow-lg overflow-hidden">
-      <!-- Header -->
-      <div class="bg-primary-600 text-white px-6 py-4">
-        <h1 class="text-2xl font-bold">Réservation confirmée</h1>
-        <p class="text-primary-100">Code de confirmation: {{ reservation.confirmationCode }}</p>
+    
+    <!-- Message d'erreur -->
+    <div *ngIf="!isLoading && error" class="bg-red-900 bg-opacity-40 border border-red-500 text-white p-4 rounded-sm mb-8">
+      <p>{{ error }}</p>
+      <button *ngIf="reservation?.id" (click)="loadReservation(reservation?.id!)" class="mt-2 text-gold underline">
+        Réessayer
+      </button>
+    </div>
+    
+    <!-- Contenu de la confirmation -->
+    <div *ngIf="!isLoading && !error && reservation" class="bg-gray-900 rounded-sm shadow-xl overflow-hidden">
+      <!-- En-tête avec bannière -->
+      <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-8 border-b border-gold">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-gold">Confirmation de réservation</h1>
+            <p class="text-white mt-1">Votre réservation a été confirmée avec succès</p>
+          </div>
+          <!-- Statut de la réservation -->
+          <div>
+            <span class="px-4 py-2 rounded-full bg-green-900 bg-opacity-30 text-green-500 border border-green-500 font-medium">
+              {{ reservation.status === 'confirmed' ? 'Confirmée' : 'En attente' }}
+            </span>
+          </div>
+        </div>
       </div>
-
-      <!-- Content -->
-      <div class="p-6">
-        <!-- Space Details -->
-        <div class="mb-8">
-          <h2 class="text-xl font-semibold mb-4">Détails de l'espace</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <img [src]="reservation.space?.mainImage" [alt]="reservation.space?.name" class="w-full h-64 object-cover rounded-lg">
+      
+      <!-- Informations de réservation -->
+      <div class="p-6 md:p-8">
+        <!-- Numéro de réservation -->
+        <div class="flex justify-between items-center mb-8 p-4 bg-gray-800 rounded-sm">
+          <div>
+            <h2 class="text-gold font-medium">Numéro de réservation</h2>
+            <p class="text-2xl text-white font-bold mt-1">{{ reservation.id }}</p>
+          </div>
+          <div class="print:hidden">
+            <button 
+              (click)="printReservation()" 
+              class="flex items-center px-4 py-2 border border-gold text-gold rounded-sm hover:bg-gold hover:text-black transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+              </svg>
+              Imprimer
+            </button>
+          </div>
+        </div>
+        
+        <!-- Grille de contenu -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Détails de la chambre -->
+          <div class="md:col-span-2">
+            <h2 class="text-xl font-semibold text-gold mb-4">Détails de la chambre</h2>
+            <div class="bg-gray-800 rounded-sm overflow-hidden">
+              <div class="flex flex-col md:flex-row">
+                <!-- Image de la chambre -->
+                <div class="md:w-1/3">
+                  <img 
+                    *ngIf="reservation.room?.mainImage" 
+                    [src]="reservation.room?.mainImage" 
+                    [alt]="reservation.room?.name" 
+                    class="w-full h-48 md:h-full object-cover"
+                  >
+                </div>
+                
+                <!-- Informations sur la chambre -->
+                <div class="p-4 md:p-6 md:w-2/3">
+                  <h3 class="text-xl font-semibold text-gold">{{ reservation.room?.name }}</h3>
+                  <p class="text-sm text-gray-400">{{ getRoomTypeLabel(reservation.room?.type) }}</p>
+                  
+                  <div class="mt-4 grid grid-cols-2 gap-y-2 text-sm">
+                    <div class="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                      </svg>
+                      {{ reservation.numberOfGuests }} personne{{ reservation.numberOfGuests > 1 ? 's' : '' }}
+                    </div>
+                    
+                    <div *ngIf="reservation.room?.surface" class="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                      {{ reservation.room?.surface }} m²
+                    </div>
+                  </div>
+                  
+                  <!-- Équipements (si disponibles) -->
+                  <div *ngIf="reservation?.room?.amenities?.length" class="mt-4">
+                    <h4 class="text-sm font-medium text-gold mb-2">Équipements</h4>
+                    <div class="flex flex-wrap gap-2">
+                      <app-amenity-badge 
+                        *ngFor="let amenity of reservation?.room?.amenities?.slice(0, 4) || []" 
+                        [amenity]="amenity"
+                        [size]="'small'"
+                      ></app-amenity-badge>
+                      
+                      <span *ngIf="reservation?.room?.amenities?.length && (reservation?.room?.amenities?.length || 0) > 4" class="text-xs text-gray-400 flex items-center">
+                        + {{ (reservation!.room?.amenities?.length || 0) - 4 }} plus
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="text-lg font-medium">{{ reservation.space?.name }}</h3>
-              <p class="text-gray-600">{{ getSpaceTypeLabel(reservation.space?.type) }}</p>
+          </div>
+          
+          <!-- Résumé de la réservation -->
+          <div>
+            <h2 class="text-xl font-semibold text-gold mb-4">Votre réservation</h2>
+            <div class="bg-gray-800 rounded-sm p-4">
+              <!-- Dates -->
+              <div class="mb-4 pb-4 border-b border-gray-700">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-400">Arrivée :</span>
+                  <span class="font-medium">{{ formatDate(reservation.startDate) }}</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-400">Départ :</span>
+                  <span class="font-medium">{{ formatDate(reservation.endDate) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-400">Durée :</span>
+                  <span class="font-medium">{{ getNights() }} nuit{{ getNights() > 1 ? 's' : '' }}</span>
+                </div>
+              </div>
+              
+              <!-- Détails du prix -->
+              <div class="mb-4 pb-4 border-b border-gray-700">
+                <h3 class="text-gold font-medium mb-2">Détails du prix</h3>
+                
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-400">{{ getNights() }} nuit{{ getNights() > 1 ? 's' : '' }}</span>
+                  <span>{{ formatPrice(reservation.totalPrice || 0) }}</span>
+                </div>
+                
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-400">Taxes et frais (18%)</span>
+                  <span>{{ formatPrice(calculateTaxes()) }}</span>
+                </div>
+                
+                <div class="flex justify-between items-center mt-4 font-bold">
+                  <span class="text-gold">Total</span>
+                  <span class="text-gold">{{ formatPrice((reservation.totalPrice || 0) + calculateTaxes()) }}</span>
+                </div>
+              </div>
+              
+              <!-- Mode de paiement -->
+              <div>
+                <h3 class="text-gold font-medium mb-2">Mode de paiement</h3>
+                
+                <div class="flex items-center text-white mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gold mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                    <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+                  </svg>
+                  <span>
+                    {{ reservation.payment?.method === 'card' ? 'Carte bancaire' : 
+                       reservation.payment?.method === 'paypal' ? 'PayPal' : 
+                       reservation.payment?.method === 'bank_transfer' ? 'Virement bancaire' : 
+                       'Paiement à l\'arrivée' }}
+                  </span>
+                </div>
+                
+                <div *ngIf="reservation.payment?.method === 'on_arrival'" class="text-yellow-500 text-sm mt-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                  </svg>
+                  Le paiement sera effectué directement à l'hôtel lors de votre arrivée
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Stay Details -->
-        <div class="mb-8">
-          <h2 class="text-xl font-semibold mb-4">Détails du séjour</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p class="text-gray-600">Date d'arrivée</p>
-              <p class="font-medium">{{ getFormattedDate(reservation.startDate) }}</p>
-            </div>
-            <div>
-              <p class="text-gray-600">Date de départ</p>
-              <p class="font-medium">{{ getFormattedDate(reservation.endDate) }}</p>
-            </div>
-            <div>
-              <p class="text-gray-600">Nombre de nuits</p>
-              <p class="font-medium">{{ getNights() }}</p>
-            </div>
-            <div>
-              <p class="text-gray-600">Nombre d'invités</p>
-              <p class="font-medium">{{ reservation.numberOfGuests }}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Guest Details -->
-        <div class="mb-8">
-          <h2 class="text-xl font-semibold mb-4">Détails de l'invité</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p class="text-gray-600">Nom complet</p>
-              <p class="font-medium">{{ reservation.user?.firstName }} {{ reservation.user?.lastName }}</p>
-            </div>
-            <div>
-              <p class="text-gray-600">Email</p>
-              <p class="font-medium">{{ reservation.user?.email }}</p>
-            </div>
-            <div>
-              <p class="text-gray-600">Téléphone</p>
-              <p class="font-medium">{{ reservation.user?.phoneNumber }}</p>
+        
+        <!-- Informations du client -->
+        <div class="mt-8">
+          <h2 class="text-xl font-semibold text-gold mb-4">Informations du client</h2>
+          <div class="bg-gray-800 rounded-sm p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-gold font-medium mb-2">Coordonnées</h3>
+                <div class="space-y-2">
+                  <p>
+                    <span class="text-gray-400">Nom complet :</span> 
+                    <span class="ml-2">{{ reservation.guestInfo!.title === 'mr' ? 'M.' : 
+                                        reservation.guestInfo!.title === 'mrs' ? 'Mme' : 
+                                        reservation.guestInfo!.title === 'ms' ? 'Mlle' : 'Dr' }} 
+                                        {{ reservation.guestInfo!.firstName }} {{ reservation.guestInfo!.lastName }}</span>
+                  </p>
+                  <p>
+                    <span class="text-gray-400">Email :</span> 
+                    <span class="ml-2">{{ reservation.guestInfo!.email }}</span>
+                  </p>
+                  <p>
+                    <span class="text-gray-400">Téléphone :</span> 
+                    <span class="ml-2">{{ reservation.guestInfo!.phone }}</span>
+                  </p>
+                </div>
+              </div>
+              
+              <div *ngIf="reservation.specialRequests">
+                <h3 class="text-gold font-medium mb-2">Demandes spéciales</h3>
+                <p class="text-white">{{ reservation.specialRequests }}</p>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Price Summary -->
-        <div class="mb-8">
-          <h2 class="text-xl font-semibold mb-4">Récapitulatif des prix</h2>
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <div class="flex justify-between mb-2">
-              <span class="text-gray-600">Prix total</span>
-              <span class="font-medium">{{ reservation.totalPrice | currency:'XOF':'symbol':'1.0-0' }}</span>
-            </div>
-            <div class="flex justify-between mb-2">
-              <span class="text-gray-600">Taxes (18%)</span>
-              <span class="font-medium">{{ getTaxAmount() | currency:'XOF':'symbol':'1.0-0' }}</span>
-            </div>
-            <div class="border-t border-gray-200 my-2"></div>
-            <div class="flex justify-between font-bold">
-              <span>Total à payer</span>
-              <span>{{ reservation.totalPrice + getTaxAmount() | currency:'XOF':'symbol':'1.0-0' }}</span>
-            </div>
-          </div>
-        </div>
-
+        
         <!-- Actions -->
-        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="mt-8 flex flex-wrap gap-4 print:hidden">
           <button 
-            (click)="viewReservationDetails()"
-            class="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+            (click)="downloadInvoice()" 
+            class="px-6 py-3 bg-gold text-black font-medium rounded-sm hover:bg-opacity-90 transition-colors"
           >
-            Voir les détails
-          </button>
-          <button 
-            (click)="downloadInvoice()"
-            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
             Télécharger la facture
           </button>
+          
+          <button 
+            (click)="viewReservations()" 
+            class="px-6 py-3 border border-gray-700 text-white rounded-sm hover:bg-gray-800 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Voir mes réservations
+          </button>
+        </div>
+        
+        <!-- Information supplémentaire -->
+        <div class="mt-8 bg-gray-800 p-4 rounded-sm border-l-4 border-gold">
+          <div class="flex items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gold mr-3 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <h3 class="font-medium text-gold">Informations importantes</h3>
+              <p class="text-sm mt-1">Une copie de cette confirmation a été envoyée à votre adresse email. Veuillez la présenter lors de votre arrivée à l'hôtel.</p>
+              <p class="text-sm mt-2">Pour toute question ou modification de votre réservation, veuillez contacter notre service client au <span class="text-gold">+225 27 30 64 50 50</span> ou par email à <span class="text-gold">contact&#64;rexhotel.com</span></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
