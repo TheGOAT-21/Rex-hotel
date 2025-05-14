@@ -1,139 +1,225 @@
 <div class="filter-container">
-    <!-- Mobile Filter Toggle -->
-    <button 
-      class="filter-toggle-btn md:hidden w-full flex items-center justify-between"
-      (click)="toggleFilter()"
-      aria-expanded="false"
-      [attr.aria-expanded]="isFilterOpen"
+  <!-- Mobile Filter Toggle -->
+  <button 
+    class="filter-toggle-btn md:hidden w-full flex items-center justify-between"
+    (click)="toggleFilter()"
+    aria-expanded="false"
+    [attr.aria-expanded]="isFilterOpen"
+  >
+    <span class="flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+      </svg>
+      Filtrer les chambres
+    </span>
+    <svg 
+      *ngIf="!isFilterOpen" 
+      xmlns="http://www.w3.org/2000/svg" 
+      class="h-5 w-5" 
+      viewBox="0 0 20 20" 
+      fill="currentColor"
     >
-      <span class="flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-        </svg>
-        Filtrer les résultats
-      </span>
-      <svg 
-        *ngIf="!isFilterOpen" 
-        xmlns="http://www.w3.org/2000/svg" 
-        class="h-5 w-5" 
-        viewBox="0 0 20 20" 
-        fill="currentColor"
-      >
-        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-      </svg>
-      <svg 
-        *ngIf="isFilterOpen" 
-        xmlns="http://www.w3.org/2000/svg" 
-        class="h-5 w-5" 
-        viewBox="0 0 20 20" 
-        fill="currentColor"
-      >
-        <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-      </svg>
-    </button>
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+    <svg 
+      *ngIf="isFilterOpen" 
+      xmlns="http://www.w3.org/2000/svg" 
+      class="h-5 w-5" 
+      viewBox="0 0 20 20" 
+      fill="currentColor"
+    >
+      <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+    </svg>
+  </button>
+  
+  <!-- Filter Content (visible on desktop, toggles on mobile) -->
+  <div 
+    class="filter-content"
+    [ngClass]="{'block': isFilterOpen || windowObj.innerWidth >= 768, 'hidden': !isFilterOpen && windowObj.innerWidth < 768}"
+  >
+    <!-- Search Bar -->
+    <div class="search-bar-container">
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          placeholder="Rechercher une chambre..."
+          class="search-input pl-10"
+          [value]="filterModel.search || ''"
+          (input)="onSearchInput($event)"
+        >
+      </div>
+    </div>
     
-    <!-- Filter Content (visible on desktop, toggles on mobile) -->
-    <div 
-      class="filter-content"
-      [ngClass]="{'block': isFilterOpen || windowObj.innerWidth >= 768, 'hidden': !isFilterOpen && windowObj.innerWidth < 768}"
-    >
-      <!-- Search Bar -->
-      <div class="search-bar-container">
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-            </svg>
-          </div>
+    <!-- Basic Filters -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+      <!-- Price Range -->
+      <div class="filter-group">
+        <h3 class="filter-title">Prix par nuit</h3>
+        <div class="flex items-center space-x-2">
           <input 
-            type="text" 
-            placeholder="Rechercher un espace..."
-            class="search-input pl-10"
-            [value]="filterModel.search || ''"
-            (input)="onSearchInput($event)"
+            type="number"
+            placeholder="Min"
+            class="price-input"
+            [(ngModel)]="filterModel.priceMin"
+            min="0"
           >
+          <span class="text-gray-400">—</span>
+          <input 
+            type="number"
+            placeholder="Max"
+            class="price-input"
+            [(ngModel)]="filterModel.priceMax"
+            min="0"
+          >
+          <span class="text-white">€</span>
         </div>
       </div>
       
-      <!-- Basic Filters -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-        <!-- Price Range -->
-        <div class="filter-group">
-          <h3 class="filter-title">Prix</h3>
-          <div class="flex items-center space-x-2">
-            <input 
-              type="number"
-              placeholder="Min"
-              class="price-input"
-              [(ngModel)]="filterModel.priceMin"
-              min="0"
-            >
-            <span class="text-gray-400">—</span>
-            <input 
-              type="number"
-              placeholder="Max"
-              class="price-input"
-              [(ngModel)]="filterModel.priceMax"
-              min="0"
-            >
-            <span class="text-white">€</span>
-          </div>
+      <!-- Capacity -->
+      <div class="filter-group">
+        <h3 class="filter-title">Capacité</h3>
+        <div class="flex items-center">
+          <input 
+            type="number"
+            placeholder="Nombre de personnes"
+            class="capacity-input"
+            [(ngModel)]="filterModel.capacityMin"
+            min="1"
+            [max]="maxCapacity"
+          >
+          <span class="ml-2 text-white">pers.</span>
         </div>
-        
-        <!-- Capacity -->
-        <div class="filter-group">
-          <h3 class="filter-title">Capacité</h3>
-          <div class="flex items-center">
-            <input 
-              type="number"
-              placeholder="Nombre de personnes"
-              class="capacity-input"
-              [(ngModel)]="filterModel.capacityMin"
-              min="1"
-            >
-            <span class="ml-2 text-white">pers.</span>
+      </div>
+      
+      <!-- Room Types (shortened list) -->
+      <div class="filter-group">
+        <h3 class="filter-title">Type de chambre</h3>
+        <div class="space-y-2">
+          <div 
+            *ngFor="let type of roomTypes.slice(0, 3)" 
+            class="filter-checkbox-item"
+          >
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="checkbox"
+                class="hidden"
+                [checked]="isRoomTypeSelected(type.id)"
+                (change)="toggleRoomType(type.id)"
+              >
+              <span 
+                class="checkbox-custom"
+                [ngClass]="{'checked': isRoomTypeSelected(type.id)}"
+              ></span>
+              <span class="ml-2">{{ type.name }}</span>
+            </label>
           </div>
+          
+          <button 
+            *ngIf="roomTypes.length > 3" 
+            (click)="toggleAdvancedFilter()" 
+            class="text-gold text-sm hover:underline mt-1"
+          >
+            Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
+          </button>
         </div>
-        
-        <!-- Space Types (shortened list) -->
+      </div>
+      
+      <!-- Amenities (shortened list) -->
+      <div class="filter-group">
+        <h3 class="filter-title">Équipements</h3>
+        <div class="space-y-2">
+          <div 
+            *ngFor="let amenity of amenities.slice(0, 3)" 
+            class="filter-checkbox-item"
+          >
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="checkbox"
+                class="hidden"
+                [checked]="isAmenitySelected(amenity.id)"
+                (change)="toggleAmenity(amenity.id)"
+              >
+              <span 
+                class="checkbox-custom"
+                [ngClass]="{'checked': isAmenitySelected(amenity.id)}"
+              ></span>
+              <span class="ml-2">{{ amenity.name }}</span>
+            </label>
+          </div>
+          
+          <button 
+            *ngIf="amenities.length > 3" 
+            (click)="toggleAdvancedFilter()" 
+            class="text-gold text-sm hover:underline mt-1"
+          >
+            Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Advanced Filter Section -->
+    <div *ngIf="isAdvancedFilterOpen" class="advanced-filter-section mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- All Room Types & Views -->
         <div class="filter-group">
-          <h3 class="filter-title">Type d'espace</h3>
-          <div class="space-y-2">
+          <h3 class="filter-title">Tous les types de chambres</h3>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
-              *ngFor="let type of spaceTypes.slice(0, 3)" 
+              *ngFor="let type of roomTypes" 
               class="filter-checkbox-item"
             >
               <label class="flex items-center cursor-pointer">
                 <input 
                   type="checkbox"
                   class="hidden"
-                  [checked]="isSpaceTypeSelected(type.id)"
-                  (change)="toggleSpaceType(type.id)"
+                  [checked]="isRoomTypeSelected(type.id)"
+                  (change)="toggleRoomType(type.id)"
                 >
                 <span 
                   class="checkbox-custom"
-                  [ngClass]="{'checked': isSpaceTypeSelected(type.id)}"
+                  [ngClass]="{'checked': isRoomTypeSelected(type.id)}"
                 ></span>
                 <span class="ml-2">{{ type.name }}</span>
               </label>
             </div>
-            
-            <button 
-              *ngIf="spaceTypes.length > 3" 
-              (click)="toggleAdvancedFilter()" 
-              class="text-gold text-sm hover:underline mt-1"
+          </div>
+          
+          <!-- Nouvelle section: Vue -->
+          <h3 class="filter-title mt-4">Vue</h3>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+            <div 
+              *ngFor="let view of viewOptions" 
+              class="filter-checkbox-item"
             >
-              Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
-            </button>
+              <label class="flex items-center cursor-pointer">
+                <input 
+                  type="checkbox"
+                  class="hidden"
+                  [checked]="isViewSelected(view.id)"
+                  (change)="toggleView(view.id)"
+                >
+                <span 
+                  class="checkbox-custom"
+                  [ngClass]="{'checked': isViewSelected(view.id)}"
+                ></span>
+                <span class="ml-2">{{ view.name }}</span>
+              </label>
+            </div>
           </div>
         </div>
         
-        <!-- Amenities (shortened list) -->
+        <!-- All Amenities & Bed Types -->
         <div class="filter-group">
-          <h3 class="filter-title">Équipements</h3>
-          <div class="space-y-2">
+          <h3 class="filter-title">Tous les équipements</h3>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
-              *ngFor="let amenity of amenities.slice(0, 3)" 
+              *ngFor="let amenity of amenities" 
               class="filter-checkbox-item"
             >
               <label class="flex items-center cursor-pointer">
@@ -150,88 +236,76 @@
                 <span class="ml-2">{{ amenity.name }}</span>
               </label>
             </div>
-            
-            <button 
-              *ngIf="amenities.length > 3" 
-              (click)="toggleAdvancedFilter()" 
-              class="text-gold text-sm hover:underline mt-1"
+          </div>
+          
+          <!-- Nouvelle section: Types de lit -->
+          <h3 class="filter-title mt-4">Types de lit</h3>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+            <div 
+              *ngFor="let bedType of bedTypes" 
+              class="filter-checkbox-item"
             >
-              Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
+              <label class="flex items-center cursor-pointer">
+                <input 
+                  type="checkbox"
+                  class="hidden"
+                  [checked]="isBedTypeSelected(bedType.id)"
+                  (change)="toggleBedType(bedType.id)"
+                >
+                <span 
+                  class="checkbox-custom"
+                  [ngClass]="{'checked': isBedTypeSelected(bedType.id)}"
+                ></span>
+                <span class="ml-2">{{ bedType.name }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Nouvelles options: Balcon et Étage -->
+        <div class="filter-group">
+          <h3 class="filter-title">Balcon</h3>
+          <div class="flex flex-wrap gap-2">
+            <button 
+              *ngFor="let option of [true, false, null]"
+              (click)="toggleBalcony(option)"
+              class="balcony-option-btn"
+              [ngClass]="{'active': isBalconyOptionSelected(option)}"
+            >
+              {{ getBalconyText(option) }}
+            </button>
+          </div>
+          
+          <h3 class="filter-title mt-4">Étage</h3>
+          <div class="flex flex-wrap gap-2">
+            <button 
+              *ngFor="let floor of [0, 1, 2, 3, 4, 5, 6, null]"
+              (click)="setFloor(floor)"
+              class="floor-option-btn"
+              [ngClass]="{'active': filterModel.floor === floor}"
+            >
+              {{ floor === null ? 'Tous' : (floor === 0 ? 'RDC' : 'Étage ' + floor) }}
             </button>
           </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Filter Actions -->
+    <div class="filter-actions mt-6 flex flex-wrap gap-3">
+      <button 
+        (click)="applyFilter()" 
+        class="btn-apply"
+      >
+        Appliquer les filtres
+      </button>
       
-      <!-- Advanced Filter Section -->
-      <div *ngIf="isAdvancedFilterOpen" class="advanced-filter-section mt-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- All Space Types -->
-          <div class="filter-group">
-            <h3 class="filter-title">Tous les types d'espaces</h3>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              <div 
-                *ngFor="let type of spaceTypes" 
-                class="filter-checkbox-item"
-              >
-                <label class="flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox"
-                    class="hidden"
-                    [checked]="isSpaceTypeSelected(type.id)"
-                    (change)="toggleSpaceType(type.id)"
-                  >
-                  <span 
-                    class="checkbox-custom"
-                    [ngClass]="{'checked': isSpaceTypeSelected(type.id)}"
-                  ></span>
-                  <span class="ml-2">{{ type.name }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          
-          <!-- All Amenities -->
-          <div class="filter-group">
-            <h3 class="filter-title">Tous les équipements</h3>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              <div 
-                *ngFor="let amenity of amenities" 
-                class="filter-checkbox-item"
-              >
-                <label class="flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox"
-                    class="hidden"
-                    [checked]="isAmenitySelected(amenity.id)"
-                    (change)="toggleAmenity(amenity.id)"
-                  >
-                  <span 
-                    class="checkbox-custom"
-                    [ngClass]="{'checked': isAmenitySelected(amenity.id)}"
-                  ></span>
-                  <span class="ml-2">{{ amenity.name }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Filter Actions -->
-      <div class="filter-actions mt-6 flex flex-wrap gap-3">
-        <button 
-          (click)="applyFilter()" 
-          class="btn-apply"
-        >
-          Appliquer les filtres
-        </button>
-        
-        <button 
-          (click)="resetFilter()" 
-          class="btn-reset"
-        >
-          Réinitialiser
-        </button>
-      </div>
+      <button 
+        (click)="resetFilter()" 
+        class="btn-reset"
+      >
+        Réinitialiser
+      </button>
     </div>
   </div>
+</div>

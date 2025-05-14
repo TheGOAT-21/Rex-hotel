@@ -1,92 +1,196 @@
 :host {
-    --rex-gold: #E0C989;
-    --rex-black: #000000;
-    --rex-dark-gray: #1D1D1D;
-    --rex-beige: #F5EFE0;
-  }
-  
-  .gallery-container {
-    width: 100%;
-    height: 100%;
-  }
-  
+  --rex-gold: #E0C989;
+  --rex-black: #000000;
+  --rex-dark-gray: #1D1D1D;
+  --rex-beige: #F5EFE0;
+}
+
+.gallery-container {
+  width: 100%;
+  height: 100%;
+}
+
+.main-image-container {
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.main-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.nav-arrow {
+  z-index: 10;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+  opacity: 1;
+  background-color: var(--rex-gold);
+  color: var(--rex-black);
+}
+
+.thumbnail-item {
+  position: relative;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.active-thumbnail {
+  border-color: var(--rex-gold);
+}
+
+.thumbnail-item:hover {
+  transform: translateY(-2px);
+}
+
+.lightbox {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.bg-gold, .hover\:bg-gold:hover {
+  background-color: var(--rex-gold);
+}
+
+.text-gold, .hover\:text-gold:hover {
+  color: var(--rex-gold);
+}
+
+/* Améliorations lightbox */
+.lightbox-toolbar {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-title {
+  text-transform: capitalize;
+  opacity: 0.9;
+}
+
+.toolbar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 80vh;
+  margin: 0 auto;
+}
+
+.image-container img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Curseur pour zoom et drag */
+.cursor-grab {
+  cursor: grab !important;
+}
+
+.cursor-grabbing {
+  cursor: grabbing !important;
+}
+
+.zoom-indicator {
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Lightbox thumbnails */
+.lightbox-thumbnails {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* fullscreen button */
+.fullscreen-btn {
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.fullscreen-btn:hover {
+  opacity: 1;
+  background-color: var(--rex-gold);
+  color: var(--rex-black);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
   .main-image-container {
-    height: 100%;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: 40vh;
+    min-height: 200px;
   }
   
-  .main-image {
-    height: 100%;
+  .thumbnails-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .nav-arrow svg {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+  
+  .lightbox-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .toolbar-controls {
+    margin-top: 0.5rem;
     width: 100%;
-    object-fit: cover;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-counter, .fullscreen-btn {
+    bottom: 2px;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
   }
   
-  .nav-arrow {
-    z-index: 10;
-    opacity: 0.7;
-    transition: all 0.3s ease;
+  .fullscreen-btn {
+    left: 2px;
   }
   
-  .nav-arrow:hover {
-    opacity: 1;
-    background-color: var(--rex-gold);
-    color: var(--rex-black);
+  .image-counter {
+    right: 2px;
   }
   
-  .thumbnail-item {
-    position: relative;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-    overflow: hidden;
+  .lightbox-thumbnails {
+    display: none;
   }
-  
-  .active-thumbnail {
-    border-color: var(--rex-gold);
-  }
-  
-  .thumbnail-item:hover {
-    transform: translateY(-2px);
-  }
-  
-  .lightbox {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  
-  .bg-gold, .hover\:bg-gold:hover {
-    background-color: var(--rex-gold);
-  }
-  
-  .text-gold, .hover\:text-gold:hover {
-    color: var(--rex-gold);
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 640px) {
-    .main-image-container {
-      height: 40vh;
-      min-height: 200px;
-    }
-    
-    .thumbnails-container {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .nav-arrow svg {
-      height: 1.25rem;
-      width: 1.25rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .image-counter {
-      bottom: 2px;
-      right: 2px;
-      font-size: 0.75rem;
-    }
-  }
+}

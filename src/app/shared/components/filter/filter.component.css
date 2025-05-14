@@ -1,190 +1,222 @@
 :host {
-    --rex-gold: #E0C989;
-    --rex-black: #000000;
-    --rex-dark-gray: #1D1D1D;
-    --rex-beige: #F5EFE0;
-    display: block;
-  }
-  
+  --rex-gold: #E0C989;
+  --rex-black: #000000;
+  --rex-dark-gray: #1D1D1D;
+  --rex-beige: #F5EFE0;
+  display: block;
+}
+
+.filter-container {
+  background-color: var(--rex-black);
+  border: 1px solid var(--rex-dark-gray);
+  border-radius: 0.25rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-toggle-btn {
+  background-color: var(--rex-dark-gray);
+  border: none;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-toggle-btn:hover {
+  background-color: rgba(29, 29, 29, 0.8);
+}
+
+.search-input {
+  width: 100%;
+  background-color: var(--rex-dark-gray);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border-radius: 0.25rem;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--rex-gold);
+}
+
+.search-input::placeholder {
+  color: #9e9e9e;
+}
+
+.filter-title {
+  color: var(--rex-gold);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-group {
+  margin-bottom: 1rem;
+}
+
+.price-input,
+.capacity-input {
+  width: 100%;
+  max-width: 120px;
+  background-color: var(--rex-dark-gray);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  transition: border-color 0.2s ease;
+}
+
+.price-input:focus,
+.capacity-input:focus {
+  outline: none;
+  border-color: var(--rex-gold);
+}
+
+.filter-checkbox-item {
+  margin-bottom: 0.25rem;
+}
+
+.filter-checkbox-item label {
+  color: white;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-custom {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--rex-dark-gray);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-custom.checked {
+  background-color: var(--rex-gold);
+  border-color: var(--rex-gold);
+}
+
+.checkbox-custom.checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.advanced-filter-section {
+  border-top: 1px solid var(--rex-dark-gray);
+  padding-top: 1rem;
+}
+
+/* Balcon et étage boutons */
+.balcony-option-btn,
+.floor-option-btn {
+  background-color: var(--rex-dark-gray);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.balcony-option-btn:hover,
+.floor-option-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.balcony-option-btn.active,
+.floor-option-btn.active {
+  background-color: var(--rex-gold);
+  color: var(--rex-black);
+  border-color: var(--rex-gold);
+  font-weight: 600;
+}
+
+.btn-apply {
+  background-color: var(--rex-gold);
+  color: var(--rex-black);
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 150px;
+  text-align: center;
+}
+
+.btn-apply:hover {
+  background-color: rgba(224, 201, 137, 0.8);
+}
+
+.btn-reset {
+  background-color: transparent;
+  color: white;
+  border: 1px solid var(--rex-dark-gray);
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 150px;
+  text-align: center;
+}
+
+.btn-reset:hover {
+  background-color: var(--rex-dark-gray);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
   .filter-container {
-    background-color: var(--rex-black);
-    border: 1px solid var(--rex-dark-gray);
-    border-radius: 0.25rem;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
+    padding: 1rem;
   }
   
-  .filter-toggle-btn {
-    background-color: var(--rex-dark-gray);
-    border: none;
-    color: white;
-    padding: 0.75rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .filter-toggle-btn:hover {
-    background-color: rgba(29, 29, 29, 0.8);
-  }
-  
-  .search-input {
+  .btn-apply, 
+  .btn-reset {
     width: 100%;
-    background-color: var(--rex-dark-gray);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    border-radius: 0.25rem;
-    transition: border-color 0.2s ease;
+    margin-bottom: 0.5rem;
   }
   
-  .search-input:focus {
-    outline: none;
-    border-color: var(--rex-gold);
+  .filter-actions {
+    flex-direction: column;
   }
-  
-  .search-input::placeholder {
-    color: #9e9e9e;
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    font-size: 0.875rem;
   }
   
   .filter-title {
-    color: var(--rex-gold);
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  .filter-group {
-    margin-bottom: 1rem;
-  }
-  
-  .price-input,
-  .capacity-input {
-    width: 100%;
-    max-width: 120px;
-    background-color: var(--rex-dark-gray);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.25rem;
-    transition: border-color 0.2s ease;
-  }
-  
-  .price-input:focus,
-  .capacity-input:focus {
-    outline: none;
-    border-color: var(--rex-gold);
-  }
-  
-  .filter-checkbox-item {
-    margin-bottom: 0.25rem;
+    font-size: 0.8125rem;
   }
   
   .filter-checkbox-item label {
-    color: white;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
+    font-size: 0.8125rem;
   }
   
-  .checkbox-custom {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    background-color: var(--rex-dark-gray);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 0.25rem;
-    position: relative;
-    transition: all 0.2s ease;
+  .balcony-option-btn,
+  .floor-option-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
   }
-  
-  .checkbox-custom.checked {
-    background-color: var(--rex-gold);
-    border-color: var(--rex-gold);
-  }
-  
-  .checkbox-custom.checked::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  
-  .advanced-filter-section {
-    border-top: 1px solid var(--rex-dark-gray);
-    padding-top: 1rem;
-  }
-  
-  .btn-apply {
-    background-color: var(--rex-gold);
-    color: var(--rex-black);
-    border: none;
-    padding: 0.625rem 1.25rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 150px;
-    text-align: center;
-  }
-  
-  .btn-apply:hover {
-    background-color: rgba(224, 201, 137, 0.8);
-  }
-  
-  .btn-reset {
-    background-color: transparent;
-    color: white;
-    border: 1px solid var(--rex-dark-gray);
-    padding: 0.625rem 1.25rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 150px;
-    text-align: center;
-  }
-  
-  .btn-reset:hover {
-    background-color: var(--rex-dark-gray);
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .filter-container {
-      padding: 1rem;
-    }
-    
-    .btn-apply, 
-    .btn-reset {
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-    
-    .filter-actions {
-      flex-direction: column;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .search-input {
-      font-size: 0.875rem;
-    }
-    
-    .filter-title {
-      font-size: 0.8125rem;
-    }
-    
-    .filter-checkbox-item label {
-      font-size: 0.8125rem;
-    }
-  }
+}

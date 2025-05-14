@@ -27,8 +27,8 @@ export * from './amenity-badge/amenity-badge.component';
 export * from './gallery/gallery.component';
 export * from './price-display/price-display.component';
 export * from './rating/rating.component';
-export * from './space-card/space-card.component';
-export * from './space-list/space-list.component';
+export * from './room-card/room-card.component';
+export * from './room-list/room-list.component';
 
 // Composants utilitaires
 export * from './alert/alert.component';

@@ -10,7 +10,7 @@ export const SPACES_ROUTES: Routes = [
   },
   {
     path: ':id', 
-    loadComponent: () => import('../features/detail/detail-page/detail-page.component').then(m => m.DetailPageComponent),
+    loadComponent: () => import('../features/rooms/room-detail/room-detail.component').then(m => m.DetailPageComponent),
     title: 'Détail de l\'espace | REX HOTEL'
   },
   {
@@ -18,7 +18,7 @@ export const SPACES_ROUTES: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('../features/espace/espace-list/espace-list.component').then(m => m.EspaceListComponent),
+        loadComponent: () => import('../features/espace/eroom-list/eroom-list.component').then(m => m.EspaceListComponent),
         title: 'Chambres & Suites | REX HOTEL',
         data: { filter: { types: ['chambre_executive_twin', 'chambre_king_standard', 'chambre_king_superieure', 'chambre_king_executive', 'suite_luxe', 'suite_presidentielle', 'pentahouse'] } }
       },
@@ -34,7 +34,7 @@ export const SPACES_ROUTES: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('../features/espace/espace-list/espace-list.component').then(m => m.EspaceListComponent),
+        loadComponent: () => import('../features/espace/eroom-list/eroom-list.component').then(m => m.EspaceListComponent),
         title: 'Salles de conférence | REX HOTEL',
         data: { filter: { types: ['salle_conference'] } }
       },
@@ -50,7 +50,7 @@ export const SPACES_ROUTES: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('../features/espace/espace-list/espace-list.component').then(m => m.EspaceListComponent),
+        loadComponent: () => import('../features/espace/room-list/eroom-list.component').then(m => m.EspaceListComponent),
         title: 'Restaurants & Lounges | REX HOTEL',
         data: { filter: { types: ['restaurant', 'lounge'] } }
       },

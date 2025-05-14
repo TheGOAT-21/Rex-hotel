@@ -30,13 +30,17 @@ export class DatepickerComponent implements OnInit {
   @Input() minDate: Date | null = null;
   @Input() maxDate: Date | null = null;
   @Input() disabledDates: Date[] = [];
+  @Input() disabledDateRanges: {start: Date, end: Date}[] = []; // Nouveau: plages de dates désactivées
   @Input() placeholder: string = 'Sélectionner une date';
   @Input() rangeStartLabel: string = 'Arrivée';
   @Input() rangeEndLabel: string = 'Départ';
   @Input() monthsToShow: number = 1;
+  @Input() allowPastDates: boolean = false; // Nouveau: permettre/bloquer les dates passées
+  @Input() highlightWeekends: boolean = true; // Nouveau: mettre en évidence les weekends
   
   @Output() dateSelected = new EventEmitter<Date>();
   @Output() rangeSelected = new EventEmitter<{start: Date, end: Date | null}>();
+  @Output() unavailableDateSelected = new EventEmitter<Date>(); // Nouveau: émis quand une date désactivée est sélectionnée
   
   // UI state
   isOpen: boolean = false;
@@ -65,6 +69,13 @@ export class DatepickerComponent implements OnInit {
     const today = new Date();
     this.currentMonth = today.getMonth();
     this.currentYear = today.getFullYear();
+    
+    // Définir minDate par défaut à aujourd'hui si non fourni et allowPastDates est false
+    if (!this.minDate && !this.allowPastDates) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      this.minDate = today;
+    }
     
     if (this.selectedDate) {
       this.currentMonth = this.selectedDate.getMonth();
@@ -184,6 +195,7 @@ export class DatepickerComponent implements OnInit {
       // Add days of current month
       for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(targetYear, targetMonth, i);
+        const isWeekend = date.getDay() === 0 || date.getDay() === 6;
         
         monthData.push({
           date,
@@ -230,7 +242,10 @@ export class DatepickerComponent implements OnInit {
   
   // Handle day selection
   selectDay(day: CalendarDay): void {
-    if (day.isDisabled) return;
+    if (day.isDisabled) {
+      this.unavailableDateSelected.emit(day.date);
+      return;
+    }
     
     if (this.isRange) {
       // Range selection mode
@@ -241,6 +256,13 @@ export class DatepickerComponent implements OnInit {
         this.tempEndDate = null;
         this.rangeSelectionStep = 'end';
       } else {
+        // Vérifier si la plage contient des dates désactivées
+        if (this.tempStartDate && this.hasDisabledDatesInRange(this.tempStartDate, day.date)) {
+          // Si des dates désactivées dans la plage, notifier et réinitialiser
+          this.unavailableDateSelected.emit(day.date);
+          return;
+        }
+        
         // Select end date
         this.tempEndDate = new Date(day.date);
         this.rangeSelectionStep = 'start';
@@ -276,6 +298,33 @@ export class DatepickerComponent implements OnInit {
     
     // Update calendar
     this.generateCalendarDays();
+  }
+  
+  // Nouveau: vérifier si une plage contient des dates désactivées
+  hasDisabledDatesInRange(start: Date, end: Date): boolean {
+    const startTime = start.getTime();
+    const endTime = end.getTime();
+    
+    // Vérifier dans les plages désactivées
+    for (const range of this.disabledDateRanges) {
+      const rangeStartTime = range.start.getTime();
+      const rangeEndTime = range.end.getTime();
+      
+      // Si les plages se chevauchent
+      if (!(endTime < rangeStartTime || startTime > rangeEndTime)) {
+        return true;
+      }
+    }
+    
+    // Vérifier dans les dates individuelles désactivées
+    for (const date of this.disabledDates) {
+      const dateTime = date.getTime();
+      if (dateTime >= startTime && dateTime <= endTime) {
+        return true;
+      }
+    }
+    
+    return false;
   }
   
   // Clear the selection
@@ -333,7 +382,19 @@ export class DatepickerComponent implements OnInit {
     if (this.maxDate && date > this.maxDate) return true;
     
     // Check disabled dates
-    return this.disabledDates.some(disabledDate => this.isSameDay(date, disabledDate));
+    if (this.disabledDates.some(disabledDate => this.isSameDay(date, disabledDate))) {
+      return true;
+    }
+    
+    // Check disabled ranges
+    for (const range of this.disabledDateRanges) {
+      const dateTime = date.getTime();
+      if (dateTime >= range.start.getTime() && dateTime <= range.end.getTime()) {
+        return true;
+      }
+    }
+    
+    return false;
   }
   
   // Format a date to display string
@@ -364,5 +425,11 @@ export class DatepickerComponent implements OnInit {
   // Check if day should be marked as the range end
   isRangeEnd(day: CalendarDay): boolean {
     return this.isRange && day.isEndDay;
+  }
+  
+  // Nouveau: vérifier si c'est un weekend
+  isWeekend(date: Date): boolean {
+    const day = date.getDay();
+    return day === 0 || day === 6; // 0 = dimanche, 6 = samedi
   }
 }

@@ -7,11 +7,12 @@ import {
   LoadingComponent
 } from '../index';
 import { 
-  Space,
-  SpaceAvailability,
-  ReservationRequest
+  Room,
+  RoomAvailability,
+  ReservationRequest,
+  PaymentMethod
 } from '../../../core/models';
-import { SpaceService } from '../../../core/services';
+import { RoomService } from '../../../core/services';
 
 @Component({
   selector: 'app-reservation-form',
@@ -27,7 +28,7 @@ import { SpaceService } from '../../../core/services';
   styleUrl: './reservation-form.component.css'
 })
 export class ReservationFormComponent implements OnInit, OnChanges {
-  @Input() space: Space | null = null;
+  @Input() room: Room | null = null;
   @Input() formTitle: string = 'Réservation';
   @Input() submitButtonText: string = 'Réserver maintenant';
   @Input() initialStartDate: Date | null = null;
@@ -39,25 +40,47 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   @Input() showPriceSummary: boolean = true;
   @Input() showTaxes: boolean = true;
   @Input() showPaymentInfo: boolean = true;
+  @Input() paymentEnabled: boolean = false; // Nouvelle option pour activer le paiement
 
   @Output() formSubmit = new EventEmitter<ReservationRequest>();
   @Output() formCancel = new EventEmitter<void>();
-  @Output() availabilityChange = new EventEmitter<SpaceAvailability>();
+  @Output() availabilityChange = new EventEmitter<RoomAvailability>();
 
   reservationForm!: FormGroup;
+  paymentForm!: FormGroup; // Nouveau formulaire pour les détails de paiement
   
   startDate: Date | null = null;
   endDate: Date | null = null;
   minDate: Date = new Date();
   disabledDates: Date[] = [];
+  disabledDateRanges: {start: Date, end: Date}[] = []; // Nouveau pour bloquer des plages de dates
   
-  availability: SpaceAvailability | null = null;
+  availability: RoomAvailability | null = null;
   checkingAvailability = false;
   dateRangeInvalid = false;
   
+  // État d'affichage
+  showPaymentSection: boolean = false; // Nouveau pour basculer l'affichage du formulaire de paiement
+  selectedPaymentMethod: PaymentMethod | null = null; // Nouveau pour stocker la méthode de paiement
+  
+  // Options pour le formulaire
+  guestTitles: {value: string, label: string}[] = [
+    {value: 'mr', label: 'M.'},
+    {value: 'mrs', label: 'Mme'},
+    {value: 'ms', label: 'Mlle'},
+    {value: 'dr', label: 'Dr'}
+  ];
+  
+  paymentMethods: {value: PaymentMethod, label: string}[] = [
+    {value: 'card', label: 'Carte bancaire'},
+    {value: 'paypal', label: 'PayPal'},
+    {value: 'bank_transfer', label: 'Virement bancaire'},
+    {value: 'on_arrival', label: 'Paiement à l\'arrivée'}
+  ];
+  
   constructor(
     private fb: FormBuilder,
-    private spaceService: SpaceService
+    private roomService: RoomService
   ) {}
 
   ngOnInit(): void {
@@ -80,16 +103,21 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       this.endDate = dayAfter;
     }
     
-    // Check availability if space and dates are set
-    if (this.space && this.startDate && this.endDate) {
+    // Charger les dates indisponibles
+    this.loadUnavailableDates();
+    
+    // Check availability if room and dates are set
+    if (this.room && this.startDate && this.endDate) {
       this.checkAvailability();
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['space'] && !changes['space'].firstChange) {
-      // Space changed, check availability
-      if (this.space && this.startDate && this.endDate) {
+    if (changes['room'] && !changes['room'].firstChange) {
+      // Room changed, check availability and reload unavailable dates
+      this.loadUnavailableDates();
+      
+      if (this.room && this.startDate && this.endDate) {
         this.checkAvailability();
       }
     }
@@ -97,13 +125,79 @@ export class ReservationFormComponent implements OnInit, OnChanges {
 
   initForm(): void {
     this.reservationForm = this.fb.group({
+      // Informations client
+      title: ['mr', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^[\d\s\+\-\(\)]{6,20}$/)]],
+      
+      // Informations de réservation
       guestCount: [this.initialGuestCount, [Validators.required, Validators.min(1)]],
-      specialRequests: ['']
+      specialRequests: [''],
+      
+      // Conditions
+      termsAccepted: [false, [Validators.requiredTrue]]
+    });
+    
+    // Formulaire de paiement (facultatif)
+    this.paymentForm = this.fb.group({
+      paymentMethod: ['card', Validators.required],
+      
+      // Champs pour carte bancaire
+      cardholderName: [''],
+      cardNumber: [''],
+      expiryDate: [''],
+      cvv: [''],
+      
+      // Adresse de facturation
+      billingAddress: this.fb.group({
+        street: [''],
+        city: [''],
+        zipCode: [''],
+        country: ['']
+      })
+    });
+    
+    // Activer/désactiver les validateurs en fonction de la méthode de paiement
+    this.paymentForm.get('paymentMethod')?.valueChanges.subscribe((method: PaymentMethod) => {
+      this.selectedPaymentMethod = method;
+      
+      const cardFields = ['cardholderName', 'cardNumber', 'expiryDate', 'cvv'];
+      
+      if (method === 'card') {
+        // Ajouter les validateurs pour les champs de carte
+        cardFields.forEach(field => {
+          this.paymentForm.get(field)?.setValidators([Validators.required]);
+          this.paymentForm.get(field)?.updateValueAndValidity();
+        });
+      } else {
+        // Supprimer les validateurs
+        cardFields.forEach(field => {
+          this.paymentForm.get(field)?.clearValidators();
+          this.paymentForm.get(field)?.updateValueAndValidity();
+        });
+      }
+    });
+  }
+  
+  // Charger les dates indisponibles pour la chambre
+  loadUnavailableDates(): void {
+    if (!this.room) return;
+    
+    this.roomService.getUnavailableDates(this.room.id!).subscribe({
+      next: (data) => {
+        this.disabledDates = data.dates || [];
+        this.disabledDateRanges = data.ranges || [];
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des dates indisponibles:', err);
+      }
     });
   }
 
   checkAvailability(): void {
-    if (!this.space || !this.startDate || !this.endDate) {
+    if (!this.room || !this.startDate || !this.endDate) {
       this.dateRangeInvalid = true;
       return;
     }
@@ -111,7 +205,7 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     this.dateRangeInvalid = false;
     this.checkingAvailability = true;
     
-    this.spaceService.checkAvailability(this.space.id!, this.startDate, this.endDate).subscribe({
+    this.roomService.checkAvailability(this.room.id!, this.startDate, this.endDate).subscribe({
       next: (availability) => {
         this.availability = availability;
         this.availabilityChange.emit(availability);
@@ -137,20 +231,50 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    if (this.reservationForm.invalid || !this.startDate || !this.endDate || !this.space) {
+    if (this.reservationForm.invalid || !this.startDate || !this.endDate || !this.room) {
       this.dateRangeInvalid = !this.startDate || !this.endDate;
+      
+      // Marquer tous les champs comme touchés pour montrer les erreurs
+      this.markFormGroupTouched(this.reservationForm);
+      
+      if (this.showPaymentSection && this.paymentEnabled) {
+        this.markFormGroupTouched(this.paymentForm);
+      }
+      
       return;
     }
     
     const formValue = this.reservationForm.value;
     
     const reservationRequest: ReservationRequest = {
-      spaceId: this.space.id!,
+      roomId: this.room.id!,
       startDate: this.startDate,
       endDate: this.endDate,
       numberOfGuests: formValue.guestCount,
-      specialRequests: formValue.specialRequests
+      specialRequests: formValue.specialRequests,
+      // Informations client
+      guestInfo: {
+        title: formValue.title,
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        email: formValue.email,
+        phone: formValue.phone
+      }
     };
+    
+    // Ajouter les informations de paiement si nécessaire
+    if (this.showPaymentSection && this.paymentEnabled && this.paymentForm.valid) {
+      reservationRequest.payment = {
+        method: this.paymentForm.value.paymentMethod,
+        cardDetails: this.paymentForm.value.paymentMethod === 'card' ? {
+          cardholderName: this.paymentForm.value.cardholderName,
+          cardNumber: this.paymentForm.value.cardNumber,
+          expiryDate: this.paymentForm.value.expiryDate,
+          cvv: this.paymentForm.value.cvv
+        } : undefined,
+        billingAddress: this.paymentForm.value.billingAddress
+      };
+    }
     
     this.formSubmit.emit(reservationRequest);
   }
@@ -158,9 +282,25 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   onCancel(): void {
     this.formCancel.emit();
   }
+  
+  // Marquer tous les champs d'un formulaire comme touchés pour afficher les erreurs
+  markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+  
+  // Basculer entre la vue de réservation et la vue de paiement
+  togglePaymentSection(): void {
+    this.showPaymentSection = !this.showPaymentSection;
+  }
 
   // Helper methods
-  getSpaceTypeLabel(type: string): string {
+  getRoomTypeLabel(type: string): string {
     return type
       .replace(/_/g, ' ')
       .replace(/-/g, ' ')
@@ -170,7 +310,7 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   }
 
   getGuestCountOptions(): number[] {
-    const max = this.space ? Math.min(this.space.capacity, this.maxGuests) : this.maxGuests;
+    const max = this.room ? Math.min(this.room.capacity, this.maxGuests) : this.maxGuests;
     return Array.from({length: max}, (_, i) => i + 1);
   }
 
@@ -182,7 +322,7 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   }
 
   getBasePrice(): number {
-    return this.space ? this.space.price : 0;
+    return this.room ? this.room.price : 0;
   }
 
   calculateTaxes(): number {
@@ -202,5 +342,32 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
+  }
+  
+  getFormControlError(controlName: string): string {
+    const control = this.reservationForm.get(controlName);
+    if (control?.invalid && (control.dirty || control.touched)) {
+      if (control.errors?.['required']) {
+        return 'Ce champ est requis.';
+      }
+      if (control.errors?.['email']) {
+        return 'Veuillez entrer une adresse email valide.';
+      }
+      if (control.errors?.['minlength']) {
+        return `Minimum ${control.errors['minlength'].requiredLength} caractères.`;
+      }
+      if (control.errors?.['pattern']) {
+        return 'Format invalide.';
+      }
+      if (control.errors?.['min']) {
+        return `La valeur minimale est ${control.errors['min'].min}.`;
+      }
+    }
+    return '';
+  }
+  
+  isFormControlInvalid(controlName: string): boolean {
+    const control = this.reservationForm.get(controlName);
+    return control ? control.invalid && (control.dirty || control.touched) : false;
   }
 }

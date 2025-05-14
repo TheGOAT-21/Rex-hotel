@@ -1,18 +1,122 @@
 :host {
-    --rex-gold: #E0C989;
-    --rex-black: #000000;
-    --rex-dark-gray: #1D1D1D;
-    --rex-beige: #F5EFE0;
+  --rex-gold: #E0C989;
+  --rex-black: #000000;
+  --rex-dark-gray: #1D1D1D;
+  --rex-beige: #F5EFE0;
+}
+
+.text-gold {
+  color: var(--rex-gold);
+}
+
+.bg-gold {
+  background-color: var(--rex-gold);
+}
+
+.border-gold {
+  border-color: var(--rex-gold);
+}
+
+/* Styles pour les formulaires */
+input, select, textarea {
+  background-color: var(--rex-black);
+  border: 1px solid #333;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--rex-gold);
+  box-shadow: 0 0 0 1px var(--rex-gold);
+}
+
+.checkbox-custom {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--rex-dark-gray);
+  border: 1px solid #333;
+  border-radius: 0.25rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkbox-custom.checked {
+  background-color: var(--rex-gold);
+  border-color: var(--rex-gold);
+}
+
+.checkbox-custom.checked::after {
+  content: '';
+  position: absolute;
+  top: 0.25rem;
+  left: 0.45rem;
+  width: 0.375rem;
+  height: 0.625rem;
+  border: solid var(--rex-black);
+  border-width: 0 0.125rem 0.125rem 0;
+  transform: rotate(45deg);
+}
+
+/* Styles pour les boutons radio */
+.radio-button {
+  position: relative;
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: var(--rex-dark-gray);
+  border: 1px solid #333;
+}
+
+.radio-button.checked {
+  border-color: var(--rex-gold);
+}
+
+.radio-button.checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: var(--rex-gold);
+}
+
+/* Sections */
+.personal-info-section,
+.payment-section {
+  border-top: 1px solid var(--rex-dark-gray);
+  padding-top: 1.5rem;
+}
+
+/* Méthodes de paiement */
+.payment-method-option label {
+  transition: all 0.3s ease;
+}
+
+.payment-method-option label:hover {
+  border-color: var(--rex-gold);
+}
+
+/* Animation transition */
+.payment-form-container {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .payment-methods {
+    grid-template-columns: 1fr;
   }
-  
-  .text-gold {
-    color: var(--rex-gold);
-  }
-  
-  .bg-gold {
-    background-color: var(--rex-gold);
-  }
-  
-  .border-gold {
-    border-color: var(--rex-gold);
-  }
+}
