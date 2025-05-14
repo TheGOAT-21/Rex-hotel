@@ -3,6 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
+// Interface pour définir la structure des éléments du menu
+interface MenuItem {
+  label: string;
+  routerLink: string;
+  exact?: boolean;
+  isButton?: boolean;
+}
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -13,18 +21,26 @@ import { AuthService } from '../../../core/services/auth.service';
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   isMobileMenuOpen = false;
-  isLoggedIn = false;
-  userName = '';
+  
+  // Définition des éléments du menu
+  menuItems: MenuItem[] = [
+    { label: 'Accueil', routerLink: '/', exact: true },
+    { label: 'Chambres', routerLink: '/catalog' },
+    { label: 'Services', routerLink: '/services' },
+    { label: 'Contacts', routerLink: '/contact' }
+  ];
+  
+  // Bouton de réservation séparé (traitement spécial)
+  reservationButton: MenuItem = {
+    label: 'Réserver',
+    routerLink: '/auth/login',
+    isButton: true
+  };
 
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      this.isLoggedIn = !!user;
-      if (user) {
-        this.userName = `${user.firstName} ${user.lastName}`;
-      }
-    });
+    // Si vous avez besoin d'initialiser quoi que ce soit
   }
 
   @HostListener('window:scroll', [])
@@ -38,10 +54,5 @@ export class NavbarComponent implements OnInit {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.closeMobileMenu();
   }
 }
