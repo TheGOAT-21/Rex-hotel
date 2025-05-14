@@ -1,7 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 
 // Interface pour définir la structure des éléments du menu
 interface MenuItem {
@@ -37,7 +36,6 @@ export class NavbarComponent implements OnInit {
     isButton: true
   };
 
-  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     // Si vous avez besoin d'initialiser quoi que ce soit
