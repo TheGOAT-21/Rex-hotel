@@ -69,10 +69,10 @@ export class FilterComponent implements OnInit {
   
   loadRoomTypes(): void {
     this.roomService.getRoomTypes().subscribe({
-      next: (types) => {
+      next: (types: { id: string; name: string }[]) => {
         this.roomTypes = types;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load room types', err);
       }
     });
@@ -80,10 +80,10 @@ export class FilterComponent implements OnInit {
   
   loadAmenities(): void {
     this.roomService.getAmenities().subscribe({
-      next: (amenities) => {
+      next: (amenities: Amenity[]) => {
         this.amenities = amenities;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to load amenities', err);
       }
     });
@@ -171,7 +171,7 @@ export class FilterComponent implements OnInit {
   
   // Nouveau: Basculer l'option de balcon
   toggleBalcony(hasBalcony: boolean | null): void {
-    this.filterModel.hasBalcony = this.filterModel.hasBalcony === hasBalcony ? undefined : hasBalcony;
+    this.filterModel.hasBalcony = hasBalcony === null ? undefined : hasBalcony;
   }
   
   isRoomTypeSelected(typeId: string): boolean {
@@ -228,7 +228,7 @@ export class FilterComponent implements OnInit {
   
   // Nouveau: Définir l'étage
   setFloor(floor: number | null): void {
-    this.filterModel.floor = floor;
+    this.filterModel.floor = floor === null ? undefined : floor;
   }
   
   // Nouveau: Obtenir le texte pour l'option de balcon

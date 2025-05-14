@@ -6,13 +6,16 @@ import {
   PriceDisplayComponent,
   LoadingComponent
 } from '../index';
-import { 
-  Room,
-  RoomAvailability,
-  ReservationRequest,
-  PaymentMethod
-} from '../../../core/models';
-import { RoomService } from '../../../core/services';
+
+// Importation directe des modèles individuels au lieu d'utiliser un barrel file
+// Supposons que ces fichiers existent ou doivent être créés
+import { Room } from '../../../core/models/room.model';
+import { RoomAvailability } from '../../../core/models/room.model';
+import { ReservationRequest } from '../../../core/models/reservation.model';
+import { PaymentMethod } from '../../../core/models/reservation.model';
+
+// Importation directe du service Room
+import { RoomService } from '../../../core/services/room.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -40,30 +43,28 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   @Input() showPriceSummary: boolean = true;
   @Input() showTaxes: boolean = true;
   @Input() showPaymentInfo: boolean = true;
-  @Input() paymentEnabled: boolean = false; // Nouvelle option pour activer le paiement
+  @Input() paymentEnabled: boolean = false;
 
   @Output() formSubmit = new EventEmitter<ReservationRequest>();
   @Output() formCancel = new EventEmitter<void>();
   @Output() availabilityChange = new EventEmitter<RoomAvailability>();
 
   reservationForm!: FormGroup;
-  paymentForm!: FormGroup; // Nouveau formulaire pour les détails de paiement
+  paymentForm!: FormGroup;
   
   startDate: Date | null = null;
   endDate: Date | null = null;
   minDate: Date = new Date();
   disabledDates: Date[] = [];
-  disabledDateRanges: {start: Date, end: Date}[] = []; // Nouveau pour bloquer des plages de dates
+  disabledDateRanges: {start: Date, end: Date}[] = [];
   
   availability: RoomAvailability | null = null;
   checkingAvailability = false;
   dateRangeInvalid = false;
   
-  // État d'affichage
-  showPaymentSection: boolean = false; // Nouveau pour basculer l'affichage du formulaire de paiement
-  selectedPaymentMethod: PaymentMethod | null = null; // Nouveau pour stocker la méthode de paiement
+  showPaymentSection: boolean = false;
+  selectedPaymentMethod: PaymentMethod | null = null;
   
-  // Options pour le formulaire
   guestTitles: {value: string, label: string}[] = [
     {value: 'mr', label: 'M.'},
     {value: 'mrs', label: 'Mme'},
@@ -86,7 +87,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.initForm();
     
-    // Initialize dates
     if (this.initialStartDate) {
       this.startDate = new Date(this.initialStartDate);
     } else {
@@ -103,10 +103,8 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       this.endDate = dayAfter;
     }
     
-    // Charger les dates indisponibles
     this.loadUnavailableDates();
     
-    // Check availability if room and dates are set
     if (this.room && this.startDate && this.endDate) {
       this.checkAvailability();
     }
@@ -114,7 +112,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['room'] && !changes['room'].firstChange) {
-      // Room changed, check availability and reload unavailable dates
       this.loadUnavailableDates();
       
       if (this.room && this.startDate && this.endDate) {
@@ -125,32 +122,22 @@ export class ReservationFormComponent implements OnInit, OnChanges {
 
   initForm(): void {
     this.reservationForm = this.fb.group({
-      // Informations client
       title: ['mr', [Validators.required]],
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^[\d\s\+\-\(\)]{6,20}$/)]],
-      
-      // Informations de réservation
       guestCount: [this.initialGuestCount, [Validators.required, Validators.min(1)]],
       specialRequests: [''],
-      
-      // Conditions
       termsAccepted: [false, [Validators.requiredTrue]]
     });
     
-    // Formulaire de paiement (facultatif)
     this.paymentForm = this.fb.group({
       paymentMethod: ['card', Validators.required],
-      
-      // Champs pour carte bancaire
       cardholderName: [''],
       cardNumber: [''],
       expiryDate: [''],
       cvv: [''],
-      
-      // Adresse de facturation
       billingAddress: this.fb.group({
         street: [''],
         city: [''],
@@ -159,20 +146,17 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       })
     });
     
-    // Activer/désactiver les validateurs en fonction de la méthode de paiement
     this.paymentForm.get('paymentMethod')?.valueChanges.subscribe((method: PaymentMethod) => {
       this.selectedPaymentMethod = method;
       
       const cardFields = ['cardholderName', 'cardNumber', 'expiryDate', 'cvv'];
       
       if (method === 'card') {
-        // Ajouter les validateurs pour les champs de carte
         cardFields.forEach(field => {
           this.paymentForm.get(field)?.setValidators([Validators.required]);
           this.paymentForm.get(field)?.updateValueAndValidity();
         });
       } else {
-        // Supprimer les validateurs
         cardFields.forEach(field => {
           this.paymentForm.get(field)?.clearValidators();
           this.paymentForm.get(field)?.updateValueAndValidity();
@@ -181,16 +165,15 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     });
   }
   
-  // Charger les dates indisponibles pour la chambre
   loadUnavailableDates(): void {
     if (!this.room) return;
     
     this.roomService.getUnavailableDates(this.room.id!).subscribe({
-      next: (data) => {
+      next: (data: {dates: Date[], ranges: {start: Date, end: Date}[]}) => {
         this.disabledDates = data.dates || [];
         this.disabledDateRanges = data.ranges || [];
       },
-      error: (err) => {
+      error: (err: Error) => {
         console.error('Erreur lors du chargement des dates indisponibles:', err);
       }
     });
@@ -206,12 +189,12 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     this.checkingAvailability = true;
     
     this.roomService.checkAvailability(this.room.id!, this.startDate, this.endDate).subscribe({
-      next: (availability) => {
+      next: (availability: RoomAvailability) => {
         this.availability = availability;
         this.availabilityChange.emit(availability);
         this.checkingAvailability = false;
       },
-      error: (err) => {
+      error: (err: Error) => {
         console.error('Error checking availability:', err);
         this.checkingAvailability = false;
         this.availability = null;
@@ -234,7 +217,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     if (this.reservationForm.invalid || !this.startDate || !this.endDate || !this.room) {
       this.dateRangeInvalid = !this.startDate || !this.endDate;
       
-      // Marquer tous les champs comme touchés pour montrer les erreurs
       this.markFormGroupTouched(this.reservationForm);
       
       if (this.showPaymentSection && this.paymentEnabled) {
@@ -252,7 +234,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       endDate: this.endDate,
       numberOfGuests: formValue.guestCount,
       specialRequests: formValue.specialRequests,
-      // Informations client
       guestInfo: {
         title: formValue.title,
         firstName: formValue.firstName,
@@ -262,7 +243,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
       }
     };
     
-    // Ajouter les informations de paiement si nécessaire
     if (this.showPaymentSection && this.paymentEnabled && this.paymentForm.valid) {
       reservationRequest.payment = {
         method: this.paymentForm.value.paymentMethod,
@@ -283,7 +263,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     this.formCancel.emit();
   }
   
-  // Marquer tous les champs d'un formulaire comme touchés pour afficher les erreurs
   markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
@@ -294,12 +273,10 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     });
   }
   
-  // Basculer entre la vue de réservation et la vue de paiement
   togglePaymentSection(): void {
     this.showPaymentSection = !this.showPaymentSection;
   }
 
-  // Helper methods
   getRoomTypeLabel(type: string): string {
     return type
       .replace(/_/g, ' ')
@@ -326,7 +303,6 @@ export class ReservationFormComponent implements OnInit, OnChanges {
   }
 
   calculateTaxes(): number {
-    // Simulate tax calculation (e.g., 10% of base price)
     return this.getBasePrice() * this.getNights() * 0.1;
   }
 

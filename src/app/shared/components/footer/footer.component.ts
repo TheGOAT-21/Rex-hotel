@@ -24,7 +24,7 @@ export class FooterComponent implements OnInit {
   constructor(private settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.settingsService.hotelSettings$.subscribe(settings => {
+    this.settingsService.hotelSettings$.subscribe((settings: HotelSettings) => {
       this.hotelSettings = settings;
     });
   }
