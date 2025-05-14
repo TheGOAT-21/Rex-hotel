@@ -8,7 +8,7 @@ import {
   LoadingComponent,
   DatepickerComponent,
   PriceDisplayComponent,
-  SpaceCardComponent
+  RoomCardComponent
 } from '../../../shared/components';
 import { 
   ReservationService, 

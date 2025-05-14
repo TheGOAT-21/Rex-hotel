@@ -37,7 +37,7 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class SpaceTypeBadgeComponent {
+export class RoomTypeBadgeComponent {
   @Input() type: string = '';
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
 

@@ -12,7 +12,7 @@ import { AmenityBadgeComponent } from '../amenity-badge/amenity-badge.component'
   templateUrl: './room-card.component.html',
   styleUrl: './room-card.component.css'
 })
-export class SpaceCardComponent {
+export class RoomCardComponent{
   @Input() space!: Space;
   @Input() isFeatured: boolean = false;
   @Input() showDetails: boolean = true;

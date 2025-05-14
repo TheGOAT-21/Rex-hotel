@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { 
   GalleryComponent,
-  SpaceCardComponent,
+  RoomCardComponent,
   LoadingComponent,
   RatingComponent,
   AmenityBadgeComponent,
@@ -22,7 +22,7 @@ import { Space, Amenity, SpaceType, ViewType } from '../../../core/models';
     RouterModule,
     FormsModule,
     GalleryComponent,
-    SpaceCardComponent,
+    RoomCardComponent,
     LoadingComponent,
     RatingComponent,
     AmenityBadgeComponent,

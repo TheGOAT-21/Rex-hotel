@@ -30,7 +30,7 @@ import { Space, SpaceAvailability, SpaceType } from '../../../core/models';
   templateUrl: './room-detail.component.html',
   styleUrl: './room-detail.component.css'
 })
-export class DetailPageComponent implements OnInit {
+export class RoomDetailComponent implements OnInit {
   space: Space | null = null;
   isLoading = true;
   error: string | null = null;

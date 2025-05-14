@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { SpaceListComponent, BreadcrumbsComponent } from '../../../shared/components';
+import { RoomListComponent, BreadcrumbsComponent } from '../../../shared/components';
 import { SpaceFilter } from '../../../core/models';
 
 @Component({
@@ -9,13 +9,13 @@ import { SpaceFilter } from '../../../core/models';
   standalone: true,
   imports: [
     CommonModule,
-    SpaceListComponent,
+    RoomListComponent,
     BreadcrumbsComponent
   ],
   templateUrl: './rooms-list.component.html',
   styleUrl: './rooms-list.component.css'
 })
-export class CatalogPageComponent implements OnInit {
+export class RoomsListComponent implements OnInit {
   initialFilter: SpaceFilter = {};
 
   constructor(private route: ActivatedRoute) {}

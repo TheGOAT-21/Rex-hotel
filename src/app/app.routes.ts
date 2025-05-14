@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'spaces',
-        loadChildren: () => import('./routes/spaces.routes').then(m => m.SPACES_ROUTES)
+        loadChildren: () => import('./routes/rooms.routes').then(m => m.SPACES_ROUTES)
       },
       {
         path: 'reservation',

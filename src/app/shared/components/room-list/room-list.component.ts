@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SpaceService } from '../../../core/services/space.service';
 import { Space, SpaceFilter } from '../../../core/models';
-import { SpaceCardComponent } from '../room-card/room-card.component';
+import { RoomCardComponent} from '../room-card/room-card.component';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { LoadingComponent } from '../loading/loading.component';
 import { FilterComponent } from '../filter/filter.component';
@@ -10,11 +10,11 @@ import { FilterComponent } from '../filter/filter.component';
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, SpaceCardComponent, PaginationComponent, LoadingComponent, FilterComponent],
+  imports: [CommonModule, RoomCardComponent, PaginationComponent, LoadingComponent, FilterComponent],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css'
 })
-export class SpaceListComponent implements OnInit {
+export class RoomListComponent implements OnInit {
   @Input() title: string = 'Nos espaces';
   @Input() showFilter: boolean = true;
   @Input() initialFilter: SpaceFilter = {};
