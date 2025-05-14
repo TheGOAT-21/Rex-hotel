@@ -18,7 +18,7 @@ import {
   RESERVATIONS,
   HOTEL_SERVICES,
   COMMON_AREAS
-} from '../mocks/mock-data';
+} from '../mock/mock-data';
 
 @Injectable({
   providedIn: 'root'

@@ -1,91 +1,48 @@
-// src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { adminGuard } from './core/guards/admin.guard';
 import { AdminLayoutComponent } from './shared/layouts/admin-layout/admin-layout.component';
-import { authGuard } from './core/guards/auth.guard';
-//import { adminGuard } from './core/guards/admin.guard';
-//import { superAdminGuard } from './core/guards/super-admin.guard';
+import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
-  // Routes publiques avec le MainLayout
   {
     path: '',
     component: MainLayoutComponent,
     children: [
       {
         path: '',
-        loadComponent: () => import('./features/home/home-page/home-page.component').then(m => m.HomePageComponent),
-        title: 'REX HOTEL - Élégance & Confort | Yamoussoukro'
+        loadComponent: () => import('./features/home/home-page/home-page.component').then(c => c.HomePageComponent),
+        title: 'Accueil | REX HOTEL'
       },
       {
-        path: 'catalog',
-        loadChildren: () => import('./routes/catalog.routes').then(m => m.CATALOG_ROUTES)
-      },
-      {
-        path: 'spaces',
-        loadChildren: () => import('./routes/rooms.routes').then(m => m.SPACES_ROUTES)
-      },
-      {
-        path: 'reservation',
-        loadChildren: () => import('./routes/reservation.routes').then(m => m.RESERVATION_ROUTES)
-      },
-      {
-        path: 'profile',
-        canActivate: [authGuard],
-        loadChildren: () => import('./routes/profile.routes').then(m => m.PROFILE_ROUTES)
-      },
-      // Pages statiques
-      {
-        path: 'about',
-        loadComponent: () => import('./features/static/about-page/about-page.component').then(m => m.AboutPageComponent),
-        title: 'À propos | REX HOTEL'
-      },
-      {
-        path: 'contact',
-        loadComponent: () => import('./features/static/contact-page/contact-page.component').then(m => m.ContactPageComponent),
-        title: 'Contact | REX HOTEL'
-      },
-      {
-        path: 'faq',
-        loadComponent: () => import('./features/static/faq-page/faq-page.component').then(m => m.FaqPageComponent),
-        title: 'FAQ | REX HOTEL'
+        path: 'rooms',
+        loadChildren: () => import('./routes/rooms.routes').then(m => m.ROOMS_ROUTES),
       },
       {
         path: 'services',
-        loadComponent: () => import('./features/static/services-page/services-page.component').then(m => m.ServicesPageComponent),
-        title: 'Services | REX HOTEL'
+        loadComponent: () => import('./features/services/services-page/services-page.component').then(c => c.ServicesPageComponent),
+        title: 'Nos Services | REX HOTEL'
       },
-      // Notifications
       {
-        path: 'notifications',
-        canActivate: [authGuard],
-        loadChildren: () => import('./routes/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES)
-      }
+        path: 'contact',
+        loadComponent: () => import('./features/contact/contact-page/contact-page.component').then(c => c.ContactPageComponent),
+        title: 'Contact | REX HOTEL'
+      },
+      {
+        path: 'reservation',
+        loadChildren: () => import('./routes/reservation.routes').then(m => m.RESERVATION_ROUTES),
+      },
     ]
   },
-
-  // Routes Admin - Lazy Loading
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    //canActivate: [authGuard, adminGuard],
+    canActivate: [adminGuard],
     loadChildren: () => import('./routes/admin.routes').then(m => m.ADMIN_ROUTES),
-    title: 'Administration | REX HOTEL'
   },
-
-  // Route d'authentification
-  {
-    path: 'auth',
-    loadChildren: () => import('./routes/auth.routes').then(m => m.AUTH_ROUTES)
-  },
-
-  // Pages d'erreur
   {
     path: 'error',
-    loadChildren: () => import('./routes/errors.routes').then(m => m.ERRORS_ROUTES)
+    loadChildren: () => import('./routes/errors.routes').then(m => m.ERRORS_ROUTES),
   },
-  // Redirection vers 404
   {
     path: '**',
     redirectTo: 'error/404'

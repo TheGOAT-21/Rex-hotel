@@ -1,9 +1,7 @@
 // src/app/shared/components/index.ts
 
 // Interfaces administratives
-export * from './admin-nav/admin-nav.component';
 export * from './amenity-manager/amenity-manager.component';
-export * from './export-data/export-data.component';
 export * from './sidebar/sidebar.component';
 export * from './statistics-widget/statistics-widget.component';
 
@@ -31,8 +29,6 @@ export * from './room-card/room-card.component';
 export * from './room-list/room-list.component';
 
 // Composants utilitaires
-export * from './alert/alert.component';
-export * from './loader/loader.component';
 export * from './loading/loading.component';
 export * from './modal/modal.component';
 export * from './toast/toast.component';

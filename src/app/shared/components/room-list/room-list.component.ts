@@ -1,90 +1,174 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoomService } from '../../../core/services/room.service'; // Importation corrigée
-import { Room, RoomFilter } from '../../../core/models'; // Importation corrigée
-import { RoomCardComponent } from '../room-card/room-card.component';
-import { PaginationComponent } from '../pagination/pagination.component';
-import { LoadingComponent } from '../loading/loading.component';
-import { FilterComponent } from '../filter/filter.component';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { 
+  RoomCardComponent, 
+  PaginationComponent,
+  LoadingComponent 
+} from '../';
+import { RoomService } from '../../../core/services/room.service';
+import { Room, RoomFilter, Amenity } from '../../../core/models';
+import { ROOM_TYPES, AMENITIES, VIEW_OPTIONS } from '../../../core/mock/mock-data';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, RoomCardComponent, PaginationComponent, LoadingComponent, FilterComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    RoomCardComponent,
+    PaginationComponent,
+    LoadingComponent
+  ],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css'
 })
 export class RoomListComponent implements OnInit {
-  @Input() title: string = 'Nos chambres'; // Modifié de 'Nos espaces'
-  @Input() showFilter: boolean = true;
-  @Input() initialFilter: RoomFilter = {}; // Modifié de SpaceFilter
+  @Input() title: string = '';
+  @Input() showFilter: boolean = false;
+  @Input() initialFilter: RoomFilter = {};
   @Input() viewMode: 'grid' | 'list' = 'grid';
   @Input() itemsPerPage: number = 6;
   
-  @Output() filterChange = new EventEmitter<RoomFilter>(); // Modifié de SpaceFilter
+  @Output() filterChange = new EventEmitter<RoomFilter>();
   
-  rooms: Room[] = []; // Modifié de spaces
-  loading: boolean = true;
-  error: string | null = null;
-  
-  totalItems: number = 0;
+  rooms: Room[] = [];
+  totalRooms: number = 0;
   currentPage: number = 1;
   
-  currentFilter: RoomFilter = {}; // Modifié de SpaceFilter
+  isLoading: boolean = false;
+  error: string | null = null;
   
-  constructor(private roomService: RoomService) {} // Modifié de spaceService
+  showAdvancedFilters: boolean = false;
+  
+  // Filtres
+  filter: RoomFilter = {
+    page: 1,
+    limit: this.itemsPerPage
+  };
+  
+  // Options pour les filtres
+  roomTypes = ROOM_TYPES;
+  amenities = AMENITIES;
+  viewOptions = VIEW_OPTIONS;
+  
+  constructor(private roomService: RoomService) {}
   
   ngOnInit(): void {
-    this.currentFilter = { ...this.initialFilter };
-    this.loadRooms(); // Modifié de loadSpaces
-  }
-  
-  loadRooms(): void { // Modifié de loadSpaces
-    this.loading = true;
-    this.error = null;
-    
-    const filter: RoomFilter = { // Modifié de SpaceFilter
-      ...this.currentFilter,
-      page: this.currentPage,
+    // Initialiser les filtres
+    this.filter = {
+      ...this.filter,
+      ...this.initialFilter,
+      page: 1,
       limit: this.itemsPerPage
     };
     
-    this.roomService.getAllRooms(filter).subscribe({ // Modifié de spaceService.getAllSpaces
-      next: (result: {items: Room[], total: number}) => { // Type explicite ajouté
-        this.rooms = result.items; // Modifié de spaces
-        this.totalItems = result.total;
-        this.loading = false;
+    // Charger les chambres
+    this.loadRooms();
+  }
+  
+  loadRooms(): void {
+    this.isLoading = true;
+    this.error = null;
+    
+    this.roomService.getAllRooms(this.filter).subscribe({
+      next: (result) => {
+        this.rooms = result.items;
+        this.totalRooms = result.total;
+        this.isLoading = false;
       },
-      error: (err: any) => { // Type explicite ajouté
-        this.error = "Impossible de charger les chambres. Veuillez réessayer."; // Modifié de "espaces"
-        this.loading = false;
-        console.error(err);
+      error: (err) => {
+        console.error('Error loading rooms:', err);
+        this.error = "Une erreur est survenue lors du chargement des chambres.";
+        this.isLoading = false;
       }
     });
   }
   
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadRooms(); // Modifié de loadSpaces
-    // Scroll to top of results
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  
-  onFilterChange(filter: RoomFilter): void { // Modifié de SpaceFilter
-    this.currentFilter = { ...filter };
-    this.currentPage = 1; // Reset to first page
-    this.loadRooms(); // Modifié de loadSpaces
-    this.filterChange.emit(this.currentFilter);
-  }
-  
-  toggleViewMode(): void {
-    this.viewMode = this.viewMode === 'grid' ? 'list' : 'grid';
+  applyFilter(): void {
+    this.currentPage = 1;
+    this.filter.page = 1;
+    this.loadRooms();
+    this.filterChange.emit(this.filter);
   }
   
   resetFilters(): void {
-    this.currentFilter = {};
-    this.currentPage = 1;
-    this.loadRooms(); // Modifié de loadSpaces
-    this.filterChange.emit(this.currentFilter);
+    this.filter = {
+      page: 1,
+      limit: this.itemsPerPage
+    };
+    this.loadRooms();
+    this.filterChange.emit(this.filter);
+  }
+  
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.filter.page = page;
+    this.loadRooms();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  toggleAdvancedFilters(): void {
+    this.showAdvancedFilters = !this.showAdvancedFilters;
+  }
+  
+  toggleAmenity(amenityId: string): void {
+    if (!this.filter.amenities) {
+      this.filter.amenities = [amenityId];
+    } else {
+      const index = this.filter.amenities.indexOf(amenityId);
+      if (index === -1) {
+        this.filter.amenities.push(amenityId);
+      } else {
+        this.filter.amenities.splice(index, 1);
+      }
+      
+      // Si la liste est vide, supprimer la propriété
+      if (this.filter.amenities.length === 0) {
+        delete this.filter.amenities;
+      }
+    }
+    
+    this.applyFilter();
+  }
+  
+  isAmenitySelected(amenityId: string): boolean {
+    return this.filter.amenities?.includes(amenityId) || false;
+  }
+  
+  toggleView(viewId: string): void {
+    if (!this.filter.views) {
+      this.filter.views = [viewId];
+    } else {
+      const index = this.filter.views.indexOf(viewId);
+      if (index === -1) {
+        this.filter.views.push(viewId);
+      } else {
+        this.filter.views.splice(index, 1);
+      }
+      
+      // Si la liste est vide, supprimer la propriété
+      if (this.filter.views.length === 0) {
+        delete this.filter.views;
+      }
+    }
+    
+    this.applyFilter();
+  }
+  
+  isViewSelected(viewId: string): boolean {
+    return this.filter.views?.includes(viewId) || false;
+  }
+  
+  toggleBalcony(): void {
+    if (this.filter.hasBalcony === true) {
+      delete this.filter.hasBalcony;
+    } else {
+      this.filter.hasBalcony = true;
+    }
+    
+    this.applyFilter();
   }
 }

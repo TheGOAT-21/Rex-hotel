@@ -1,122 +1,205 @@
-<div class="room-list-container">
-    <!-- Title and View Toggle -->
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl text-gold font-semibold">{{ title }}</h2>
-      
-      <div class="flex items-center space-x-2">
-        <!-- Grid/List View Toggle -->
-        <button 
-          (click)="toggleViewMode()" 
-          class="view-toggle-btn" 
-          [ngClass]="{'active': viewMode === 'grid'}"
-          aria-label="Affichage en grille"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-        </button>
-        
-        <button 
-          (click)="toggleViewMode()" 
-          class="view-toggle-btn" 
-          [ngClass]="{'active': viewMode === 'list'}"
-          aria-label="Affichage en liste"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
-    </div>
+<div class="room-list">
+  <!-- Titre optionnel -->
+  <h2 *ngIf="title" class="text-2xl font-semibold text-gold mb-6">{{ title }}</h2>
   
-    <!-- Filter Section (Optional) -->
-    <div *ngIf="showFilter" class="filter-section mb-8">
-      <app-filter 
-        [currentFilter]="currentFilter" 
-        (filterChange)="onFilterChange($event)"
-      ></app-filter>
-      
-      <!-- Active Filters and Reset -->
-      <div *ngIf="currentFilter && (currentFilter.search || currentFilter.priceMin || currentFilter.priceMax || currentFilter.capacityMin || (currentFilter.types && currentFilter.types.length) || (currentFilter.amenities && currentFilter.amenities.length))" class="active-filters mt-4 p-4 bg-gray-900 rounded-sm">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm text-white">Filtres actifs:</span>
-          
-          <div *ngIf="currentFilter.search" class="filter-tag">
-            Recherche: {{ currentFilter.search }}
-          </div>
-          
-          <div *ngIf="currentFilter.priceMin || currentFilter.priceMax" class="filter-tag">
-            Prix: {{ currentFilter.priceMin || 0 }}€ - {{ currentFilter.priceMax || '∞' }}€
-          </div>
-          
-          <div *ngIf="currentFilter.capacityMin" class="filter-tag">
-            Capacité: {{ currentFilter.capacityMin }}+ personnes
-          </div>
-          
-          <div *ngIf="currentFilter.types && currentFilter.types.length" class="filter-tag">
-            Types: {{ currentFilter.types.length }} sélectionnés
-          </div>
-          
-          <div *ngIf="currentFilter.amenities && currentFilter.amenities.length" class="filter-tag">
-            Équipements: {{ currentFilter.amenities.length }} sélectionnés
-          </div>
-          
-          <button 
-            (click)="resetFilters()" 
-            class="filter-reset-btn ml-auto"
+  <!-- Filtres -->
+  <div *ngIf="showFilter" class="mb-8 bg-gray-900 p-4 md:p-6 rounded-sm">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Recherche -->
+      <div>
+        <label class="block text-gold text-sm mb-2">Recherche</label>
+        <div class="relative">
+          <input 
+            type="text" 
+            [(ngModel)]="filter.search" 
+            (ngModelChange)="applyFilter()"
+            class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none pl-9"
+            placeholder="Rechercher..."
           >
-            Réinitialiser les filtres
-          </button>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-2 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
+      </div>
+      
+      <!-- Type de chambre -->
+      <div>
+        <label class="block text-gold text-sm mb-2">Type de chambre</label>
+        <select 
+          [(ngModel)]="filter.types" 
+          (ngModelChange)="applyFilter()"
+          class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none"
+        >
+          <option [ngValue]="[]">Tous les types</option>
+          <option *ngFor="let type of roomTypes" [ngValue]="[type.id]">{{ type.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Prix max -->
+      <div>
+        <label class="block text-gold text-sm mb-2">Prix max</label>
+        <select 
+          [(ngModel)]="filter.priceMax" 
+          (ngModelChange)="applyFilter()"
+          class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none"
+        >
+          <option [ngValue]="undefined">Tous les prix</option>
+          <option [ngValue]="50000">Moins de 50 000 FCFA</option>
+          <option [ngValue]="100000">Moins de 100 000 FCFA</option>
+          <option [ngValue]="150000">Moins de 150 000 FCFA</option>
+          <option [ngValue]="200000">Moins de 200 000 FCFA</option>
+          <option [ngValue]="300000">Moins de 300 000 FCFA</option>
+        </select>
+      </div>
+      
+      <!-- Capacité -->
+      <div>
+        <label class="block text-gold text-sm mb-2">Capacité minimum</label>
+        <select 
+          [(ngModel)]="filter.capacityMin" 
+          (ngModelChange)="applyFilter()"
+          class="w-full bg-black border border-gray-700 rounded-sm p-2 text-white focus:border-gold focus:outline-none"
+        >
+          <option [ngValue]="undefined">Toutes les capacités</option>
+          <option [ngValue]="1">1 personne</option>
+          <option [ngValue]="2">2 personnes</option>
+          <option [ngValue]="3">3 personnes</option>
+          <option [ngValue]="4">4 personnes</option>
+          <option [ngValue]="5">5+ personnes</option>
+        </select>
       </div>
     </div>
     
-    <!-- Loading State -->
-    <div *ngIf="loading" class="flex justify-center my-12">
-      <app-loading [size]="'large'" [type]="'spinner'" [message]="'Chargement des espaces...'"></app-loading>
-    </div>
-    
-    <!-- Error State -->
-    <div *ngIf="error" class="error-container p-4 bg-red-900 text-white rounded-sm mb-6">
-      <p>{{ error }}</p>
-      <button (click)="loadSpaces()" class="mt-2 text-gold underline">Réessayer</button>
-    </div>
-    
-    <!-- Empty State -->
-    <div *ngIf="!loading && !error && spaces.length === 0" class="empty-state p-8 text-center mb-8">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gold opacity-50" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-      </svg>
-      <h3 class="text-xl text-gold font-semibold mb-2">Aucun espace trouvé</h3>
-      <p class="text-gray-400 mb-4">Aucun espace ne correspond à vos critères de recherche.</p>
-      <button (click)="resetFilters()" class="btn-gold">Réinitialiser les filtres</button>
-    </div>
-    
-    <!-- Grid View -->
-    <div *ngIf="!loading && !error && spaces.length > 0 && viewMode === 'grid'" class="grid-view">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div *ngFor="let space of spaces" class="room-card-wrapper">
-          <app-room-card [space]="space"></app-room-card>
+    <!-- Filtres avancés (toggle) -->
+    <div class="mt-4">
+      <button 
+        (click)="toggleAdvancedFilters()" 
+        class="flex items-center text-gold hover:underline focus:outline-none"
+      >
+        <span>Filtres avancés</span>
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="h-4 w-4 ml-1 transition-transform duration-300" 
+          [ngClass]="{'rotate-180': showAdvancedFilters}"
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      <div *ngIf="showAdvancedFilters" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Équipements -->
+        <div>
+          <label class="block text-gold text-sm mb-2">Équipements</label>
+          <div class="flex flex-wrap gap-2">
+            <div *ngFor="let amenity of amenities" class="inline-flex items-center">
+              <input 
+                type="checkbox" 
+                [id]="'amenity-' + amenity.id" 
+                [value]="amenity.id" 
+                (change)="toggleAmenity(amenity.id)"
+                class="form-checkbox h-4 w-4 text-gold bg-black border-gray-700 rounded focus:ring-gold"
+                [checked]="isAmenitySelected(amenity.id)"
+              >
+              <label [for]="'amenity-' + amenity.id" class="ml-2 text-sm text-white">{{ amenity.name }}</label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Vue -->
+        <div>
+          <label class="block text-gold text-sm mb-2">Vue</label>
+          <div class="flex flex-wrap gap-2">
+            <div *ngFor="let view of viewOptions" class="inline-flex items-center">
+              <input 
+                type="checkbox" 
+                [id]="'view-' + view.id" 
+                [value]="view.id" 
+                (change)="toggleView(view.id)"
+                class="form-checkbox h-4 w-4 text-gold bg-black border-gray-700 rounded focus:ring-gold"
+                [checked]="isViewSelected(view.id)"
+              >
+              <label [for]="'view-' + view.id" class="ml-2 text-sm text-white">{{ view.name }}</label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Balcon -->
+        <div>
+          <label class="block text-gold text-sm mb-2">Options</label>
+          <div class="flex flex-wrap gap-2">
+            <div class="inline-flex items-center">
+              <input 
+                type="checkbox" 
+                id="has-balcony" 
+                [checked]="filter.hasBalcony === true"
+                (change)="toggleBalcony()"
+                class="form-checkbox h-4 w-4 text-gold bg-black border-gray-700 rounded focus:ring-gold"
+              >
+              <label for="has-balcony" class="ml-2 text-sm text-white">Avec balcon</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+  
+  <!-- État de chargement -->
+  <div *ngIf="isLoading" class="flex justify-center py-12">
+    <app-loading 
+      [size]="'large'" 
+      [type]="'spinner'" 
+      [message]="'Chargement des chambres...'"
+    ></app-loading>
+  </div>
+  
+  <!-- Message d'erreur -->
+  <div *ngIf="error" class="bg-red-900 bg-opacity-30 border border-red-500 text-white p-4 rounded-sm mb-8">
+    <p>{{ error }}</p>
+    <button (click)="loadRooms()" class="mt-2 text-gold underline">Réessayer</button>
+  </div>
+  
+  <!-- Aucun résultat -->
+  <div *ngIf="!isLoading && !error && rooms.length === 0" class="text-center py-12 bg-gray-900 rounded-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gold mx-auto mb-4 opacity-50" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+    </svg>
+    <h3 class="text-xl text-gold font-semibold mb-2">Aucune chambre trouvée</h3>
+    <p class="text-gray-400 mb-6">Aucune chambre ne correspond à vos critères. Essayez de modifier vos filtres.</p>
+    <button 
+      (click)="resetFilters()" 
+      class="bg-gold text-black px-6 py-3 rounded-sm hover:bg-opacity-90 transition-colors duration-200"
+    >
+      Réinitialiser les filtres
+    </button>
+  </div>
+  
+  <!-- Liste des chambres -->
+  <div *ngIf="!isLoading && !error && rooms.length > 0" class="room-list-container">
+    <!-- Mode grille -->
+    <div *ngIf="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let room of rooms" class="room-card transform transition hover:-translate-y-1 duration-300">
+        <app-room-card [room]="room" [showDetails]="true"></app-room-card>
+      </div>
+    </div>
     
-    <!-- List View -->
-    <div *ngIf="!loading && !error && spaces.length > 0 && viewMode === 'list'" class="list-view">
-      <div class="space-y-4">
-        <div *ngFor="let space of spaces" class="list-item">
-          <app-room-card [space]="space" [showDetails]="true"></app-room-card>
-        </div>
+    <!-- Mode liste -->
+    <div *ngIf="viewMode === 'list'" class="space-y-6">
+      <div *ngFor="let room of rooms" class="room-card transform transition hover:-translate-y-1 duration-300">
+        <app-room-card [room]="room" [showDetails]="true" [orientation]="'horizontal'"></app-room-card>
       </div>
     </div>
     
     <!-- Pagination -->
-    <div *ngIf="!loading && !error && totalItems > itemsPerPage" class="pagination-container mt-8 flex justify-center">
+    <div *ngIf="totalRooms > itemsPerPage" class="mt-8 flex justify-center">
       <app-pagination 
-        [currentPage]="currentPage" 
-        [totalItems]="totalItems" 
+        [currentPage]="currentPage"
+        [totalItems]="totalRooms"
         [itemsPerPage]="itemsPerPage"
         (pageChange)="onPageChange($event)"
       ></app-pagination>
     </div>
   </div>
+</div>

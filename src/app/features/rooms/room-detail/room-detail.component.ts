@@ -10,8 +10,8 @@ import {
   LoadingComponent,
   RatingComponent
 } from '../../../shared/components';
-import { SpaceService } from '../../../core/services/space.service';
-import { Space, SpaceAvailability, SpaceType } from '../../../core/models';
+import { RoomService } from '../../../core/services/room.service';
+import { Room, RoomAvailability, RoomType } from '../../../core/models';
 
 @Component({
   selector: 'app-room-detail',
@@ -31,7 +31,7 @@ import { Space, SpaceAvailability, SpaceType } from '../../../core/models';
   styleUrl: './room-detail.component.css'
 })
 export class RoomDetailComponent implements OnInit {
-  space: Space | null = null;
+  room: Room | null = null;
   isLoading = true;
   error: string | null = null;
 
@@ -41,11 +41,11 @@ export class RoomDetailComponent implements OnInit {
   guestCount = 1;
 
   // Availability
-  availability: SpaceAvailability | null = null;
+  availability: RoomAvailability | null = null;
   checkingAvailability = false;
 
-  // Related spaces
-  relatedSpaces: Space[] = [];
+  // Related rooms
+  relatedRooms: Room[] = [];
 
   averageRating: number = 4.5; // Example average rating
   reviewCount: number = 12; // Example number of reviews
@@ -53,16 +53,16 @@ export class RoomDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private spaceService: SpaceService
+    private roomService: RoomService
   ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
-        this.loadSpaceDetails(id);
+        this.loadRoomDetails(id);
       } else {
-        this.error = "Space ID not found.";
+        this.error = "Room ID not found.";
         this.isLoading = false;
       }
     });
@@ -77,45 +77,42 @@ export class RoomDetailComponent implements OnInit {
     this.endDate = dayAfter;
   }
 
-  loadSpaceDetails(id: string): void {
+  loadRoomDetails(id: string): void {
     this.isLoading = true;
     this.error = null;
 
-    this.spaceService.getSpaceById(id).subscribe({
-      next: (space) => {
-        this.space = space;
+    this.roomService.getRoomById(id).subscribe({
+      next: (room) => {
+        this.room = room;
         this.isLoading = false;
         this.checkAvailability();
-        this.loadRelatedSpaces(space.type);
+        this.loadRelatedRooms(room.type);
       },
       error: (err) => {
-        this.error = "An error occurred while loading space details.";
+        this.error = "An error occurred while loading room details.";
         this.isLoading = false;
-        console.error('Error loading space details:', err);
+        console.error('Error loading room details:', err);
       }
     });
   }
 
-  loadRelatedSpaces(type: SpaceType): void {
-    this.spaceService.getSpacesByType(type).subscribe({
-      next: (spaces) => {
-        // Filter out current space and limit to 3 related spaces
-        this.relatedSpaces = spaces
-          .filter(space => space.id !== this.space?.id)
-          .slice(0, 3);
+  loadRelatedRooms(type: string): void {
+    this.roomService.getSimilarRooms(this.room?.id || '', 3).subscribe({
+      next: (rooms) => {
+        this.relatedRooms = rooms;
       },
       error: (err) => {
-        console.error('Error loading related spaces:', err);
+        console.error('Error loading related rooms:', err);
       }
     });
   }
 
   checkAvailability(): void {
-    if (!this.space || !this.startDate || !this.endDate) return;
+    if (!this.room || !this.startDate || !this.endDate) return;
 
     this.checkingAvailability = true;
 
-    this.spaceService.checkAvailability(this.space.id!, this.startDate, this.endDate).subscribe({
+    this.roomService.checkAvailability(this.room.id!, this.startDate, this.endDate).subscribe({
       next: (availability) => {
         this.availability = availability;
         this.checkingAvailability = false;
@@ -141,9 +138,9 @@ export class RoomDetailComponent implements OnInit {
   }
 
   proceedToReservation(): void {
-    if (!this.space || !this.startDate || !this.endDate) return;
+    if (!this.room || !this.startDate || !this.endDate) return;
 
-    this.router.navigate(['/reservation/create', this.space.id], {
+    this.router.navigate(['/reservation/create', this.room.id], {
       queryParams: {
         startDate: this.startDate.toISOString(),
         endDate: this.endDate.toISOString(),
@@ -153,13 +150,24 @@ export class RoomDetailComponent implements OnInit {
   }
 
   // Display methods
-  getSpaceTypeLabel(type: string): string {
-    return type
-      .replace(/_/g, ' ')
-      .replace(/-/g, ' ')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  getRoomTypeLabel(type: string): string {
+    switch(type) {
+      case 'standard':
+        return 'Chambre Standard';
+      case 'deluxe':
+        return 'Chambre Deluxe';
+      case 'suite':
+        return 'Suite';
+      case 'presidential':
+        return 'Suite Présidentielle';
+      default:
+        return type
+          .replace(/_/g, ' ')
+          .replace(/-/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+    }
   }
 
   formatDateRange(start: Date, end: Date): string {
@@ -179,7 +187,7 @@ export class RoomDetailComponent implements OnInit {
   }
 
   calculateTotalPrice(): number {
-    if (!this.space) return 0;
-    return this.space.price * this.getNights();
+    if (!this.room) return 0;
+    return this.room.price * this.getNights();
   }
 }

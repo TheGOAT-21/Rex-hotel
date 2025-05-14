@@ -8,7 +8,7 @@ import {
   ReservationStatus,
   Payment 
 } from '../models';
-import { RESERVATIONS, ROOMS } from '../mocks/mock-data';
+import { RESERVATIONS, ROOMS } from '../mock/mock-data';
 
 @Injectable({
   providedIn: 'root'

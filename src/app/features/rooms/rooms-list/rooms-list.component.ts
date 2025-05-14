@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RoomListComponent, BreadcrumbsComponent } from '../../../shared/components';
-import { SpaceFilter } from '../../../core/models';
+import { RoomFilter } from '../../../core/models';
 
 @Component({
   selector: 'app-rooms-list',
@@ -16,7 +16,7 @@ import { SpaceFilter } from '../../../core/models';
   styleUrl: './rooms-list.component.css'
 })
 export class RoomsListComponent implements OnInit {
-  initialFilter: SpaceFilter = {};
+  initialFilter: RoomFilter = {};
 
   constructor(private route: ActivatedRoute) {}
 
@@ -29,7 +29,7 @@ export class RoomsListComponent implements OnInit {
     });
   }
 
-  onFilterChange(filter: SpaceFilter): void {
+  onFilterChange(filter: RoomFilter): void {
     // Gérer les changements de filtre si nécessaire
     console.log('Filter changed:', filter);
   }

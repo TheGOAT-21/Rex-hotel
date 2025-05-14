@@ -4,3 +4,36 @@
   --rex-dark-gray: #1D1D1D;
   --rex-beige: #F5EFE0;
 }
+
+.shadow-text {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Custom styling for gallery component */
+:host ::ng-deep .gallery-container .main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:host ::ng-deep .gallery-container .gallery-controls {
+  z-index: 10;
+}
+
+/* Custom styling for datepicker */
+:host ::ng-deep .datepicker-container {
+  width: 100%;
+}
+
+/* Custom styling for room cards */
+:host ::ng-deep .room-card:hover {
+  transform: translateY(-8px);
+  transition: transform 0.3s ease;
+}
+
+/* Custom styling for amenity badges */
+:host ::ng-deep .amenity-badge {
+  background-color: rgba(224, 201, 137, 0.1);
+  border: 1px solid rgba(224, 201, 137, 0.3);
+  color: var(--rex-gold);
+}
