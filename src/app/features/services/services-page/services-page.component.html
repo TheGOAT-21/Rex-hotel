@@ -1,1 +1,111 @@
-<p>services-page works!</p>
+<div class="bg-black text-white min-h-screen">
+    <!-- Loading State -->
+    <app-loading *ngIf="isLoading" [fullScreen]="true" [overlay]="true" message="Chargement des services..."></app-loading>
+  
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] max-h-[600px] min-h-[400px] overflow-hidden">
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20 w-[90%] max-w-[800px]">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-4 text-white">NOS SERVICES</h1>
+        <p class="text-lg md:text-xl text-[#E0C989] font-medium tracking-wider">CONFORT & EXCELLENCE</p>
+      </div>
+    </section>
+  
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 -mt-8 relative z-20">
+      <!-- Breadcrumbs -->
+      <div class="mb-8">
+        <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+      </div>
+      
+      <!-- Introduction Section -->
+      <div class="text-center mb-12 max-w-3xl mx-auto">
+        <h2 class="text-3xl font-semibold text-[#E0C989] mb-4">Une expérience inoubliable</h2>
+        <p class="text-white text-lg leading-relaxed">
+          Découvrez l'excellence de notre service hôtelier avec une gamme complète de prestations conçues pour répondre à tous vos besoins. Que vous soyez en voyage d'affaires ou de loisirs, le REX HOTEL vous offre confort et qualité.
+        </p>
+      </div>
+      
+      <!-- Featured Services -->
+      <section class="mb-20">
+        <h2 class="text-2xl font-semibold text-[#E0C989] mb-8 text-center uppercase tracking-wider">Services Premium</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div *ngFor="let service of featuredServices" class="transform transition-transform hover:-translate-y-2 duration-300">
+            <app-service-card 
+              [service]="service" 
+              [showDetails]="true" 
+              [isFeatured]="true"
+            ></app-service-card>
+          </div>
+        </div>
+      </section>
+      
+      <!-- All Services -->
+      <section class="mb-20">
+        <h2 class="text-2xl font-semibold text-[#E0C989] mb-8 text-center uppercase tracking-wider">Tous nos services</h2>
+        
+        <!-- Category Tabs -->
+        <div class="flex flex-wrap justify-center mb-10 gap-2">
+          <button 
+            (click)="setActiveCategory('all')" 
+            class="px-4 py-2 text-sm font-medium rounded-sm transition-colors duration-200"
+            [ngClass]="activeCategory === 'all' ? 'bg-[#E0C989] text-black' : 'bg-[#1D1D1D] text-white hover:bg-[#E0C989] hover:text-black'"
+          >
+            Tous
+          </button>
+          
+          <button 
+            *ngFor="let type of serviceTypes" 
+            (click)="setActiveCategory(type.value)" 
+            class="px-4 py-2 text-sm font-medium rounded-sm transition-colors duration-200"
+            [ngClass]="activeCategory === type.value ? 'bg-[#E0C989] text-black' : 'bg-[#1D1D1D] text-white hover:bg-[#E0C989] hover:text-black'"
+          >
+            {{ type.label }}
+          </button>
+        </div>
+        
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div *ngFor="let service of getServicesByActiveCategory()" class="transform transition-transform hover:-translate-y-2 duration-300">
+            <app-service-card 
+              [service]="service" 
+              [showDetails]="true"
+              [orientation]="'vertical'"
+            ></app-service-card>
+          </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div *ngIf="getServicesByActiveCategory().length === 0" class="text-center py-10">
+          <p class="text-gray-400">Aucun service disponible dans cette catégorie</p>
+        </div>
+      </section>
+      
+      <!-- Testimonials Section -->
+      <section class="mb-12 bg-[#1D1D1D] p-8 rounded-sm">
+        <h2 class="text-2xl font-semibold text-[#E0C989] mb-8 text-center uppercase tracking-wider">Ce que disent nos clients</h2>
+        
+        <app-testimonial-slider 
+          [testimonials]="testimonials"
+          [autoPlay]="true"
+          [autoPlayInterval]="6000"
+          [display]="'cards'"
+          [maxDisplayed]="3"
+        ></app-testimonial-slider>
+      </section>
+      
+      <!-- CTA Section -->
+      <section class="text-center bg-[#1D1D1D] p-10 rounded-sm border border-[#E0C989]/20">
+        <h2 class="text-2xl font-semibold text-[#E0C989] mb-4">Réservez dès maintenant</h2>
+        <p class="text-white mb-6 max-w-2xl mx-auto">
+          Profitez de tous nos services haut de gamme lors de votre prochain séjour au REX HOTEL. Réservez en ligne pour bénéficier de nos meilleurs tarifs.
+        </p>
+        <a 
+          routerLink="/reservation" 
+          class="inline-block bg-[#E0C989] text-[#000000] font-semibold py-3 px-8 rounded-sm text-lg uppercase tracking-wider transition-colors hover:bg-opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300"
+        >
+          Réserver maintenant
+        </a>
+      </section>
+    </div>
+  </div>

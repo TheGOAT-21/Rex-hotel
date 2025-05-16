@@ -236,9 +236,10 @@ export const HOTEL_SERVICES = [
     description: 'Notre restaurant gastronomique propose une cuisine raffinée inspirée des saveurs locales et internationales.',
     openingHours: '07:00 - 22:30',
     images: [
-      'assets/images/Restaurant/restaurant-1.jpg',
-      'assets/images/Restaurant/restaurant-2.jpg',
-      'assets/images/Restaurant/restaurant-3.jpg'
+      'assets/images/Restaurant/restaurant.png',
+      'assets/images/Restaurant/restaurant1.png',
+      'assets/images/Restaurant/restaurant2.png',
+      'assets/images/Restaurant/restaurant3.png'
     ],
     features: [
       'Cuisine locale et internationale',
@@ -254,9 +255,9 @@ export const HOTEL_SERVICES = [
     description: 'Détendez-vous au bord de notre magnifique piscine extérieure entourée de transats et de palmiers.',
     openingHours: '08:00 - 20:00',
     images: [
-      'assets/images/Piscine/piscine-1.jpg',
-      'assets/images/Piscine/piscine-2.jpg',
-      'assets/images/Piscine/piscine-3.jpg'
+      'assets/images/Piscine/piscine-1.png',
+      'assets/images/Piscine/piscine-2.png',
+      'assets/images/Piscine/piscine-3.png'
     ],
     features: [
       'Piscine extérieure',
@@ -272,9 +273,10 @@ export const HOTEL_SERVICES = [
     description: 'Espace modulable pour vos réunions professionnelles et événements, équipé des dernières technologies.',
     capacity: 150,
     images: [
-      'assets/images/Salle de conference/conference-1.jpg',
-      'assets/images/Salle de conference/conference-2.jpg',
-      'assets/images/Salle de conference/conference-3.jpg'
+      'assets/images/ConferenceRoom/conference.png',
+      'assets/images/ConferenceRoom/conference1.png',
+      'assets/images/ConferenceRoom/conference2.png',
+      'assets/images/ConferenceRoom/conference3.png'
     ],
     features: [
       'Équipement audiovisuel',
@@ -290,8 +292,10 @@ export const HOTEL_SERVICES = [
     description: 'Salle de réunion intime et fonctionnelle, idéale pour les petits groupes et les entretiens.',
     capacity: 20,
     images: [
-      'assets/images/Salle de reunion 1/reunion-1-1.jpg',
-      'assets/images/Salle de reunion 1/reunion-1-2.jpg'
+      'assets/images/MeetingRoom/meeting1.png',
+      'assets/images/MeetingRoom/meeting2.png',
+      'assets/images/MeetingRoom/meeting3.png',
+      'assets/images/MeetingRoom/meeting4.png'
     ],
     features: [
       'Table de conférence',
@@ -307,8 +311,10 @@ export const HOTEL_SERVICES = [
     description: 'Salle de réunion spacieuse avec configuration flexible, parfaite pour les ateliers et séminaires.',
     capacity: 40,
     images: [
-      'assets/images/Salle de reunion 2/reunion-2-1.jpg',
-      'assets/images/Salle de reunion 2/reunion-2-2.jpg'
+      'assets/images/MeetingRoom2/meeting1.png',
+      'assets/images/MeetingRoom2/meeting2.png',
+      'assets/images/MeetingRoom2/meeting3.png',
+      'assets/images/MeetingRoom2/meeting4.png'
     ],
     features: [
       'Configuration flexible',
@@ -324,9 +330,13 @@ export const HOTEL_SERVICES = [
     description: 'Magnifique salle de réception pour célébrer votre mariage dans un cadre élégant et raffiné.',
     capacity: 200,
     images: [
-      'assets/images/Salle de mariage/mariage-1.jpg',
-      'assets/images/Salle de mariage/mariage-2.jpg',
-      'assets/images/Salle de mariage/mariage-3.jpg'
+      'assets/images/WeddingRoom/wedroom0.png',
+      'assets/images/WeddingRoom/wedroom1.png',
+      'assets/images/WeddingRoom/wedroom2.png',
+      'assets/images/WeddingRoom/wedroom3.png',
+      'assets/images/WeddingRoom/wedroom4.png',
+      'assets/images/WeddingRoom/wedroom5.png',
+      'assets/images/WeddingRoom/wedroom6.png',
     ],
     features: [
       'Espace de réception élégant',
@@ -341,8 +351,10 @@ export const HOTEL_SERVICES = [
     type: 'parking',
     description: 'Parking sécurisé en sous-sol avec accès direct à l\'hôtel.',
     images: [
-      'assets/images/parking RDC/parking-1.jpg',
-      'assets/images/parking RDC/parking-2.jpg'
+      'assets/images/ParkingRDC/parking.png',
+      'assets/images/ParkingRDC/parking1.png',
+      'assets/images/ParkingRDC/parking2.png',
+      'assets/images/ParkingRDC/parking3.png',
     ],
     features: [
       'Sécurité 24/7',
@@ -358,8 +370,8 @@ export const HOTEL_SERVICES = [
     description: 'Aire de jeux surveillée pour le divertissement de vos enfants pendant votre séjour.',
     openingHours: '10:00 - 18:00',
     images: [
-      'assets/images/Espace enfant/enfant-1.jpg',
-      'assets/images/Espace enfant/enfant-2.jpg'
+      'assets/images/KidsSpaces/kids-play (1).png',
+      'assets/images/KidsSpaces/kids-play (2).png',
     ],
     features: [
       'Activités ludiques et éducatives',
@@ -375,8 +387,11 @@ export const HOTEL_SERVICES = [
     description: 'Élégante terrasse au rez-de-chaussée, idéale pour se détendre ou prendre un verre en fin de journée.',
     openingHours: '09:00 - 23:00',
     images: [
-      'assets/images/Terrasse RDC/terrasse-rdc-1.jpg',
-      'assets/images/Terrasse RDC/terrasse-rdc-2.jpg'
+      'assets/images/Terrasse RDC/terrasse1.png',
+      'assets/images/Terrasse RDC/terrasse2.png',
+      'assets/images/Terrasse RDC/terrasse3.png',
+      'assets/images/Terrasse RDC/terrasse4.png',
+      'assets/images/Terrasse RDC/terrasse5.png'
     ],
     features: [
       'Service de boissons et snacks',
@@ -392,8 +407,10 @@ export const HOTEL_SERVICES = [
     description: 'Terrasse panoramique au premier étage offrant une vue imprenable sur les environs.',
     openingHours: '09:00 - 22:00',
     images: [
-      'assets/images/Terrace 1er tage/terrasse-1er-1.jpg',
-      'assets/images/Terrace 1er tage/terrasse-1er-2.jpg'
+      'assets/images/Terrasse1eretage/terrasse1.png',
+      'assets/images/Terrasse1eretage/terrasse2.png',
+      'assets/images/Terrasse1eretage/terrasse3.png',
+      'assets/images/Terrasse1eretage/terrasse4.png',      
     ],
     features: [
       'Vue panoramique',
@@ -411,8 +428,8 @@ export const COMMON_AREAS = [
     name: 'Hall d\'entrée',
     description: 'Hall d\'accueil spacieux et élégant avec réception ouverte 24h/24.',
     images: [
-      'assets/images/Exterieur/exterieur-1.jpg',
-      'assets/images/Exterieur/exterieur-2.jpg'
+      'assets/images/Exterieur/exterieur-1.png',
+      'assets/images/Exterieur/exterieur-2.png'
     ],
   },
   {
@@ -420,8 +437,8 @@ export const COMMON_AREAS = [
     name: 'Hall 1er Étage',
     description: 'Espace de détente et d\'attente au 1er étage, avec accès aux salles de réunion.',
     images: [
-      'assets/images/Hall 1er Etage/hall-1er-1.jpg',
-      'assets/images/Hall 1er Etage/hall-1er-2.jpg'
+      'assets/images/Hall 1er Etage/hall-1er-1.png',
+      'assets/images/Hall 1er Etage/hall-1er-2.png'
     ],
   }
 ];
