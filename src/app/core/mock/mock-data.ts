@@ -38,11 +38,11 @@ export const ROOMS: Room[] = [
     capacity: 2,
     surface: 25,
     floor: 1,
-    mainImage: 'assets/images/chanbre type A/chambre-type-a-main.jpg',
+    mainImage: 'assets/images/ChambretypeA/classic-room (1).png',
     images: [
-      'assets/images/chanbre type A/chambre-type-a-1.jpg',
-      'assets/images/chanbre type A/chambre-type-a-2.jpg',
-      'assets/images/chanbre type A/chambre-type-a-3.jpg'
+      'assets/images/ChambretypeA/classic-room (2).png',
+      'assets/images/ChambretypeA/classic-room (3).png',
+      'assets/images/ChambretypeA/classic-room (4).png'
     ],
     hasBalcony: false,
     view: ['garden'],
@@ -65,11 +65,11 @@ export const ROOMS: Room[] = [
     capacity: 2,
     surface: 30,
     floor: 1,
-    mainImage: 'assets/images/Chambre type B/chambre-type-b-main.jpg',
+    mainImage: 'assets/images/ChambretypeB/chamb1.png',
     images: [
-      'assets/images/Chambre type B/chambre-type-b-1.jpg',
-      'assets/images/Chambre type B/chambre-type-b-2.jpg',
-      'assets/images/Chambre type B/chambre-type-b-3.jpg'
+      'assets/images/ChambretypeB/chamb5.png',
+      'assets/images/ChambretypeB/chamb6.png',
+      'assets/images/ChambretypeB/chamb7.png'
     ],
     hasBalcony: true,
     view: ['garden'],
@@ -94,11 +94,11 @@ export const ROOMS: Room[] = [
     capacity: 3,
     surface: 35,
     floor: 2,
-    mainImage: 'assets/images/Chambre type C/chambre-type-c-main.jpg',
+    mainImage: 'assets/images/ChambretypeC/deluxe1.png',
     images: [
-      'assets/images/Chambre type C/chambre-type-c-1.jpg',
-      'assets/images/Chambre type C/chambre-type-c-2.jpg',
-      'assets/images/Chambre type C/chambre-type-c-3.jpg'
+      'assets/images/ChambretypeC/deluxe2.png',
+      'assets/images/ChambretypeC/deluxe3.png',
+      'assets/images/ChambretypeC/deluxe1.png'
     ],
     hasBalcony: true,
     view: ['pool'],
@@ -125,11 +125,11 @@ export const ROOMS: Room[] = [
     capacity: 2,
     surface: 40,
     floor: 2,
-    mainImage: 'assets/images/chambre type D/chambre-type-d-main.jpg',
+    mainImage: 'assets/images/chambretypeD/Familiale.png',
     images: [
-      'assets/images/chambre type D/chambre-type-d-1.jpg',
-      'assets/images/chambre type D/chambre-type-d-2.jpg',
-      'assets/images/chambre type D/chambre-type-d-3.jpg'
+      'assets/images/chambretypeD/Familiale.png',
+      'assets/images/chambretypeD/Familiale2.png',
+      'assets/images/ChambretypeP/prnthouse4.png'
     ],
     hasBalcony: true,
     view: ['city'],
@@ -159,11 +159,11 @@ export const ROOMS: Room[] = [
     capacity: 4,
     surface: 65,
     floor: 3,
-    mainImage: 'assets/images/Chambre type P/chambre-type-p-main.jpg',
+    mainImage: 'assets/images/ChambretypeP/penthouse1.png',
     images: [
-      'assets/images/Chambre type P/chambre-type-p-1.jpg',
-      'assets/images/Chambre type P/chambre-type-p-2.jpg',
-      'assets/images/Chambre type P/chambre-type-p-3.jpg'
+      'assets/images/ChambretypeP/penthouse2.png',
+      'assets/images/ChambretypeP/penthouse3.png',
+      'assets/images/ChambretypeP/penthouse4.png'
     ],
     hasBalcony: true,
     view: ['city', 'pool'],
@@ -172,7 +172,7 @@ export const ROOMS: Room[] = [
     description: `La chambre Type P est notre suite de luxe, offrant une chambre principale avec lit king-size, un salon séparé, et une grande terrasse privée avec vue sur la ville et la piscine. Cette suite spacieuse de 65m² peut accueillir confortablement jusqu'à 4 personnes, ce qui en fait un choix idéal pour les familles ou les séjours prolongés.`,
     isAvailable: true,
     isActive: true,
-    isFeatured: true
+    isFeatured: false
   }
 ];
 

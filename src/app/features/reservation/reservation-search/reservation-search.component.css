@@ -1,0 +1,26 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+  }
+  
+  .bg-dark-gray {
+    background-color: var(--rex-dark-gray);
+  }
+  
+  .border-dark-gray {
+    border-color: var(--rex-dark-gray);
+  }
+  
+  .text-gold {
+    color: var(--rex-gold);
+  }
+  
+  .bg-gold {
+    background-color: var(--rex-gold);
+  }
+  
+  .border-gold {
+    border-color: var(--rex-gold);
+  }

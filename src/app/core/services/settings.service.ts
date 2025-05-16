@@ -12,7 +12,7 @@ export class SettingsService {
   private hotelSettingsData: HotelSettings = {
     id: '1',
     name: 'REX HOTEL',
-    logo: 'assets/logos/rexhotel-icone.svg',
+    logo: 'assets/logos/rexhotellogo.svg',
     description: 'Situé au cœur de Yamoussoukro, REX HOTEL allie élégance et confort pour vous offrir un séjour mémorable. Notre établissement 4 étoiles vous propose des chambres modernes, un restaurant gastronomique, et des installations de premier ordre pour vos séjours professionnels et vos moments de détente.',
     checkInTime: '14:00',
     checkOutTime: '12:00',

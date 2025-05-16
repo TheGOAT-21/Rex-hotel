@@ -15,7 +15,7 @@ export const routes: Routes = [
       },
       {
         path: 'rooms',
-        loadChildren: () => import('./routes/rooms.routes').then(m => m.ROOMS_ROUTES),
+        loadChildren: () => import('./routes/rooms.routes').then(routes => routes.ROOMS_ROUTES),
       },
       {
         path: 'services',

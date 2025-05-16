@@ -1,1 +1,98 @@
-<p>contact-form works!</p>
+<div class="contact-form-container bg-black text-white p-6 rounded-sm border border-gold border-opacity-20">
+    <h2 class="text-xl font-semibold text-gold mb-4">Contactez-nous</h2>
+    
+    <!-- Message de succès -->
+    <div *ngIf="submitSuccess" class="mb-6 bg-black border border-gold border-opacity-50 text-beige p-4 rounded-sm">
+      <p>Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.</p>
+    </div>
+    
+    <!-- Message d'erreur global -->
+    <div *ngIf="submitError" class="mb-6 bg-black border border-gold border-opacity-30 text-beige p-4 rounded-sm">
+      <p>Une erreur est survenue lors de l'envoi du message. Veuillez réessayer ultérieurement.</p>
+    </div>
+    
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Nom -->
+      <div class="form-group">
+        <label for="name" class="block text-gold text-sm mb-2">Nom complet*</label>
+        <input 
+          id="name" 
+          type="text"
+          formControlName="name"
+          class="w-full bg-dark-gray border border-gold border-opacity-20 rounded-sm p-2 text-beige focus:border-gold focus:outline-none"
+          placeholder="Votre nom"
+        >
+        <div *ngIf="isFieldInvalid('name')" class="text-gold text-opacity-80 text-xs mt-1">
+          {{ getFieldError('name') }}
+        </div>
+      </div>
+      
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email" class="block text-gold text-sm mb-2">Email*</label>
+        <input 
+          id="email" 
+          type="email"
+          formControlName="email"
+          class="w-full bg-dark-gray border border-gold border-opacity-20 rounded-sm p-2 text-beige focus:border-gold focus:outline-none"
+          placeholder="votre.email@exemple.com"
+        >
+        <div *ngIf="isFieldInvalid('email')" class="text-gold text-opacity-80 text-xs mt-1">
+          {{ getFieldError('email') }}
+        </div>
+      </div>
+      
+      <!-- Sujet -->
+      <div class="form-group">
+        <label for="subject" class="block text-gold text-sm mb-2">Sujet*</label>
+        <input 
+          id="subject" 
+          type="text"
+          formControlName="subject"
+          class="w-full bg-dark-gray border border-gold border-opacity-20 rounded-sm p-2 text-beige focus:border-gold focus:outline-none"
+          placeholder="Sujet de votre message"
+        >
+        <div *ngIf="isFieldInvalid('subject')" class="text-gold text-opacity-80 text-xs mt-1">
+          {{ getFieldError('subject') }}
+        </div>
+      </div>
+      
+      <!-- Message -->
+      <div class="form-group">
+        <label for="message" class="block text-gold text-sm mb-2">Message*</label>
+        <textarea 
+          id="message" 
+          formControlName="message"
+          rows="5" 
+          class="w-full bg-dark-gray border border-gold border-opacity-20 rounded-sm p-2 text-beige focus:border-gold focus:outline-none"
+          placeholder="Votre message..."
+        ></textarea>
+        <div *ngIf="isFieldInvalid('message')" class="text-gold text-opacity-80 text-xs mt-1">
+          {{ getFieldError('message') }}
+        </div>
+      </div>
+      
+      <!-- État de soumission -->
+      <div *ngIf="isSubmitting" class="flex justify-center py-4">
+        <app-loading 
+          [size]="'small'" 
+          [type]="'dots'" 
+          [message]="'Envoi en cours...'"
+        ></app-loading>
+      </div>
+      
+      <!-- Bouton d'envoi -->
+      <button 
+        type="submit" 
+        class="w-full bg-gold text-black py-3 font-semibold rounded-sm hover:bg-opacity-90 transition duration-300"
+        [disabled]="isSubmitting"
+        [ngClass]="{'opacity-50 cursor-not-allowed': isSubmitting}"
+      >
+        Envoyer le message
+      </button>
+      
+      <p class="text-xs text-beige text-opacity-80 text-center mt-4">
+        * Champs obligatoires
+      </p>
+    </form>
+  </div>

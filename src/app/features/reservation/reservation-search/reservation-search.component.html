@@ -1,1 +1,283 @@
-<p>reservation-search works!</p>
+<div class="bg-black min-h-screen text-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Fil d'Ariane -->
+      <app-breadcrumbs [items]="[
+        { label: 'Accueil', path: '/' },
+        { label: 'Réservation', path: null }
+      ]"></app-breadcrumbs>
+      
+      <!-- Bannière principale -->
+      <div class="relative overflow-hidden rounded-sm mb-8">
+        <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10"></div>
+        <img src="assets/images/hotel/hotel-facade.jpg" alt="REX HOTEL" class="w-full h-96 object-cover">
+        <div class="absolute inset-0 flex flex-col justify-center z-20 px-8 md:px-16">
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Réservez votre <span class="text-gold">séjour</span></h1>
+          <p class="text-xl text-white max-w-2xl">Trouvez la chambre parfaite pour votre séjour à REX HOTEL, votre havre de luxe et de confort à Yamoussoukro.</p>
+        </div>
+      </div>
+      
+      <!-- Formulaire de recherche -->
+      <div class="bg-dark-gray rounded-sm p-6 shadow-lg mb-12">
+        <h2 class="text-2xl font-semibold text-gold mb-6">Recherchez votre chambre</h2>
+        
+        <form [formGroup]="searchForm" (ngSubmit)="searchRooms()">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Dates (avec datepicker) -->
+            <div class="form-group col-span-1 lg:col-span-2">
+              <label class="block text-gold text-sm mb-2">Dates de séjour</label>
+              <app-datepicker
+                [isRange]="true"
+                [rangeStartLabel]="'Arrivée'"
+                [rangeEndLabel]="'Départ'"
+                [monthsToShow]="2"
+                (rangeSelected)="onDateRangeSelected($event)"
+              ></app-datepicker>
+            </div>
+            
+            <!-- Nombre de personnes -->
+            <div class="form-group">
+              <label for="guestCount" class="block text-gold text-sm mb-2">Voyageurs</label>
+              <div class="relative">
+                <select 
+                  id="guestCount" 
+                  formControlName="guestCount"
+                  class="w-full bg-black border border-dark-gray rounded-sm p-3 text-white focus:border-gold focus:outline-none appearance-none"
+                >
+                  <option *ngFor="let i of [1,2,3,4,5,6]" [value]="i">
+                    {{ i }} {{ i > 1 ? 'personnes' : 'personne' }}
+                  </option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Type de chambre -->
+            <div class="form-group">
+              <label for="roomType" class="block text-gold text-sm mb-2">Type de chambre</label>
+              <div class="relative">
+                <select 
+                  id="roomType" 
+                  formControlName="roomType"
+                  class="w-full bg-black border border-dark-gray rounded-sm p-3 text-white focus:border-gold focus:outline-none appearance-none"
+                >
+                  <option [value]="''">Toutes les chambres</option>
+                  <option *ngFor="let type of roomTypes" [value]="type.id">{{ type.name }}</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Filtres avancés (toggle) -->
+          <div class="mt-4">
+            <button 
+              type="button"
+              (click)="toggleAdvancedSearch()" 
+              class="flex items-center text-gold hover:underline focus:outline-none"
+            >
+              <span>Filtres avancés</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-4 w-4 ml-1 transition-transform duration-300" 
+                [ngClass]="{'rotate-180': showAdvancedSearch}"
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            
+            <div *ngIf="showAdvancedSearch" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-300">
+              <!-- Équipements -->
+              <div class="form-group">
+                <label class="block text-gold text-sm mb-2">Équipements</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <div *ngFor="let amenity of amenities" class="flex items-center">
+                    <input 
+                      type="checkbox"
+                      [id]="'amenity-' + amenity.id"
+                      [value]="amenity.id"
+                      (change)="toggleAmenity(amenity.id)"
+                      class="form-checkbox h-4 w-4 text-gold bg-black border-gray-700 rounded focus:ring-gold"
+                      [checked]="isAmenitySelected(amenity.id)"
+                    >
+                    <label [for]="'amenity-' + amenity.id" class="ml-2 text-sm text-white">{{ amenity.name }}</label>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Prix max -->
+              <div class="form-group">
+                <label for="maxPrice" class="block text-gold text-sm mb-2">Budget maximum</label>
+                <div class="relative">
+                  <select 
+                    id="maxPrice" 
+                    formControlName="maxPrice"
+                    class="w-full bg-black border border-dark-gray rounded-sm p-3 text-white focus:border-gold focus:outline-none appearance-none"
+                  >
+                    <option [value]="null">Sans limite</option>
+                    <option [value]="50000">Moins de 50 000 XOF</option>
+                    <option [value]="100000">Moins de 100 000 XOF</option>
+                    <option [value]="150000">Moins de 150 000 XOF</option>
+                    <option [value]="200000">Moins de 200 000 XOF</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Options supplémentaires -->
+              <div class="form-group">
+                <label class="block text-gold text-sm mb-2">Options</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="flex items-center">
+                    <input 
+                      type="checkbox"
+                      id="has-balcony"
+                      formControlName="hasBalcony"
+                      class="form-checkbox h-4 w-4 text-gold bg-black border-dark-gray rounded focus:ring-gold"
+                    >
+                    <label for="has-balcony" class="ml-2 text-sm text-white">Avec balcon</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input 
+                      type="checkbox"
+                      id="breakfast-included"
+                      formControlName="breakfastIncluded"
+                      class="form-checkbox h-4 w-4 text-gold bg-black border-dark-gray rounded focus:ring-gold"
+                    >
+                    <label for="breakfast-included" class="ml-2 text-sm text-white">Petit-déjeuner inclus</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bouton de recherche -->
+          <div class="mt-6 flex justify-center">
+            <button 
+              type="submit" 
+              class="px-8 py-3 bg-gold text-black font-semibold rounded-sm hover:bg-opacity-90 transition duration-300 flex items-center"
+              [disabled]="searchForm.invalid || isLoading"
+              [ngClass]="{'opacity-70 cursor-not-allowed': searchForm.invalid || isLoading}"
+            >
+              <span *ngIf="!isLoading">Rechercher</span>
+              <div *ngIf="isLoading" class="flex items-center">
+                <app-loading [size]="'small'" [type]="'dots'" [showMessage]="false"></app-loading>
+                Recherche en cours...
+              </div>
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Nos types de chambres -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold text-gold mb-6">Nos types de chambres</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let type of roomTypes" class="bg-dark-gray rounded-sm overflow-hidden border border-dark-gray transition-all duration-300 hover:border-gold">
+            <img [src]="'assets/images/rooms/room-type-' + type.id + '.jpg'" [alt]="type.name" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-gold font-semibold text-lg">{{ type.name }}</h3>
+              <p class="text-gray-300 text-sm mt-2">{{ getRoomTypeDescription(type.id) }}</p>
+              <div class="mt-4 flex justify-between items-center">
+                <app-price-display 
+                  [price]="getRoomTypePrice(type.id)"
+                  [periodicity]="'night'"
+                  [size]="'small'"
+                ></app-price-display>
+                <a [routerLink]="['/rooms']" [queryParams]="{type: type.id}" class="text-gold hover:underline text-sm">Voir les chambres</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Services inclus -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold text-gold mb-6">Services inclus</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div *ngFor="let service of featuredServices" class="bg-dark-gray p-4 rounded-sm text-center border border-dark-gray transition-all duration-300 hover:border-gold">
+            <div class="flex justify-center text-gold mb-3">
+              <app-amenity-badge 
+                [amenity]="{ id: service.icon, name: service.name, icon: service.icon }"
+                [size]="'large'"
+              ></app-amenity-badge>
+            </div>
+            <h3 class="text-white font-medium">{{ service.name }}</h3>
+            <p class="text-gray-300 text-sm mt-2">{{ service.description }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Questions fréquentes -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold text-gold mb-6">Questions fréquentes</h2>
+        
+        <div class="space-y-4">
+          <div *ngFor="let faq of faqs; let i = index" class="bg-dark-gray rounded-sm border border-dark-gray overflow-hidden">
+            <button 
+              (click)="toggleFaq(i)" 
+              class="w-full text-left p-4 flex justify-between items-center focus:outline-none"
+            >
+              <span class="font-medium text-white">{{ faq.question }}</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-5 w-5 text-gold transition-transform duration-300" 
+                [ngClass]="{'rotate-180': faq.isOpen}"
+                viewBox="0 0 20 20" 
+                fill="currentColor"
+              >
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div 
+              *ngIf="faq.isOpen" 
+              class="p-4 border-t border-dark-gray text-gray-300 bg-black text-sm"
+            >
+              {{ faq.answer }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Call to action -->
+      <div class="bg-gradient-to-r from-dark-gray to-black rounded-sm p-8 text-center">
+        <h2 class="text-2xl font-bold text-gold mb-3">Besoin d'aide pour votre réservation ?</h2>
+        <p class="text-white mb-6 max-w-2xl mx-auto">Notre équipe de concierges est disponible 24/7 pour vous aider à planifier votre séjour parfait à REX HOTEL.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="tel:+22527306450" class="px-6 py-3 bg-gold text-black font-semibold rounded-sm hover:bg-opacity-90 transition duration-300">
+            <span class="flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              +225 27 30 64 50 50
+            </span>
+          </a>
+          <a [routerLink]="['/contact']" class="px-6 py-3 border border-gold text-gold font-semibold rounded-sm hover:bg-gold hover:text-black transition duration-300">
+            <span class="flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              Contacter notre équipe
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>

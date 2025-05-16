@@ -1,1 +1,38 @@
-<p>contact-map works!</p>
+<div class="map-container">
+    <!-- Adresse de l'hôtel si demandée -->
+    <div *ngIf="showAddress" class="address-overlay">
+      <div class="address-card">
+        <div class="address-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
+        <div class="address-content">
+          <h3>Notre emplacement</h3>
+          <p *ngFor="let line of getHotelAddress()" class="address-line">{{ line }}</p>
+          <a href="https://goo.gl/maps/YourMapLink" target="_blank" class="directions-link">
+            Obtenir l'itinéraire
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Iframe de la carte Google Maps -->
+    <div class="map-wrapper">
+      <iframe 
+        [src]="mapUrl" 
+        [width]="width" 
+        [height]="height" 
+        allowfullscreen=""
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade"
+        aria-label="Carte de l'Hôtel Rex Yamoussoukro"
+        title="Localisation de l'Hôtel Rex Yamoussoukro"
+        class="map-iframe"
+      ></iframe>
+    </div>
+  </div>

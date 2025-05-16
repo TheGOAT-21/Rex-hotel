@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PriceDisplayComponent implements OnInit {
   @Input() price: number = 0;
-  @Input() currency: string = '€';
+  @Input() currency: string = 'FCFA';
   @Input() periodicity: 'night' | 'day' | 'hour' | 'person' | 'none' = 'night';
   @Input() isDiscounted: boolean = false;
   @Input() originalPrice?: number;

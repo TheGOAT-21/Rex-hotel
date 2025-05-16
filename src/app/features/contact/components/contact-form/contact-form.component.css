@@ -1,0 +1,40 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+  }
+  
+  .text-gold {
+    color: var(--rex-gold);
+  }
+  
+  .bg-gold {
+    background-color: var(--rex-gold);
+  }
+  
+  .text-beige {
+    color: var(--rex-beige);
+  }
+  
+  .bg-dark-gray {
+    background-color: var(--rex-dark-gray);
+  }
+  
+  .border-gold {
+    border-color: var(--rex-gold);
+  }
+  
+  /* Style pour les états d'erreur */
+  input.ng-invalid.ng-touched,
+  textarea.ng-invalid.ng-touched {
+    border-color: var(--rex-gold);
+    border-opacity: 0.5;
+  }
+  
+  /* Style pour les états de focus */
+  input:focus,
+  textarea:focus {
+    border-color: var(--rex-gold);
+    box-shadow: 0 0 0 1px var(--rex-gold);
+  }

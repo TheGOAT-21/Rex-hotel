@@ -26,7 +26,6 @@ export * from './gallery/gallery.component';
 export * from './price-display/price-display.component';
 export * from './rating/rating.component';
 export * from './room-card/room-card.component';
-export * from './room-list/room-list.component';
 
 // Composants utilitaires
 export * from './loading/loading.component';

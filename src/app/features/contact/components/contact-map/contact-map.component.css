@@ -1,0 +1,150 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+    display: block;
+  }
+  
+  /* Conteneur principal */
+  .map-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .map-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Wrapper pour la carte */
+  .map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--rex-dark-gray);
+  }
+  
+  /* Style de l'iframe */
+  .map-iframe {
+    display: block;
+    border: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+  
+  .map-wrapper:hover .map-iframe {
+    opacity: 1;
+  }
+  
+  /* Overlay d'adresse */
+  .address-overlay {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+    max-width: 320px;
+    pointer-events: none;
+  }
+  
+  /* Carte d'adresse */
+  .address-card {
+    background-color: var(--rex-black);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 3px solid var(--rex-gold);
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .address-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Icône d'adresse */
+  .address-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    color: var(--rex-gold);
+    flex-shrink: 0;
+  }
+  
+  .address-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Contenu de l'adresse */
+  .address-content {
+    color: white;
+  }
+  
+  .address-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--rex-gold);
+  }
+  
+  .address-line {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 4px 0;
+    color: var(--rex-beige);
+  }
+  
+  /* Lien pour obtenir l'itinéraire */
+  .directions-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--rex-gold);
+    margin-top: 12px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .directions-link svg {
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
+    transition: transform 0.2s ease;
+  }
+  
+  .directions-link:hover {
+    color: white;
+  }
+  
+  .directions-link:hover svg {
+    transform: translateX(4px);
+  }
+  
+  /* Adaptations responsives */
+  @media (max-width: 640px) {
+    .address-overlay {
+      position: relative;
+      top: auto;
+      left: auto;
+      max-width: none;
+      margin-bottom: 16px;
+    }
+    
+    .address-card {
+      width: 100%;
+    }
+  }

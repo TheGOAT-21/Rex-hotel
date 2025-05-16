@@ -1,1 +1,126 @@
-<p>testimonial-slider works!</p>
+<div class="testimonial-slider" 
+     (mouseenter)="pauseAutoPlay()" 
+     (mouseleave)="resumeAutoPlay()">
+  
+  <!-- Carousel display mode -->
+  <div *ngIf="display === 'carousel'" class="carousel-container">
+    <!-- Navigation arrows -->
+    <button *ngIf="showControls && testimonials.length > 1" 
+            class="nav-button prev-button"
+            (click)="prev()"
+            aria-label="Précédent">
+      <fa-icon [icon]="faChevronLeft"></fa-icon>
+    </button>
+    
+    <!-- Testimonial content -->
+    <div class="carousel-content" [ngClass]="{'animating': isAnimating}">
+      <div *ngFor="let testimonial of displayedTestimonials; let i = index" 
+           class="testimonial-item carousel-item"
+           [ngClass]="{'active': i === 0}">
+        
+        <div class="quote-icon">
+          <fa-icon [icon]="faQuoteLeft" size="2x"></fa-icon>
+        </div>
+        
+        <div class="testimonial-rating">
+          <app-rating [rating]="testimonial.rating" 
+                     [showValue]="true" 
+                     [size]="'medium'"></app-rating>
+        </div>
+        
+        <p class="testimonial-comment">{{ testimonial.comment }}</p>
+        
+        <div class="testimonial-author">
+          <div *ngIf="testimonial.photo" class="author-photo">
+            <img [src]="testimonial.photo" [alt]="testimonial.name">
+          </div>
+          <div *ngIf="!testimonial.photo" class="author-icon">
+            <fa-icon [icon]="faUser"></fa-icon>
+          </div>
+          <div class="author-info">
+            <p class="author-name">{{ testimonial.name }}</p>
+            <p *ngIf="testimonial.position" class="author-position">{{ testimonial.position }}</p>
+            <p class="author-date">{{ formatDate(testimonial.date) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Navigation arrows -->
+    <button *ngIf="showControls && testimonials.length > 1" 
+            class="nav-button next-button"
+            (click)="next()"
+            aria-label="Suivant">
+      <fa-icon [icon]="faChevronRight"></fa-icon>
+    </button>
+    
+    <!-- Navigation dots -->
+    <div *ngIf="showDots && testimonials.length > 1" class="navigation-dots">
+      <button *ngFor="let testimonial of testimonials; let i = index" 
+              class="dot-button" 
+              [ngClass]="{'active': i === currentIndex}"
+              (click)="goToSlide(i)"
+              [attr.aria-label]="'Témoignage ' + (i + 1)">
+      </button>
+    </div>
+  </div>
+  
+  <!-- Cards display mode -->
+  <div *ngIf="display === 'cards'" class="cards-container">
+    <div class="testimonial-cards">
+      <div *ngFor="let testimonial of displayedTestimonials; let i = index" 
+           class="testimonial-item card-item">
+        
+        <div class="quote-icon">
+          <fa-icon [icon]="faQuoteLeft"></fa-icon>
+        </div>
+        
+        <div class="testimonial-rating">
+          <app-rating [rating]="testimonial.rating" 
+                     [showValue]="true" 
+                     [size]="'small'"></app-rating>
+        </div>
+        
+        <p class="testimonial-comment">{{ testimonial.comment }}</p>
+        
+        <div class="testimonial-author">
+          <div *ngIf="testimonial.photo" class="author-photo">
+            <img [src]="testimonial.photo" [alt]="testimonial.name">
+          </div>
+          <div *ngIf="!testimonial.photo" class="author-icon">
+            <fa-icon [icon]="faUser"></fa-icon>
+          </div>
+          <div class="author-info">
+            <p class="author-name">{{ testimonial.name }}</p>
+            <p *ngIf="testimonial.position" class="author-position">{{ testimonial.position }}</p>
+            <p class="author-date">{{ formatDate(testimonial.date) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Navigation controls for cards mode -->
+    <div *ngIf="showControls && testimonials.length > maxDisplayed" class="cards-controls">
+      <button class="control-button prev-button" 
+              (click)="prev()"
+              aria-label="Précédent">
+        <fa-icon [icon]="faChevronLeft"></fa-icon>
+      </button>
+      <button class="control-button next-button" 
+              (click)="next()"
+              aria-label="Suivant">
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </button>
+    </div>
+    
+    <!-- Navigation dots for cards mode -->
+    <div *ngIf="showDots && testimonials.length > maxDisplayed" class="navigation-dots">
+      <button *ngFor="let testimonial of testimonials; let i = index" 
+              class="dot-button" 
+              [ngClass]="{'active': i === currentIndex}"
+              (click)="goToSlide(i)"
+              [attr.aria-label]="'Témoignage ' + (i + 1) + ' à ' + (i + maxDisplayed)">
+      </button>
+    </div>
+  </div>
+</div>

@@ -43,19 +43,19 @@ export class HomePageComponent implements OnInit {
   // Testimonials data
   testimonials = [
     {
-      name: 'Sophie Martin',
+      name: 'Jean Roland',
       rating: 4.8,
       comment: 'Un séjour inoubliable avec un service exceptionnel. La vue sur le lac depuis notre chambre était magnifique.',
       date: new Date('2025-03-15')
     },
     {
-      name: 'Jean Dupont',
+      name: 'Chris touré',
       rating: 5,
       comment: 'Espace incroyable, personnel attentif et cuisine délicieuse. Parfait pour notre événement d\'entreprise.',
       date: new Date('2025-03-02')
     },
     {
-      name: 'Marie Laurent',
+      name: 'Gisele Konan',
       rating: 4.7,
       comment: 'Le Rex Hotel a dépassé nos attentes. Les espaces sont élégants et le confort est au rendez-vous.',
       date: new Date('2025-02-18')
@@ -67,11 +67,10 @@ export class HomePageComponent implements OnInit {
   
   // Hero gallery images
   heroImages = [
-    'assets/images/hotel/exterior.jpg',
-    'assets/images/hotel/lobby.jpg',
-    'assets/images/hotel/pool.jpg',
-    'assets/images/hotel/restaurant.jpg',
-    'assets/images/hotel/suite.jpg'
+    'assets/images/Exterieur/hotel-exterior.png',
+    'assets/images/Exterieur/hotel-exterior (1).png',
+    'assets/images/Exterieur/hotel-exterior (2).png',
+    'assets/images/Exterieur/hotel-exterior (3).png',
   ];
 
   constructor(

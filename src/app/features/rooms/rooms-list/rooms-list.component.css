@@ -1,10 +1,52 @@
-:host {
-    --rex-gold: #E0C989;
-    --rex-black: #000000;
-    --rex-dark-gray: #1D1D1D;
-    --rex-beige: #F5EFE0;
-  }
-  
-  .text-gold {
-    color: var(--rex-gold);
-  }
+/* src/app/features/rooms/rooms-list/rooms-list.component.css */
+.room-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.1), 0 4px 6px -2px rgba(251, 191, 36, 0.05);
+}
+
+/* Animation pour le chargement */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.room-list-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Style pour les checkboxes */
+.form-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 1rem;
+  width: 1rem;
+  background-color: transparent;
+  border: 1px solid #4B5563;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+
+.form-checkbox:checked {
+  background-color: #D4AF37;
+  border-color: #D4AF37;
+}
+
+.form-checkbox:checked::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.form-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+}

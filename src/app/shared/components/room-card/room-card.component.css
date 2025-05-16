@@ -33,3 +33,46 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Classes personnalisées pour la charte graphique */
+.bg-rex-black {
+  background-color: var(--rex-black);
+}
+
+.bg-rex-dark-gray {
+  background-color: var(--rex-dark-gray);
+}
+
+.border-rex-dark-gray {
+  border-color: var(--rex-dark-gray);
+}
+
+.border-rex-gold {
+  border-color: var(--rex-gold);
+}
+
+.text-rex-gold {
+  color: var(--rex-gold);
+}
+
+.text-rex-beige {
+  color: var(--rex-beige);
+}
+
+.text-white {
+  color: white;
+}
+
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+/* Pour les hover et focus states */
+.room-card:hover, 
+.room-card:focus-within {
+  border-color: var(--rex-gold);
+}
