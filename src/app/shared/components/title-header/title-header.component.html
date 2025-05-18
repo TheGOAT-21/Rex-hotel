@@ -1,0 +1,15 @@
+<div [class]="decorationClasses">
+    <!-- Title with dynamic heading level -->
+    <ng-container [ngSwitch]="level">
+      <h1 *ngSwitchCase="'h1'" [class]="getHeadingClass() + ' ' + titleClasses">{{ title }}</h1>
+      <h2 *ngSwitchCase="'h2'" [class]="getHeadingClass() + ' ' + titleClasses">{{ title }}</h2>
+      <h3 *ngSwitchCase="'h3'" [class]="getHeadingClass() + ' ' + titleClasses">{{ title }}</h3>
+      <h4 *ngSwitchCase="'h4'" [class]="getHeadingClass() + ' ' + titleClasses">{{ title }}</h4>
+    </ng-container>
+    
+    <!-- Decoration line for title if enabled -->
+    <div *ngIf="withDecoration" [class]="decorationLineClasses"></div>
+    
+    <!-- Optional subtitle -->
+    <p *ngIf="subtitle" [class]="subtitleClasses">{{ subtitle }}</p>
+  </div>

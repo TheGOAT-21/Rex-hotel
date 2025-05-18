@@ -1,0 +1,35 @@
+<div class="amenity-card bg-black p-6 rounded shadow-lg transition-transform duration-300 hover:-translate-y-2 text-center">
+    <!-- Icône dans un cercle -->
+    <div class="w-16 h-16 bg-dark-gray rounded-full flex items-center justify-center text-gold mx-auto mb-4">
+      <i *ngIf="amenity.icon === 'wifi'" class="fa fa-wifi fa-lg"></i>
+      <i *ngIf="amenity.icon === 'breakfast'" class="fa fa-coffee fa-lg"></i>
+      <i *ngIf="amenity.icon === 'parking'" class="fa fa-car fa-lg"></i>
+      <i *ngIf="amenity.icon === 'pool'" class="fa fa-swimming-pool fa-lg"></i>
+      <i *ngIf="amenity.icon === 'restaurant'" class="fa fa-utensils fa-lg"></i>
+      <i *ngIf="amenity.icon === 'ac'" class="fa fa-snowflake fa-lg"></i>
+      <i *ngIf="amenity.icon === 'tv'" class="fa fa-tv fa-lg"></i>
+      <i *ngIf="amenity.icon === 'balcony'" class="fa fa-dungeon fa-lg"></i>
+      <i *ngIf="amenity.icon === 'conference'" class="fa fa-users fa-lg"></i>
+      <i *ngIf="amenity.icon === 'meeting'" class="fa fa-handshake fa-lg"></i>
+      <i *ngIf="amenity.icon === 'child'" class="fa fa-child fa-lg"></i>
+      <i *ngIf="amenity.icon === 'terrace'" class="fa fa-umbrella-beach fa-lg"></i>
+      <i *ngIf="amenity.icon === 'minibar'" class="fa fa-glass-martini fa-lg"></i>
+      <i *ngIf="amenity.icon === 'safe'" class="fa fa-lock fa-lg"></i>
+      <i *ngIf="amenity.icon === 'bathtub'" class="fa fa-bath fa-lg"></i>
+      <i *ngIf="!['wifi', 'breakfast', 'parking', 'pool', 'restaurant', 'ac', 'tv', 'balcony', 'conference', 'meeting', 'child', 'terrace', 'minibar', 'safe', 'bathtub'].includes(amenity.icon)" class="fa fa-concierge-bell fa-lg"></i>
+    </div>
+    
+    <!-- Nom de l'équipement -->
+    <h3 class="text-white font-medium text-xl mb-4">{{ amenity.name }}</h3>
+    
+    <!-- Description (optionnelle) -->
+    <p *ngIf="showDescription && amenity.description" class="text-white mb-4 text-sm">{{ amenity.description }}</p>
+    
+    <!-- Badge de l'équipement -->
+    <app-amenity-badge [amenity]="amenity" [size]="'large'"></app-amenity-badge>
+  
+    <!-- Contenu supplémentaire pour la variante détaillée -->
+    <div *ngIf="variant === 'detailed'" class="mt-4 pt-4 border-t border-gold border-opacity-20">
+      <p class="text-gold text-sm">{{ amenity.category }}</p>
+    </div>
+  </div>

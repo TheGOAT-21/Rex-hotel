@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AmenityManagerComponent } from './amenity-manager.component';
+import { AmenityCardComponent } from './amenity-card.component';
 
-describe('AmenityManagerComponent', () => {
-  let component: AmenityManagerComponent;
-  let fixture: ComponentFixture<AmenityManagerComponent>;
+describe('AmenityCardComponent', () => {
+  let component: AmenityCardComponent;
+  let fixture: ComponentFixture<AmenityCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AmenityManagerComponent]
+      imports: [AmenityCardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AmenityManagerComponent);
+    fixture = TestBed.createComponent(AmenityCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

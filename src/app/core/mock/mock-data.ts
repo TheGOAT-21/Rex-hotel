@@ -1,5 +1,5 @@
 // src/app/core/mocks/mock-data.ts
-import { Room, RoomType, Amenity, Reservation } from '../models';
+import { Room, RoomType, Amenity, Reservation, Testimonial } from '../models';
 
 // Types de chambre
 export const ROOM_TYPES: { id: RoomType; name: string }[] = [
@@ -173,6 +173,62 @@ export const ROOMS: Room[] = [
     isAvailable: true,
     isActive: true,
     isFeatured: false
+  }
+];
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    id: '1',
+    name: 'Jean Roland',
+    rating: 4.8,
+    comment: 'Un séjour inoubliable avec un service exceptionnel. La vue sur le lac depuis notre chambre était magnifique.',
+    date: new Date('2025-03-15'),
+    roomType: 'suite'
+  },
+  {
+    id: '2',
+    name: 'Chris Touré',
+    rating: 5,
+    comment: 'Espace incroyable, personnel attentif et cuisine délicieuse. Parfait pour notre événement d\'entreprise.',
+    date: new Date('2025-03-02'),
+    location: 'Abidjan',
+    roomType: 'presidential'
+  },
+  {
+    id: '3',
+    name: 'Gisele Konan',
+    rating: 4.7,
+    comment: 'Le Rex Hotel a dépassé nos attentes. Les espaces sont élégants et le confort est au rendez-vous.',
+    date: new Date('2025-02-18'),
+    location: 'Yamoussoukro',
+    roomType: 'deluxe'
+  },
+  {
+    id: '4',
+    name: 'Marc Dubois',
+    rating: 4.5,
+    comment: 'Personnel très professionnel et attentionné. Nous avons particulièrement apprécié le restaurant.',
+    date: new Date('2025-01-25'),
+    location: 'Paris',
+    roomType: 'standard'
+  },
+  {
+    id: '5',
+    name: 'Aminata Diallo',
+    rating: 4.9,
+    comment: 'La qualité du service est vraiment exceptionnelle. Les chambres sont spacieuses et très bien aménagées.',
+    date: new Date('2025-02-10'),
+    location: 'Dakar',
+    roomType: 'suite'
+  },
+  {
+    id: '6',
+    name: 'Thomas Kouamé',
+    rating: 4.6,
+    comment: 'J\'ai adoré la piscine et les espaces de détente. Un vrai havre de paix au cœur de la ville.',
+    date: new Date('2025-03-05'),
+    location: 'San Pedro',
+    roomType: 'deluxe'
   }
 ];
 

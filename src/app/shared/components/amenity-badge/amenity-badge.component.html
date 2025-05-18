@@ -1,6 +1,6 @@
-<div class="amenity-badge" [ngClass]="size">
-    <div class="amenity-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" [innerHTML]="getIconPath()"></svg>
-    </div>
-    <span class="amenity-name">{{ amenity.name }}</span>
+<div class="amenity-badge bg-[#000000] bg-opacity-10 border border-[#E0C989] border-opacity-30 text-[#E0C989] rounded px-3 py-2 inline-flex items-center transition-all duration-300 hover:bg-opacity-20" [ngClass]="size">
+  <div class="amenity-icon mr-2 flex items-center justify-center">
+    <i class="fa" [ngClass]="getIconClass()" aria-hidden="true"></i>
   </div>
+  <span class="amenity-name text-sm font-medium">{{ amenity.name }}</span>
+</div>

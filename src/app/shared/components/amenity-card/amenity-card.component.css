@@ -1,0 +1,22 @@
+:host {
+    --gold: #E0C989;
+    --black: #000000;
+    --dark-gray: #1D1D1D;
+    --beige: #F5EFE0;
+  }
+  
+  .amenity-card {
+    background-color: var(--black);
+  }
+  
+  .bg-dark-gray {
+    background-color: var(--dark-gray);
+  }
+  
+  .text-gold {
+    color: var(--gold);
+  }
+  
+  .border-gold {
+    border-color: var(--gold);
+  }

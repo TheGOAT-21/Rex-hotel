@@ -8,12 +8,14 @@ import {
   LoadingComponent,
   RatingComponent,
   AmenityBadgeComponent,
-  DatepickerComponent 
+  DatepickerComponent,
+  TestimonialCardComponent
 } from '../../../shared/components';
 import { AuthService } from '../../../core/services/auth.service';
 import { RoomService } from '../../../core/services/room.service';
-import { Room, Amenity } from '../../../core/models';
-import { ROOMS, AMENITIES } from '../../../core/mock/mock-data';
+import { Room, Amenity, Testimonial } from '../../../core/models';
+import { ROOMS, AMENITIES, TESTIMONIALS } from '../../../core/mock/mock-data';
+import { QuickBookingComponent } from "../../../shared/components/quick-booking/quick-booking.component";
 
 @Component({
   selector: 'app-home-page',
@@ -27,8 +29,10 @@ import { ROOMS, AMENITIES } from '../../../core/mock/mock-data';
     LoadingComponent,
     RatingComponent,
     AmenityBadgeComponent,
-    DatepickerComponent
-  ],
+    DatepickerComponent,
+    QuickBookingComponent,
+    TestimonialCardComponent
+],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
@@ -39,28 +43,8 @@ export class HomePageComponent implements OnInit {
   startDate: Date | null = null;
   endDate: Date | null = null;
   selectedGuests = 1;
-  
-  // Testimonials data
-  testimonials = [
-    {
-      name: 'Jean Roland',
-      rating: 4.8,
-      comment: 'Un séjour inoubliable avec un service exceptionnel. La vue sur le lac depuis notre chambre était magnifique.',
-      date: new Date('2025-03-15')
-    },
-    {
-      name: 'Chris touré',
-      rating: 5,
-      comment: 'Espace incroyable, personnel attentif et cuisine délicieuse. Parfait pour notre événement d\'entreprise.',
-      date: new Date('2025-03-02')
-    },
-    {
-      name: 'Gisele Konan',
-      rating: 4.7,
-      comment: 'Le Rex Hotel a dépassé nos attentes. Les espaces sont élégants et le confort est au rendez-vous.',
-      date: new Date('2025-02-18')
-    }
-  ];
+  testimonials: Testimonial[] = [];
+
   
   // Featured amenities using mock data
   hotelAmenities: Amenity[] = AMENITIES.slice(0, 6);
@@ -86,6 +70,9 @@ export class HomePageComponent implements OnInit {
     
     // Load featured rooms
     this.loadFeaturedRooms();
+
+        // Load testimonials - utilise les 3 premiers témoignages
+        this.testimonials = TESTIMONIALS.slice(0, 3);
     
     // Initialize dates for the datepicker
     const tomorrow = new Date();

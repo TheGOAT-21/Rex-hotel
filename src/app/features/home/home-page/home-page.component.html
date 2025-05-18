@@ -8,6 +8,8 @@
         
     <!-- Overlay -->
     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-2"></div>
+
+    
     
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-2 text-white shadow-text">REX HOTEL</h1>
@@ -84,8 +86,10 @@
       </div>
     </div>
   </section>
+
+
   
-  <!-- Amenities Section with improved visuals -->
+  <!-- Amenities Section-->
   <section class="py-16 bg-[#1D1D1D]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos services exclusifs</h2>
@@ -127,25 +131,22 @@
     </div>
   </section>
   
-  <!-- Testimonials Section with improved layout -->
+  <!-- Testimonials Section  -->
   <section class="py-16 bg-[#000000]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-10 uppercase tracking-wider">Ce que disent nos clients</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let testimonial of testimonials" class="bg-[#1D1D1D] p-6 rounded shadow-lg border-l-4 border-[#E0C989] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-          <div class="mb-4">
-            <app-rating [rating]="testimonial.rating" [showValue]="true"></app-rating>
-          </div>
-          <p class="text-white italic mb-6">"{{ testimonial.comment }}"</p>
-          <div class="border-t border-[#E0C989] border-opacity-20 pt-4">
-            <p class="text-[#E0C989] font-semibold">{{ testimonial.name }}</p>
-            <p class="text-gray-400 text-sm">{{ testimonial.date | date:'MMM yyyy' }}</p>
-          </div>
+          <app-testimonial-card 
+            [testimonial]="testimonial"
+            [variant]="'default'"
+          ></app-testimonial-card>
         </div>
       </div>
     </div>
   </section>
+  
   
   <!-- CTA Section with parallax effect -->
   <section class="py-20 bg-black bg-opacity-70 bg-blend-overlay bg-fixed bg-center bg-cover" style="background-image: url('/assets/images/hotel/cta-background.jpg')">
@@ -160,4 +161,35 @@
       </a>
     </div>
   </section>
+</div>
+
+
+<div class="py-8 bg-black min-h-screen">
+  <div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-4xl text-white font-bold mb-8">Démonstration du Quick Booking</h1>
+    
+    <h2 class="text-2xl text-[#E0C989] font-semibold mb-4">1. Style standard</h2>
+    <app-quick-booking></app-quick-booking>
+    
+    <h2 class="text-2xl text-[#E0C989] font-semibold mt-12 mb-4">2. Style flottant</h2>
+    <div class="relative mb-16">
+      <!-- Image de fond -->
+      <div class="h-[400px] rounded-sm overflow-hidden">
+        <img src="assets/images/ConferenceRoom/conference.png" alt="REX HOTEL" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
+        <div class="absolute inset-0 flex flex-col justify-center z-10 p-8">
+          <h3 class="text-4xl font-bold text-white mb-2">Bienvenue au REX HOTEL</h3>
+          <p class="text-xl text-white max-w-2xl">Vivez une expérience inoubliable dans notre hôtel de luxe.</p>
+        </div>
+      </div>
+      
+      <!-- Composant QuickBooking flottant -->
+      <div class="container mx-auto px-4">
+        <app-quick-booking [isFloating]="true"></app-quick-booking>
+      </div>
+    </div>
+    
+    <h2 class="text-2xl text-[#E0C989] font-semibold mt-16 mb-4">3. Style compact</h2>
+    <app-quick-booking [isCompact]="true" [showTitle]="false"></app-quick-booking>
+  </div>
 </div>
