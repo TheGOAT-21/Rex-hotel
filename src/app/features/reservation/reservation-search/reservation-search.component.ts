@@ -1,47 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { 
   BreadcrumbsComponent, 
-  DatepickerComponent,
-  PriceDisplayComponent,
-  AmenityBadgeComponent,
+  AmenityCardComponent,
+  FilterComponent,
   LoadingComponent
 } from '../../../shared/components';
 import { RoomService } from '../../../core/services/room.service';
-import { RoomType, Amenity } from '../../../core/models';
+import { RoomFilter, RoomType, Amenity } from '../../../core/models';
 
 @Component({
   selector: 'app-reservation-search',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     RouterModule,
     BreadcrumbsComponent,
-    DatepickerComponent,
-    PriceDisplayComponent,
-    AmenityBadgeComponent,
+    AmenityCardComponent,
+    FilterComponent,
     LoadingComponent
   ],
   templateUrl: './reservation-search.component.html',
   styleUrl: './reservation-search.component.css'
 })
 export class ReservationSearchComponent implements OnInit {
-  searchForm!: FormGroup;
-  showAdvancedSearch: boolean = false;
   isLoading: boolean = false;
-  
-  // Dates de séjour
-  startDate: Date | null = null;
-  endDate: Date | null = null;
-  
-  // Options de filtrage
-  roomTypes: { id: string; name: string }[] = [];
-  amenities: Amenity[] = [];
-  selectedAmenities: string[] = [];
+  currentFilter: RoomFilter = {};
   
   // Services mis en avant
   featuredServices = [
@@ -96,125 +81,72 @@ export class ReservationSearchComponent implements OnInit {
     }
   ];
 
-  dateRange: { start: Date | null, end: Date | null } = { start: new Date(), end: null };
-
   constructor(
-    private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private roomService: RoomService
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
-    this.loadRoomTypes();
-    this.loadAmenities();
-    
-    // Initialiser les dates par défaut (aujourd'hui et demain)
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    
-    const dayAfter = new Date(today);
-    dayAfter.setDate(dayAfter.getDate() + 2);
-    
-    this.startDate = tomorrow;
-    this.endDate = dayAfter;
+    // Initialiser le filtre si nécessaire
+    this.initializeFilter();
   }
   
-  initForm(): void {
-    this.searchForm = this.fb.group({
-      guestCount: [2, [Validators.required, Validators.min(1)]],
-      roomType: [''],
-      maxPrice: [null],
-      hasBalcony: [false],
-      breakfastIncluded: [false]
-    });
+  initializeFilter(): void {
+    // Définir les valeurs par défaut du filtre si nécessaire
+    this.currentFilter = {
+      search: '',
+      priceMin: undefined,
+      priceMax: undefined,
+      capacityMin: undefined,
+      types: [],
+      amenities: [],
+      views: [],
+      bedTypes: [],
+      hasBalcony: undefined,
+      floor: undefined
+    };
   }
   
-  loadRoomTypes(): void {
-    this.roomService.getRoomTypes().subscribe({
-      next: (types) => {
-        this.roomTypes = types;
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement des types de chambre:', err);
-      }
-    });
-  }
-  
-  loadAmenities(): void {
-    this.roomService.getAmenities().subscribe({
-      next: (amenities) => {
-        this.amenities = amenities;
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement des équipements:', err);
-      }
-    });
-  }
-  
-  toggleAdvancedSearch(): void {
-    this.showAdvancedSearch = !this.showAdvancedSearch;
-  }
-  
-  toggleAmenity(amenityId: string): void {
-    const index = this.selectedAmenities.indexOf(amenityId);
-    
-    if (index === -1) {
-      // Ajouter l'équipement
-      this.selectedAmenities.push(amenityId);
-    } else {
-      // Retirer l'équipement
-      this.selectedAmenities.splice(index, 1);
-    }
-  }
-  
-  isAmenitySelected(amenityId: string): boolean {
-    return this.selectedAmenities.includes(amenityId);
-  }
-  
-  onDateRangeSelected(range: { start: Date | null, end: Date | null }): void {
-    if (range.start) {
-      this.dateRange = range;
-    }
+  onFilterChange(filter: RoomFilter): void {
+    this.currentFilter = filter;
+    this.searchRooms();
   }
   
   searchRooms(): void {
-    if (this.searchForm.invalid || !this.startDate || !this.endDate) {
-      return;
-    }
-    
     this.isLoading = true;
     
-    const formValue = this.searchForm.value;
+    // Préparer les paramètres de recherche pour la navigation
+    const queryParams: any = {};
     
-    // Préparer les paramètres de recherche
-    const queryParams: any = {
-      startDate: this.startDate.toISOString(),
-      endDate: this.endDate.toISOString(),
-      guests: formValue.guestCount
-    };
-    
-    // Ajouter les paramètres optionnels s'ils sont sélectionnés
-    if (formValue.roomType) {
-      queryParams.type = formValue.roomType;
+    // Ajouter les dates si disponibles
+    if (this.currentFilter.startDate && this.currentFilter.endDate) {
+      queryParams.startDate = this.currentFilter.startDate.toISOString();
+      queryParams.endDate = this.currentFilter.endDate.toISOString();
     }
     
-    if (formValue.maxPrice) {
-      queryParams.maxPrice = formValue.maxPrice;
+    // Ajouter le nombre de personnes
+    if (this.currentFilter.capacityMin) {
+      queryParams.guests = this.currentFilter.capacityMin;
     }
     
-    if (formValue.hasBalcony) {
-      queryParams.balcony = true;
+    // Ajouter le type de chambre
+    if (this.currentFilter.types && this.currentFilter.types.length > 0) {
+      queryParams.type = this.currentFilter.types[0];
     }
     
-    if (formValue.breakfastIncluded) {
-      queryParams.breakfast = true;
+    // Ajouter le prix maximum
+    if (this.currentFilter.priceMax) {
+      queryParams.maxPrice = this.currentFilter.priceMax;
     }
     
-    if (this.selectedAmenities.length > 0) {
-      queryParams.amenities = this.selectedAmenities.join(',');
+    // Ajouter le balcon
+    if (this.currentFilter.hasBalcony !== undefined) {
+      queryParams.balcony = this.currentFilter.hasBalcony;
+    }
+    
+    // Ajouter les équipements
+    if (this.currentFilter.amenities && this.currentFilter.amenities.length > 0) {
+      queryParams.amenities = this.currentFilter.amenities.join(',');
     }
     
     // Simuler un délai de recherche
@@ -227,31 +159,5 @@ export class ReservationSearchComponent implements OnInit {
   
   toggleFaq(index: number): void {
     this.faqs[index].isOpen = !this.faqs[index].isOpen;
-  }
-  
-  getRoomTypeDescription(typeId: string): string {
-    switch(typeId) {
-      case 'standard':
-        return 'Chambre confortable avec toutes les commodités essentielles pour un séjour agréable.';
-      case 'deluxe':
-        return 'Espace plus généreux avec balcon privé et équipements premium.';
-      case 'suite':
-        return 'Suite spacieuse avec salon séparé, idéale pour les longs séjours.';
-      case 'presidential':
-        return 'Notre offre la plus luxueuse, avec vues imprenables et services VIP.';
-      default:
-        return 'Découvrez le confort et l\'élégance de nos chambres.';
-    }
-  }
-  
-  getRoomTypePrice(typeId: string): number {
-    const prices: { [key: string]: number } = {
-      'standard': 120000,
-      'deluxe': 150000,
-      'suite': 180000,
-      'presidential': 350000
-    };
-    
-    return prices[typeId] || 100000;
   }
 }
