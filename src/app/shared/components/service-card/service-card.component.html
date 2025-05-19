@@ -1,144 +1,129 @@
-<div class="service-card bg-gray-900 rounded-sm overflow-hidden border border-gray-800 h-full transition-all duration-300 hover:border-gold focus-within:border-gold">
-    <!-- Layout vertical -->
-    <div *ngIf="orientation === 'vertical'" class="flex flex-col h-full">
-      <!-- Image du service -->
-      <div class="relative">
-        <a [routerLink]="['/services', service.id]" class="block">
-          <img 
-            [src]="getMainImage()" 
-            [alt]="service.name" 
-            class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
-          >
-        </a>
-        
-        <!-- Badge pour les services en vedette -->
-        <div *ngIf="isFeatured" class="absolute top-2 right-2 bg-gold text-black text-xs px-2 py-1 rounded-sm font-semibold">
-          En vedette
-        </div>
-      </div>
+<div class="service-card bg-rex-dark-gray rounded-sm overflow-hidden border border-rex-dark-gray h-full transition-all duration-300">
+  <!-- Layout vertical -->
+  <div *ngIf="orientation === 'vertical'" class="flex flex-col h-full">
+    <!-- Image du service avec overlay élégant -->
+    <div class="relative overflow-hidden">
+      <a [routerLink]="['/services', service.id]" class="block">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
+        <img 
+          [src]="getMainImage()" 
+          [alt]="service.name" 
+          class="w-full h-52 object-cover transition-transform duration-500 hover:scale-105"
+        >
+      </a>
       
-      <!-- Contenu de la carte -->
-      <div class="p-4 flex flex-col flex-grow">
-        <!-- Icône et nom -->
-        <div class="flex items-center mb-2">
-          <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gold mr-3">
-            <fa-icon [icon]="getServiceIcon()" class="text-lg"></fa-icon>
-          </div>
-          <h3 class="text-gold font-semibold text-lg leading-tight hover:underline">
-            <a [routerLink]="['/services', service.id]">{{ service.name }}</a>
-          </h3>
-        </div>
-        
-        <!-- Horaires ou Capacité -->
-        <div *ngIf="service.openingHours || service.capacity" class="mb-2">
-          <div *ngIf="service.openingHours" class="text-gray-300 text-xs flex items-center">
-            <fa-icon [icon]="faClock" class="text-gold mr-1"></fa-icon>
-            <span>{{ service.openingHours }}</span>
-          </div>
-          <div *ngIf="service.capacity" class="text-gray-300 text-xs flex items-center">
-            <fa-icon [icon]="faUsers" class="text-gold mr-1"></fa-icon>
-            <span>{{ service.capacity }} personnes</span>
-          </div>
-        </div>
-        
-        <!-- Description -->
-        <p *ngIf="showDetails" class="text-gray-300 text-sm mt-2 line-clamp-2">
-          {{ service.description }}
-        </p>
-        
-        <!-- Caractéristiques -->
-        <div *ngIf="showDetails && service.features && service.features.length > 0" class="mt-3 space-y-1">
-          <div *ngFor="let feature of service.features.slice(0, 2)" class="text-gray-300 text-xs flex items-start">
-            <fa-icon [icon]="faCheck" class="text-gold mr-1 mt-0.5 flex-shrink-0"></fa-icon>
-            <span>{{ feature }}</span>
-          </div>
-          <p *ngIf="service.features.length > 2" class="text-gray-400 text-xs">
-            + {{ service.features.length - 2 }} autres caractéristiques
-          </p>
-        </div>
-        
-        <!-- Galerie optionnelle -->
-        <div *ngIf="showGallery && service.images && service.images.length > 0" class="mt-4">
-          <app-gallery [images]="service.images" [showThumbnails]="false"></app-gallery>
-        </div>
-        
-        <!-- Bouton voir détails -->
-        <div class="mt-auto pt-4 text-right">
-          <a [routerLink]="['/services', service.id]" class="text-sm text-gold hover:underline inline-flex items-center">
-            Voir détails
-            <fa-icon [icon]="faPlus" class="ml-1 text-xs"></fa-icon>
-          </a>
-        </div>
+      <!-- Titre sur l'image pour le design vertical -->
+      <div class="absolute bottom-0 left-0 right-0 p-4 z-20">
+        <h3 class="text-rex-gold font-semibold text-xl leading-tight">
+          {{ service.name }}
+        </h3>
       </div>
     </div>
     
-    <!-- Layout horizontal -->
-    <div *ngIf="orientation === 'horizontal'" class="flex flex-col md:flex-row h-full">
-      <!-- Image du service -->
-      <div class="relative md:w-1/3">
-        <a [routerLink]="['/services', service.id]" class="block h-full">
-          <img 
-            [src]="getMainImage()" 
-            [alt]="service.name" 
-            class="w-full h-48 md:h-full object-cover transition-transform duration-500 hover:scale-105"
-          >
-        </a>
-        
-        <!-- Badge pour les services en vedette -->
-        <div *ngIf="isFeatured" class="absolute top-2 right-2 bg-gold text-black text-xs px-2 py-1 rounded-sm font-semibold">
-          En vedette
+    <!-- Contenu de la carte -->
+    <div class="p-5 flex flex-col flex-grow">
+      <!-- Horaires ou Capacité -->
+      <div *ngIf="service.openingHours || service.capacity" class="mb-3">
+        <div *ngIf="service.openingHours" class="text-white text-sm flex items-center">
+          <fa-icon [icon]="faClock" class="text-rex-gold mr-2"></fa-icon>
+          <span>{{ service.openingHours }}</span>
+        </div>
+        <div *ngIf="service.capacity" class="text-white text-sm flex items-center mt-1">
+          <fa-icon [icon]="faUsers" class="text-rex-gold mr-2"></fa-icon>
+          <span>{{ service.capacity }} personnes</span>
         </div>
       </div>
       
-      <!-- Contenu de la carte -->
-      <div class="p-4 flex flex-col flex-grow md:w-2/3">
-        <!-- Icône et nom -->
-        <div class="flex items-center mb-3">
-          <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gold mr-3">
-            <fa-icon [icon]="getServiceIcon()" class="text-lg"></fa-icon>
-          </div>
-          <div>
-            <h3 class="text-gold font-semibold text-lg leading-tight hover:underline">
-              <a [routerLink]="['/services', service.id]">{{ service.name }}</a>
-            </h3>
-            
-            <!-- Horaires ou Capacité -->
-            <div *ngIf="service.openingHours" class="text-gray-300 text-xs flex items-center mt-1">
-              <fa-icon [icon]="faClock" class="text-gold mr-1 text-xs"></fa-icon>
-              <span>{{ service.openingHours }}</span>
-            </div>
-          </div>
+      <!-- Description -->
+      <p *ngIf="showDetails" class="text-gray-300 text-sm mt-2 line-clamp-3">
+        {{ service.description }}
+      </p>
+      
+      <!-- Caractéristiques -->
+      <div *ngIf="showDetails && service.features && service.features.length > 0" class="mt-4 space-y-2">
+        <div *ngFor="let feature of service.features.slice(0, 3)" class="text-gray-300 text-sm flex items-start">
+          <fa-icon [icon]="faCheck" class="text-rex-gold mr-2 mt-0.5 flex-shrink-0"></fa-icon>
+          <span>{{ feature }}</span>
         </div>
-        
-        <!-- Description -->
-        <p *ngIf="showDetails" class="text-gray-300 text-sm">
-          {{ service.description }}
+        <p *ngIf="service.features.length > 3" class="text-gray-400 text-xs">
+          + {{ service.features.length - 3 }} autres caractéristiques
         </p>
-        
-        <!-- Caractéristiques en colonnes -->
-        <div *ngIf="showDetails && service.features && service.features.length > 0" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1">
-          <div *ngFor="let feature of service.features" class="text-gray-300 text-xs flex items-start">
-            <fa-icon [icon]="faCheck" class="text-gold mr-1 mt-0.5 flex-shrink-0"></fa-icon>
-            <span>{{ feature }}</span>
-          </div>
-        </div>
-        
-        <!-- Informations supplémentaires -->
-        <div *ngIf="service.capacity" class="mt-3 text-gray-300 text-sm flex items-center">
-          <fa-icon [icon]="faUsers" class="text-gold mr-1"></fa-icon>
-          <span>Capacité: {{ service.capacity }} personnes</span>
-        </div>
-        
-        <!-- Bouton voir détails -->
-        <div class="mt-4 text-right">
-          <a 
-            [routerLink]="['/services', service.id]" 
-            class="inline-flex items-center text-sm text-gold hover:underline"
-          >
-            Voir détails
-            <fa-icon [icon]="faPlus" class="ml-1 text-xs"></fa-icon>
-          </a>
-        </div>
+      </div>
+      
+      <!-- Bouton voir détails -->
+      <div class="mt-auto pt-5 text-center mt-4">
+        <a [routerLink]="['/services', service.id]" 
+          class="inline-flex items-center px-4 py-2 bg-rex-gold text-rex-black font-medium rounded-sm transition-all duration-300 hover:shadow-md hover:bg-opacity-90 relative overflow-hidden group">
+          <span class="relative z-10">Découvrir</span>
+          <fa-icon [icon]="faArrowRight" class="ml-2 relative z-10 transition-transform duration-300 group-hover:translate-x-1"></fa-icon>
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
+        </a>
       </div>
     </div>
   </div>
+  
+  <!-- Layout horizontal -->
+  <div *ngIf="orientation === 'horizontal'" class="flex flex-col md:flex-row h-full">
+    <!-- Image du service -->
+    <div class="relative md:w-1/3 overflow-hidden">
+      <a [routerLink]="['/services', service.id]" class="block h-full">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10 md:block hidden"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 md:hidden"></div>
+        <img 
+          [src]="getMainImage()" 
+          [alt]="service.name" 
+          class="w-full h-48 md:h-full object-cover transition-transform duration-500 hover:scale-105"
+        >
+      </a>
+    </div>
+    
+    <!-- Contenu de la carte -->
+    <div class="p-4 flex flex-col flex-grow md:w-2/3">
+      <div class="flex flex-col md:flex-row justify-between">
+        <!-- Nom et type -->
+        <div>
+          <h3 class="text-rex-gold font-semibold text-lg leading-tight hover:underline">
+            <a [routerLink]="['/services', service.id]">{{ service.name }}</a>
+          </h3>
+          
+          <!-- Horaires -->
+          <div *ngIf="service.openingHours" class="text-gray-400 text-sm flex items-center mt-1">
+            <fa-icon [icon]="faClock" class="text-rex-gold mr-1 text-xs"></fa-icon>
+            <span>{{ service.openingHours }}</span>
+          </div>
+        </div>
+        
+        <!-- Capacité en vedette pour remplacer le prix -->
+        <div *ngIf="service.capacity" class="mt-2 md:mt-0">
+          <div class="flex items-center text-gray-300">
+            <fa-icon [icon]="faUsers" class="text-rex-gold mr-2"></fa-icon>
+            <span class="font-semibold">{{ service.capacity }} pers.</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Description courte -->
+      <p *ngIf="showDetails" class="text-gray-300 text-sm mt-2">
+        {{ service.description }}
+      </p>
+      
+      <!-- Caractéristiques en colonnes -->
+      <div *ngIf="showDetails && service.features && service.features.length > 0" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div *ngFor="let feature of service.features.slice(0, 4)" class="text-gray-300 text-sm flex items-start">
+          <fa-icon [icon]="faCheck" class="text-rex-gold mr-2 mt-0.5 flex-shrink-0"></fa-icon>
+          <span>{{ feature }}</span>
+        </div>
+      </div>
+      
+      <!-- Bouton voir détails -->
+      <div class="mt-4 text-right sm:text-left md:text-right">
+        <a [routerLink]="['/services', service.id]" 
+           class="inline-flex items-center px-4 py-2 bg-rex-gold text-rex-black font-medium rounded-sm transition-all duration-300 hover:shadow-md hover:bg-opacity-90 relative overflow-hidden group">
+          <span class="relative z-10">Découvrir</span>
+          <fa-icon [icon]="faArrowRight" class="ml-2 relative z-10 transition-transform duration-300 group-hover:translate-x-1"></fa-icon>
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

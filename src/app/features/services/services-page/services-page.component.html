@@ -20,19 +20,6 @@
             </p>
         </div>
 
-        <!-- Featured Services -->
-        <section class="mb-20">
-            <h2 class="text-2xl font-semibold text-[#E0C989] mb-8 text-center uppercase tracking-wider">Services Premium
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div *ngFor="let service of featuredServices"
-                    class="transform transition-transform hover:-translate-y-2 duration-300">
-                    <app-service-card [service]="service" [showDetails]="true" [isFeatured]="true"></app-service-card>
-                </div>
-            </div>
-        </section>
-
         <!-- All Services -->
         <section>
             <h2 class="text-2xl font-semibold text-[#E0C989] mb-8 text-center uppercase tracking-wider">Tous nos

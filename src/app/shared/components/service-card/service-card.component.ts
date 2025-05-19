@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { GalleryComponent } from '..';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
   faUtensils, faSwimmingPool, faBuildingColumns, 
   faBriefcase, faCalendarDays, faCar, faChildren, 
-  faMountain, faPlus, faClock, faUsers, faCheck
+  faMountain, faPlus, faClock, faUsers, faCheck,
+  faArrowRight, faSpa, faWifi, faParking, faGlassMartini,
+  faHotel, faConciergeBell, faDumbbell, faBed
 } from '@fortawesome/free-solid-svg-icons';
 
 interface HotelService {
@@ -26,7 +27,6 @@ interface HotelService {
   imports: [
     CommonModule,
     RouterModule,
-    GalleryComponent,
     FontAwesomeModule
   ],
   templateUrl: './service-card.component.html',
@@ -35,9 +35,7 @@ interface HotelService {
 export class ServiceCardComponent implements OnInit {
   @Input() service!: HotelService;
   @Input() showDetails: boolean = true;
-  @Input() isFeatured: boolean = false;
   @Input() orientation: 'vertical' | 'horizontal' = 'vertical';
-  @Input() showGallery: boolean = false;
   
   // Font Awesome icons
   faUtensils = faUtensils;
@@ -52,6 +50,15 @@ export class ServiceCardComponent implements OnInit {
   faClock = faClock;
   faUsers = faUsers;
   faCheck = faCheck;
+  faArrowRight = faArrowRight;
+  faSpa = faSpa;
+  faWifi = faWifi;
+  faParking = faParking;
+  faGlassMartini = faGlassMartini;
+  faHotel = faHotel;
+  faConciergeBell = faConciergeBell;
+  faDumbbell = faDumbbell;
+  faBed = faBed;
   
   constructor() { }
 
@@ -64,6 +71,7 @@ export class ServiceCardComponent implements OnInit {
   
   /**
    * Retourne l'icône Font Awesome associée au type de service
+   * Mise à jour avec des icônes plus élégantes et complètes pour un hôtel de luxe
    */
   getServiceIcon() {
     const iconMap: { [key: string]: any } = {
@@ -72,12 +80,19 @@ export class ServiceCardComponent implements OnInit {
       'conference': this.faBuildingColumns,
       'meeting': this.faBriefcase,
       'event': this.faCalendarDays,
-      'parking': this.faCar,
+      'parking': this.faParking,
       'childcare': this.faChildren,
-      'terrace': this.faMountain
+      'terrace': this.faMountain,
+      'spa': this.faSpa,
+      'wifi': this.faWifi,
+      'bar': this.faGlassMartini,
+      'concierge': this.faConciergeBell,
+      'gym': this.faDumbbell,
+      'room_service': this.faHotel,
+      'accommodation': this.faBed
     };
     
-    return iconMap[this.service.type.toLowerCase()] || this.faPlus;
+    return iconMap[this.service.type.toLowerCase()] || this.faConciergeBell;
   }
   
   /**
