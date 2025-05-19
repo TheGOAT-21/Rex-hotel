@@ -6,7 +6,8 @@ import {
   AmenityCardComponent,
   FilterComponent,
   LoadingComponent,
-  RoomCardComponent
+  RoomCardComponent,
+  TitleHeaderComponent
 } from '../../../shared/components';
 import { RoomService } from '../../../core/services/room.service';
 import { RoomFilter, Room } from '../../../core/models';
@@ -28,7 +29,8 @@ import { PaginationComponent } from "../../../shared/components/pagination/pagin
     LoadingComponent,
     RoomCardComponent,
     FontAwesomeModule,
-    PaginationComponent
+    PaginationComponent,
+    TitleHeaderComponent
 ],
   templateUrl: './reservation-search.component.html',
   styleUrl: './reservation-search.component.css'

@@ -3,7 +3,7 @@
   <app-loading *ngIf="isLoading" [fullScreen]="true" [overlay]="true" message="Chargement..."></app-loading>
 
   <!-- Hero Section with Gallery -->
-  <section class="relative h-[80vh] max-h-[800px] min-h-[500px] overflow-hidden">
+  <section class="relative md:h-[80vh] max-h-[900px] min-h-[387px] overflow-hidden">
     <app-gallery [showThumbnails]="false" [autoPlay]="true" [autoPlayInterval]="5000"></app-gallery>
 
     <!-- Overlay -->
@@ -12,7 +12,7 @@
 
 
     <div
-      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
+      class="absolute top-1/2 md:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-2 text-white shadow-text">REX HOTEL</h1>
       <p class="text-lg md:text-xl lg:text-2xl text-[#E0C989] font-medium tracking-widest mb-6 shadow-text">ÉLÉGANCE &
         CONFORT</p>

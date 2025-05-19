@@ -18,6 +18,7 @@ export * from './form-controls/form-controls.component';
 export * from './login-form/login-form.component';
 export * from './register-form/register-form.component';
 export * from './reservation-form/reservation-form.component';
+export * from './title-header/title-header.component';
 
 // Composants de présentation
 export * from './amenity-badge/amenity-badge.component';

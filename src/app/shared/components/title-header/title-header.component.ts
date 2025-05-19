@@ -17,7 +17,6 @@ export class TitleHeaderComponent {
   @Input() uppercase: boolean = false;
   @Input() tracking: 'normal' | 'wide' | 'wider' | 'widest' = 'normal';
   @Input() weight: 'normal' | 'medium' | 'semibold' | 'bold' = 'bold';
-  @Input() withDecoration: boolean = false;
   @Input() withAnimation: boolean = false;
   @Input() marginBottom: 'none' | 'small' | 'medium' | 'large' = 'medium';
 
@@ -56,13 +55,13 @@ export class TitleHeaderComponent {
     const classes = [
       // Default subtitle styling
       'mt-2',
-      // Text color - subtitle uses a complementary color to the title
-      this.getComplementaryColorClass(),
+      // Text color for subtitle (text-gray-300 for contact page style)
+      'text-gray-300',
+      // Font size for subtitle
+      'text-lg',
       // Text alignment follows the title
       this.alignment === 'center' ? 'text-center' : '',
       this.alignment === 'right' ? 'text-right' : '',
-      // Font weight for subtitle is typically lighter
-      'font-medium',
       // Animation
       this.withAnimation ? 'animated-subtitle' : ''
     ];
@@ -70,37 +69,13 @@ export class TitleHeaderComponent {
     return classes.filter(cls => cls).join(' ');
   }
 
-  get decorationClasses(): string {
-    if (!this.withDecoration) return '';
-    
-    const classes = [
-      'relative pb-4 mb-2',
-      this.alignment === 'center' ? 'decoration-center' : '',
-      this.alignment === 'right' ? 'decoration-right' : ''
-    ];
-    
-    return classes.filter(cls => cls).join(' ');
-  }
-
-  get decorationLineClasses(): string {
-    if (!this.withDecoration) return '';
-    
-    const classes = [
-      'absolute bottom-0 h-0.5 bg-gold w-20',
-      this.alignment === 'center' ? 'left-1/2 -translate-x-1/2' : '',
-      this.alignment === 'right' ? 'right-0' : 'left-0'
-    ];
-    
-    return classes.filter(cls => cls).join(' ');
-  }
-
   getHeadingClass(): string {
     switch (this.level) {
-      case 'h1': return 'text-4xl md:text-5xl leading-tight';
-      case 'h2': return 'text-3xl md:text-4xl leading-tight';
-      case 'h3': return 'text-2xl md:text-3xl leading-tight';
-      case 'h4': return 'text-xl md:text-2xl leading-tight';
-      default: return 'text-4xl md:text-5xl leading-tight';
+      case 'h1': return 'text-3xl font-bold';
+      case 'h2': return 'text-2xl font-semibold';
+      case 'h3': return 'text-xl font-medium';
+      case 'h4': return 'text-lg font-medium';
+      default: return 'text-3xl font-bold';
     }
   }
 
@@ -111,17 +86,6 @@ export class TitleHeaderComponent {
       case 'beige': return 'text-beige';
       case 'black': return 'text-black';
       default: return 'text-gold';
-    }
-  }
-
-  private getComplementaryColorClass(): string {
-    // Provide a complementary color to the title
-    switch (this.color) {
-      case 'gold': return 'text-white';
-      case 'white': return 'text-gold';
-      case 'beige': return 'text-gold';
-      case 'black': return 'text-gold';
-      default: return 'text-white';
     }
   }
 }

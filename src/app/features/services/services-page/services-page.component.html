@@ -1,10 +1,5 @@
-<div class="bg-black text-white min-h-screen">
-    <!-- Loading State -->
-    <app-loading *ngIf="isLoading" [fullScreen]="true" [overlay]="true"
-        message="Chargement des services..."></app-loading>
-
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 -mt-8 relative z-20">
+<div class="bg-black min-h-screen text-white">
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <!-- Breadcrumbs -->
         <div class="mb-8">
             <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>

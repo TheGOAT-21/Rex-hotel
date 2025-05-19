@@ -16,7 +16,6 @@ import { ReservationCtaComponent } from "../../../shared/components/reservation-
   imports: [
     CommonModule,
     RouterModule,
-    LoadingComponent,
     BreadcrumbsComponent,
     ServiceCardComponent,
     TestimonialCardComponent,

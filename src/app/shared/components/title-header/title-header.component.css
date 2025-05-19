@@ -3,8 +3,86 @@
     --rex-black: #000000;
     --rex-dark-gray: #1D1D1D;
     --rex-beige: #F5EFE0;
+    --rex-white: #FFFFFF;
   }
   
+  .text-gold {
+    color: var(--rex-gold);
+  }
+  
+  .text-white {
+    color: var(--rex-white);
+  }
+  
+  .text-beige {
+    color: var(--rex-beige);
+  }
+  
+  .text-black {
+    color: var(--rex-black);
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  
+  .font-normal {
+    font-weight: 400;
+  }
+  
+  .font-medium {
+    font-weight: 500;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  .font-bold {
+    font-weight: 700;
+  }
+  
+  .uppercase {
+    text-transform: uppercase;
+  }
+  
+  .tracking-wide {
+    letter-spacing: 0.025em;
+  }
+  
+  .tracking-wider {
+    letter-spacing: 0.05em;
+  }
+  
+  .tracking-widest {
+    letter-spacing: 0.1em;
+  }
+  
+  .mb-0 {
+    margin-bottom: 0;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+  
+  /* Animation styles */
   @keyframes fadeInUp {
     from {
       opacity: 0;
