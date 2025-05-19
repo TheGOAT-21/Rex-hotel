@@ -1,35 +1,19 @@
-<div class="bg-rex-black border border-rex-dark-gray rounded-sm p-5 mb-6">
+<div class="bg-rex-dark-gray border border-rex-dark-gray rounded-sm p-5 mb-6 shadow-md">
   <!-- Mobile Filter Toggle -->
   <button 
-    class="bg-rex-dark-gray w-full flex items-center justify-between text-white py-3 px-4 rounded-sm text-sm cursor-pointer transition-all duration-200 hover:bg-opacity-80 md:hidden"
+    class="bg-rex-black w-full flex items-center justify-between text-white py-3 px-4 rounded-sm text-sm cursor-pointer transition-all duration-200 hover:bg-opacity-80 md:hidden"
     (click)="toggleFilter()"
     aria-expanded="false"
     [attr.aria-expanded]="isFilterOpen"
   >
     <span class="flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-      </svg>
+      <fa-icon [icon]="faFilter" class="mr-2 text-rex-gold"></fa-icon>
       Filtrer les chambres
     </span>
-    <svg 
-      *ngIf="!isFilterOpen" 
-      xmlns="http://www.w3.org/2000/svg" 
-      class="h-5 w-5" 
-      viewBox="0 0 20 20" 
-      fill="currentColor"
-    >
-      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-    </svg>
-    <svg 
-      *ngIf="isFilterOpen" 
-      xmlns="http://www.w3.org/2000/svg" 
-      class="h-5 w-5" 
-      viewBox="0 0 20 20" 
-      fill="currentColor"
-    >
-      <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-    </svg>
+    <fa-icon 
+      [icon]="isFilterOpen ? faChevronUp : faChevronDown"
+      class="text-rex-gold transition-transform duration-300"
+    ></fa-icon>
   </button>
   
   <!-- Filter Content -->
@@ -40,9 +24,7 @@
     <div class="mb-4">
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-          </svg>
+          <fa-icon [icon]="faSearch" class="text-rex-gold"></fa-icon>
         </div>
         <input 
           type="text" 
@@ -58,7 +40,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
       <!-- Price Range -->
       <div class="mb-4">
-        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Prix par nuit</h3>
+        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+          <fa-icon [icon]="faMoneyBillWave" class="mr-2"></fa-icon>
+          Prix par nuit
+        </h3>
         <div class="flex items-center space-x-2">
           <input 
             type="number"
@@ -75,13 +60,16 @@
             [(ngModel)]="filterModel.priceMax"
             min="0"
           >
-          <span class="text-white">€</span>
+          <span class="text-white">FCFA</span>
         </div>
       </div>
       
       <!-- Capacity -->
       <div class="mb-4">
-        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Capacité</h3>
+        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+          <fa-icon [icon]="faUsers" class="mr-2"></fa-icon>
+          Capacité
+        </h3>
         <div class="flex items-center">
           <input 
             type="number"
@@ -97,7 +85,10 @@
       
       <!-- Room Types (shortened list) -->
       <div class="mb-4">
-        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Type de chambre</h3>
+        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+          <fa-icon [icon]="faBed" class="mr-2"></fa-icon>
+          Type de chambre
+        </h3>
         <div class="space-y-2">
           <div 
             *ngFor="let type of roomTypes.slice(0, 3)" 
@@ -121,16 +112,23 @@
           <button 
             *ngIf="roomTypes.length > 3" 
             (click)="toggleAdvancedFilter()" 
-            class="text-rex-gold text-sm hover:underline mt-1"
+            class="text-rex-gold text-sm hover:underline mt-1 flex items-center"
           >
             Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
+            <fa-icon 
+              [icon]="isAdvancedFilterOpen ? faChevronUp : faChevronDown" 
+              class="ml-1"
+            ></fa-icon>
           </button>
         </div>
       </div>
       
       <!-- Amenities (shortened list) -->
       <div class="mb-4">
-        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Équipements</h3>
+        <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+          <fa-icon [icon]="faWifi" class="mr-2"></fa-icon>
+          Équipements
+        </h3>
         <div class="space-y-2">
           <div 
             *ngFor="let amenity of amenities.slice(0, 3)" 
@@ -154,20 +152,27 @@
           <button 
             *ngIf="amenities.length > 3" 
             (click)="toggleAdvancedFilter()" 
-            class="text-rex-gold text-sm hover:underline mt-1"
+            class="text-rex-gold text-sm hover:underline mt-1 flex items-center"
           >
             Voir {{ isAdvancedFilterOpen ? 'moins' : 'plus' }}
+            <fa-icon 
+              [icon]="isAdvancedFilterOpen ? faChevronUp : faChevronDown" 
+              class="ml-1"
+            ></fa-icon>
           </button>
         </div>
       </div>
     </div>
     
     <!-- Advanced Filter Section -->
-    <div *ngIf="isAdvancedFilterOpen" class="mt-4 pt-4 border-t border-rex-dark-gray">
+    <div *ngIf="isAdvancedFilterOpen" class="mt-6 pt-4 border-t border-rex-dark-gray animate-fade-in">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- All Room Types & Views -->
         <div class="mb-4">
-          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Tous les types de chambres</h3>
+          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+            <fa-icon [icon]="faBed" class="mr-2"></fa-icon>
+            Tous les types de chambres
+          </h3>
           <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
               *ngFor="let type of roomTypes" 
@@ -190,7 +195,10 @@
           </div>
           
           <!-- Vue -->
-          <h3 class="text-rex-gold text-sm font-semibold mt-4 mb-2 uppercase tracking-wider">Vue</h3>
+          <h3 class="text-rex-gold text-sm font-semibold mt-4 mb-2 uppercase tracking-wider flex items-center">
+            <fa-icon [icon]="faMountain" class="mr-2"></fa-icon>
+            Vue
+          </h3>
           <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
               *ngFor="let view of viewOptions" 
@@ -215,7 +223,10 @@
         
         <!-- All Amenities & Bed Types -->
         <div class="mb-4">
-          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Tous les équipements</h3>
+          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+            <fa-icon [icon]="faWifi" class="mr-2"></fa-icon>
+            Tous les équipements
+          </h3>
           <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
               *ngFor="let amenity of amenities" 
@@ -238,7 +249,10 @@
           </div>
           
           <!-- Types de lit -->
-          <h3 class="text-rex-gold text-sm font-semibold mt-4 mb-2 uppercase tracking-wider">Types de lit</h3>
+          <h3 class="text-rex-gold text-sm font-semibold mt-4 mb-2 uppercase tracking-wider flex items-center">
+            <fa-icon [icon]="faBed" class="mr-2"></fa-icon>
+            Types de lit
+          </h3>
           <div class="grid grid-cols-2 gap-x-4 gap-y-2">
             <div 
               *ngFor="let bedType of bedTypes" 
@@ -263,28 +277,44 @@
         
         <!-- Balcon et Étage -->
         <div class="mb-4">
-          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider">Balcon</h3>
-          <div class="flex flex-wrap gap-2">
-            <button 
-              *ngFor="let option of [true, false, null]"
-              (click)="toggleBalcony(option)"
-              class="option-btn bg-rex-dark-gray text-white border border-transparent rounded-sm py-2 px-3 text-xs transition-colors duration-200 hover:bg-opacity-80"
-              [ngClass]="{'active': isBalconyOptionSelected(option)}"
-            >
-              {{ getBalconyText(option) }}
-            </button>
-          </div>
-          
-          <h3 class="text-rex-gold text-sm font-semibold mt-4 mb-2 uppercase tracking-wider">Étage</h3>
-          <div class="flex flex-wrap gap-2">
-            <button 
-              *ngFor="let floor of [0, 1, 2, 3, 4, 5, 6, null]"
-              (click)="setFloor(floor)"
-              class="option-btn bg-rex-dark-gray text-white border border-transparent rounded-sm py-2 px-3 text-xs transition-colors duration-200 hover:bg-opacity-80"
-              [ngClass]="{'active': filterModel.floor === floor}"
-            >
-              {{ floor === null ? 'Tous' : (floor === 0 ? 'RDC' : 'Étage ' + floor) }}
-            </button>
+          <h3 class="text-rex-gold text-sm font-semibold mb-2 uppercase tracking-wider flex items-center">
+            <fa-icon [icon]="faBuilding" class="mr-2"></fa-icon>
+            Caractéristiques
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-white text-sm mb-2 flex items-center">
+                <fa-icon [icon]="faBalcony" class="mr-2 text-xs text-rex-gold"></fa-icon>
+                Balcon
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <button 
+                  *ngFor="let option of [true, false, null]"
+                  (click)="toggleBalcony(option)"
+                  class="option-btn bg-rex-black text-white border border-transparent rounded-sm py-2 px-3 text-xs transition-colors duration-200 hover:bg-opacity-80"
+                  [ngClass]="{'active': isBalconyOptionSelected(option)}"
+                >
+                  {{ getBalconyText(option) }}
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="text-white text-sm mb-2 flex items-center">
+                <fa-icon [icon]="faBuilding" class="mr-2 text-xs text-rex-gold"></fa-icon>
+                Étage
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <button 
+                  *ngFor="let floor of [0, 1, 2, 3, 4, 5, 6, null]"
+                  (click)="setFloor(floor)"
+                  class="option-btn bg-rex-black text-white border border-transparent rounded-sm py-2 px-3 text-xs transition-colors duration-200 hover:bg-opacity-80"
+                  [ngClass]="{'active': filterModel.floor === floor}"
+                >
+                  {{ floor === null ? 'Tous' : (floor === 0 ? 'RDC' : 'Étage ' + floor) }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -294,15 +324,17 @@
     <div class="mt-6 flex flex-wrap gap-3">
       <button 
         (click)="applyFilter()" 
-        class="bg-rex-gold text-rex-black py-2.5 px-5 rounded-sm text-sm font-semibold min-w-[150px] text-center transition-all duration-200 hover:bg-opacity-80"
+        class="bg-rex-gold text-rex-black py-2.5 px-5 rounded-sm text-sm font-semibold min-w-[150px] text-center transition-all duration-200 hover:bg-opacity-80 shadow-sm hover:shadow-md flex items-center justify-center"
       >
+        <fa-icon [icon]="faCheck" class="mr-2"></fa-icon>
         Appliquer les filtres
       </button>
       
       <button 
         (click)="resetFilter()" 
-        class="bg-transparent text-white border border-rex-dark-gray py-2.5 px-5 rounded-sm text-sm min-w-[150px] text-center transition-all duration-200 hover:bg-rex-dark-gray"
+        class="bg-transparent text-white border border-rex-dark-gray py-2.5 px-5 rounded-sm text-sm min-w-[150px] text-center transition-all duration-200 hover:bg-rex-dark-gray flex items-center justify-center"
       >
+        <fa-icon [icon]="faTimes" class="mr-2"></fa-icon>
         Réinitialiser
       </button>
     </div>

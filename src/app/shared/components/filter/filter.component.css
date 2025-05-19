@@ -73,3 +73,59 @@
   color: var(--rex-black);
   border-color: var(--rex-gold);
 }
+
+/* Animation pour l'apparition des filtres avancés */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shadow effect amélioré */
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Effet hover pour les éléments interactifs */
+label.cursor-pointer:hover .checkbox-custom:not(.checked) {
+  border-color: var(--rex-gold);
+  background-color: rgba(224, 201, 137, 0.1);
+}
+
+/* Transition pour les boutons */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Style pour inputs focus */
+input:focus, select:focus {
+  box-shadow: 0 0 0 2px rgba(224, 201, 137, 0.3);
+}
+
+/* Amélioration responsive */
+@media (max-width: 768px) {
+  .grid {
+    gap: 0.75rem;
+  }
+  
+  h3 {
+    font-size: 0.875rem;
+  }
+  
+  .option-btn {
+    padding: 0.5rem 0.75rem;
+  }
+}

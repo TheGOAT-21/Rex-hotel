@@ -1,71 +1,65 @@
-<div class="room-card bg-rex-dark-gray rounded-sm overflow-hidden border border-rex-dark-gray h-full transition-all duration-300">
-  <!-- Layout vertical -->
-  <div *ngIf="orientation === 'vertical'" class="flex flex-col h-full">
-    <!-- Image de la chambre -->
-    <div class="relative">
-      <a [routerLink]="['/rooms', room.id]" class="block">
+<div class="room-card">
+  <!-- Vertical Layout -->
+  <div *ngIf="orientation === 'vertical'" class="room-card-vertical">
+    <!-- Room Image with Overlay -->
+    <div class="image-container">
+      <a [routerLink]="['/rooms', room.id]" class="image-link">
         <img 
           [src]="room.mainImage" 
           [alt]="room.name" 
-          class="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+          class="room-image"
         >
       </a>
-      
-      <!-- Badge pour les chambres en vedette -->
-      <div *ngIf="isFeatured" class="absolute top-2 right-2 bg-rex-gold text-rex-black text-xs px-2 py-1 rounded-sm font-semibold">
-        En vedette
-      </div>
     </div>
     
-    <!-- Contenu de la carte -->
-    <div class="p-4 flex flex-col flex-grow">
-      <!-- Nom et type -->
-      <div>
-        <h3 class="text-rex-gold font-semibold text-lg leading-tight hover:underline">
+    <!-- Content Section -->
+    <div class="card-content">
+      <!-- Room Name and Type -->
+      <div class="room-title-container">
+        <h3 class="room-title">
           <a [routerLink]="['/rooms', room.id]">{{ room.name }}</a>
         </h3>
-        <p class="text-gray-400 text-sm">{{ getRoomTypeLabel(room.type) }}</p>
+        <p class="room-type">{{ getRoomTypeLabel(room.type) }}</p>
       </div>
       
-      <!-- Description courte -->
-      <p *ngIf="showDetails" class="text-gray-300 text-sm mt-2 line-clamp-2">
+      <!-- Room Description -->
+      <p *ngIf="showDetails" class="room-description">
         {{ room.shortDescription }}
       </p>
       
-      <!-- Équipements -->
-      <div *ngIf="showDetails && room.amenities && room.amenities.length > 0" class="mt-3 flex flex-wrap gap-2">
+      <!-- Room Features -->
+      <div *ngIf="showDetails" class="room-features">
+        <div class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+          </svg>
+          <span>{{ room.capacity }} pers.</span>
+        </div>
+        
+        <div class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>{{ room.surface }} m²</span>
+        </div>
+      </div>
+      
+      <!-- Amenities -->
+      <div *ngIf="showDetails && room.amenities && room.amenities.length > 0" class="amenities-container">
         <app-amenity-badge 
           *ngFor="let amenity of room.amenities.slice(0, displayedAmenities)" 
           [amenity]="amenity"
           [size]="'small'"
         ></app-amenity-badge>
         
-        <span *ngIf="getMoreAmenitiesCount() > 0" class="text-xs text-gray-400 flex items-center">
-          + {{ getMoreAmenitiesCount() }} plus
+        <span *ngIf="getMoreAmenitiesCount() > 0" class="more-amenities">
+          + {{ getMoreAmenitiesCount() }}
         </span>
       </div>
       
-      <!-- Détails (capacité, surface, etc.) -->
-      <div *ngIf="showDetails" class="mt-3 grid grid-cols-2 gap-2 text-sm">
-        <div class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-          </svg>
-          {{ room.capacity }} pers.
-        </div>
-        
-        <div class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          {{ room.surface }} m²
-        </div>
-      </div>
-      
-      <!-- Footer avec prix et bouton -->
-      <div class="mt-auto pt-4 flex justify-between items-end">
+      <!-- Price and Button -->
+      <div class="card-footer">
         <app-price-display 
-          [price]="room.price" 
           [isDiscounted]="!!room.discountedPrice" 
           [originalPrice]="room.discountedPrice ? room.price : undefined"
           [price]="room.discountedPrice || room.price"
@@ -73,44 +67,42 @@
           [size]="'medium'"
         ></app-price-display>
         
-        <a [routerLink]="['/rooms', room.id]" class="text-sm text-rex-gold hover:underline">
-          Voir détails
+        <a [routerLink]="['/rooms', room.id]" class="details-button">
+          <span>Voir détails</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="button-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
         </a>
       </div>
     </div>
   </div>
   
-  <!-- Layout horizontal -->
-  <div *ngIf="orientation === 'horizontal'" class="flex flex-col md:flex-row h-full">
-    <!-- Image de la chambre -->
-    <div class="relative md:w-1/3">
-      <a [routerLink]="['/rooms', room.id]" class="block h-full">
+  <!-- Horizontal Layout -->
+  <div *ngIf="orientation === 'horizontal'" class="room-card-horizontal">
+    <!-- Room Image -->
+    <div class="image-container-horizontal">
+      <a [routerLink]="['/rooms', room.id]" class="image-link">
         <img 
           [src]="room.mainImage" 
           [alt]="room.name" 
-          class="w-full h-48 md:h-full object-cover transition-transform duration-500 hover:scale-105"
+          class="room-image"
         >
       </a>
-      
-      <!-- Badge pour les chambres en vedette -->
-      <div *ngIf="isFeatured" class="absolute top-2 right-2 bg-rex-gold text-rex-black text-xs px-2 py-1 rounded-sm font-semibold">
-        En vedette
-      </div>
     </div>
     
-    <!-- Contenu de la carte -->
-    <div class="p-4 flex flex-col flex-grow md:w-2/3">
-      <div class="flex flex-col md:flex-row justify-between">
-        <!-- Nom et type -->
-        <div>
-          <h3 class="text-rex-gold font-semibold text-lg leading-tight hover:underline">
+    <!-- Content Section -->
+    <div class="card-content-horizontal">
+      <div class="card-header">
+        <!-- Room Name and Type -->
+        <div class="room-title-container">
+          <h3 class="room-title">
             <a [routerLink]="['/rooms', room.id]">{{ room.name }}</a>
           </h3>
-          <p class="text-gray-400 text-sm">{{ getRoomTypeLabel(room.type) }}</p>
+          <p class="room-type">{{ getRoomTypeLabel(room.type) }}</p>
         </div>
         
-        <!-- Prix -->
-        <div class="mt-2 md:mt-0">
+        <!-- Price -->
+        <div class="price-container">
           <app-price-display 
             [isDiscounted]="!!room.discountedPrice" 
             [originalPrice]="room.discountedPrice ? room.price : undefined"
@@ -121,64 +113,61 @@
         </div>
       </div>
       
-      <!-- Description courte -->
-      <p *ngIf="showDetails" class="text-gray-300 text-sm mt-2">
+      <!-- Description -->
+      <p *ngIf="showDetails" class="room-description">
         {{ room.shortDescription }}
       </p>
       
-      <!-- Équipements -->
-      <div *ngIf="showDetails && room.amenities && room.amenities.length > 0" class="mt-3 flex flex-wrap gap-2">
+      <!-- Room Features -->
+      <div *ngIf="showDetails" class="room-features-horizontal">
+        <div class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+          </svg>
+          <span>{{ room.capacity }} pers.</span>
+        </div>
+        
+        <div class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>{{ room.surface }} m²</span>
+        </div>
+        
+        <div *ngIf="room.hasBalcony" class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1.5a1 1 0 01-1-1 1 1 0 011-1H15a2 2 0 00-2-2H7a2 2 0 00-2 2h.5a1 1 0 011 1 1 1 0 01-1 1H4zm7 11a1 1 0 000-2H7a1 1 0 000 2h4z" clip-rule="evenodd" />
+          </svg>
+          <span>Balcon</span>
+        </div>
+        
+        <div *ngIf="room.view && room.view.length > 0" class="feature">
+          <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+          </svg>
+          <span>Vue {{ room.view[0] }}</span>
+        </div>
+      </div>
+      
+      <!-- Amenities -->
+      <div *ngIf="showDetails && room.amenities && room.amenities.length > 0" class="amenities-container">
         <app-amenity-badge 
           *ngFor="let amenity of room.amenities.slice(0, displayedAmenities)" 
           [amenity]="amenity"
           [size]="'small'"
         ></app-amenity-badge>
         
-        <span *ngIf="getMoreAmenitiesCount() > 0" class="text-xs text-gray-400 flex items-center">
-          + {{ getMoreAmenitiesCount() }} plus
+        <span *ngIf="getMoreAmenitiesCount() > 0" class="more-amenities">
+          + {{ getMoreAmenitiesCount() }}
         </span>
       </div>
       
-      <!-- Détails (capacité, surface, etc.) -->
-      <div *ngIf="showDetails" class="mt-auto grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm pt-3">
-        <div class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-          </svg>
-          {{ room.capacity }} pers.
-        </div>
-        
-        <div class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          {{ room.surface }} m²
-        </div>
-        
-        <div *ngIf="room.hasBalcony" class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1.5a1 1 0 01-1-1 1 1 0 011-1H15a2 2 0 00-2-2H7a2 2 0 00-2 2h.5a1 1 0 011 1 1 1 0 01-1 1H4zm7 11a1 1 0 000-2H7a1 1 0 000 2h4z" clip-rule="evenodd" />
-          </svg>
-          Balcon
-        </div>
-        
-        <div *ngIf="room.view && room.view.length > 0" class="flex items-center text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rex-gold mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-          </svg>
-          Vue {{ room.view[0] }}
-        </div>
-      </div>
-      
-      <!-- Bouton voir détails -->
-      <div class="mt-4 text-right">
-        <a 
-          [routerLink]="['/rooms', room.id]" 
-          class="inline-flex items-center text-sm text-rex-gold hover:underline"
-        >
-          Voir détails
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+      <!-- Button -->
+      <div class="button-container">
+        <a [routerLink]="['/rooms', room.id]" class="details-button">
+          <span>Voir détails</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="button-icon" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </a>

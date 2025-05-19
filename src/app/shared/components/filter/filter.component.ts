@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoomFilter, RoomType, Amenity } from '../../../core/models';
 import { RoomService } from '../../../core/services/room.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { 
+  faFilter, faSearch, faBed, faWifi, 
+  faChevronDown, faChevronUp, faMountain, 
+  faBuilding, faMoneyBillWave, faUsers, 
+  faCheck, faTimes, faDoorOpen
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.css'
 })
@@ -18,14 +25,29 @@ export class FilterComponent implements OnInit {
   isFilterOpen: boolean = false;
   isAdvancedFilterOpen: boolean = false;
   
+  // Font Awesome icons
+  faFilter = faFilter;
+  faSearch = faSearch;
+  faBed = faBed;
+  faWifi = faWifi;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+  faMountain = faMountain;
+  faBuilding = faBuilding;
+  faMoneyBillWave = faMoneyBillWave;
+  faUsers = faUsers;
+  faCheck = faCheck;
+  faTimes = faTimes;
+  faBalcony = faDoorOpen;
+  
   // Filter model for two-way binding
   filterModel: RoomFilter = {};
   
   // Options for filter dropdowns
   roomTypes: { id: string; name: string }[] = [];
   amenities: { id: string; name: string; icon: string }[] = [];
-  viewOptions: { id: string; name: string }[] = []; // Nouveau
-  bedTypes: { id: string; name: string }[] = []; // Nouveau
+  viewOptions: { id: string; name: string }[] = [];
+  bedTypes: { id: string; name: string }[] = [];
   
   // Price range
   minPrice: number = 0;
@@ -49,14 +71,14 @@ export class FilterComponent implements OnInit {
     // Initialize arrays if they don't exist
     if (!this.filterModel.types) this.filterModel.types = [];
     if (!this.filterModel.amenities) this.filterModel.amenities = [];
-    if (!this.filterModel.views) this.filterModel.views = []; // Nouveau
-    if (!this.filterModel.bedTypes) this.filterModel.bedTypes = []; // Nouveau
+    if (!this.filterModel.views) this.filterModel.views = [];
+    if (!this.filterModel.bedTypes) this.filterModel.bedTypes = [];
     
     // Load filter options
     this.loadRoomTypes();
     this.loadAmenities();
-    this.loadViewOptions(); // Nouveau
-    this.loadBedTypes(); // Nouveau
+    this.loadViewOptions();
+    this.loadBedTypes();
     
     // Determine if advanced filter should be open based on existing filters
     if ((this.filterModel.views && this.filterModel.views.length > 0) ||
@@ -89,7 +111,6 @@ export class FilterComponent implements OnInit {
     });
   }
   
-  // Nouveau: Chargement des options de vue
   loadViewOptions(): void {
     this.viewOptions = [
       { id: 'sea', name: 'Vue mer' },
@@ -100,7 +121,6 @@ export class FilterComponent implements OnInit {
     ];
   }
   
-  // Nouveau: Chargement des types de lit
   loadBedTypes(): void {
     this.bedTypes = [
       { id: 'king', name: 'Lit King Size' },
@@ -143,7 +163,6 @@ export class FilterComponent implements OnInit {
     }
   }
   
-  // Nouveau: Basculer l'option de vue
   toggleView(viewId: string): void {
     const index = this.filterModel.views?.indexOf(viewId) ?? -1;
     
@@ -156,7 +175,6 @@ export class FilterComponent implements OnInit {
     }
   }
   
-  // Nouveau: Basculer le type de lit
   toggleBedType(bedTypeId: string): void {
     const index = this.filterModel.bedTypes?.indexOf(bedTypeId) ?? -1;
     
@@ -169,7 +187,6 @@ export class FilterComponent implements OnInit {
     }
   }
   
-  // Nouveau: Basculer l'option de balcon
   toggleBalcony(hasBalcony: boolean | null): void {
     this.filterModel.hasBalcony = hasBalcony === null ? undefined : hasBalcony;
   }
@@ -182,17 +199,14 @@ export class FilterComponent implements OnInit {
     return this.filterModel.amenities?.includes(amenityId) ?? false;
   }
   
-  // Nouveau: Vérifier si l'option de vue est sélectionnée
   isViewSelected(viewId: string): boolean {
     return this.filterModel.views?.includes(viewId) ?? false;
   }
   
-  // Nouveau: Vérifier si le type de lit est sélectionné
   isBedTypeSelected(bedTypeId: string): boolean {
     return this.filterModel.bedTypes?.includes(bedTypeId) ?? false;
   }
   
-  // Nouveau: Vérifier si une option de balcon est sélectionnée
   isBalconyOptionSelected(hasBalcony: boolean | null): boolean {
     return this.filterModel.hasBalcony === hasBalcony;
   }
@@ -212,10 +226,10 @@ export class FilterComponent implements OnInit {
       capacityMin: undefined,
       types: [],
       amenities: [],
-      views: [], // Nouveau
-      bedTypes: [], // Nouveau
-      hasBalcony: undefined, // Nouveau
-      floor: undefined // Nouveau
+      views: [],
+      bedTypes: [],
+      hasBalcony: undefined,
+      floor: undefined
     };
     
     this.filterChange.emit(this.filterModel);
@@ -226,12 +240,10 @@ export class FilterComponent implements OnInit {
     this.filterModel.search = searchQuery;
   }
   
-  // Nouveau: Définir l'étage
   setFloor(floor: number | null): void {
     this.filterModel.floor = floor === null ? undefined : floor;
   }
   
-  // Nouveau: Obtenir le texte pour l'option de balcon
   getBalconyText(option: boolean | null): string {
     switch (option) {
       case true: return 'Avec balcon';

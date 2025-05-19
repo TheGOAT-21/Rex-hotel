@@ -10,7 +10,7 @@ import { BreadcrumbsComponent } from '../../../shared/components/breadcrumbs/bre
 import { RoomCardComponent } from '../../../shared/components/room-card/room-card.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { LoadingComponent } from '../../../shared/components/loading/loading.component';
-import { FilterComponent } from '../../../shared/components';
+import { FilterComponent } from '../../../shared/components/filter/filter.component';
 
 // Services et modèles
 import { RoomService } from '../../../core/services/room.service';
@@ -223,5 +223,12 @@ export class RoomsListComponent implements OnInit {
     }
     
     this.applyFilter();
+  }
+
+  // Nouveau - Ajout d'une méthode pour gérer le changement de filtre
+  onFilterChange(newFilter: RoomFilter): void {
+    this.filter = newFilter;
+    this.updateUrlParams();
+    this.loadRooms();
   }
 }
