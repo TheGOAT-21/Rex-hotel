@@ -98,7 +98,6 @@
                   [minDate]="minDate"
                   [rangeStartLabel]="'Arrivée'"
                   [rangeEndLabel]="'Départ'"
-                  (rangeSelected)="onDateRangeSelected($event)"
                 ></app-datepicker>
                 
                 <div *ngIf="reservationForm.get('dates')?.invalid && reservationForm.get('dates')?.touched" class="text-red-500 mt-2 text-sm">

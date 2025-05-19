@@ -202,14 +202,13 @@ export class ReservationFormComponent implements OnInit, OnChanges {
     });
   }
 
-  onDateRangeSelected(range: {start: Date, end: Date | null}): void {
+  onDateRangeSelected(range: { start: Date | null, end: Date | null }): void {
     this.startDate = range.start;
     this.endDate = range.end;
+    this.dateRangeInvalid = !range.start;
     
-    if (this.startDate && this.endDate) {
+    if (range.start && this.room) {
       this.checkAvailability();
-    } else {
-      this.dateRangeInvalid = true;
     }
   }
 

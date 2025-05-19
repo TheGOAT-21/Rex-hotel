@@ -1,0 +1,10 @@
+<section class="text-center bg-[#1D1D1D] p-10 rounded-sm border border-[#E0C989]/20">
+    <h2 class="text-2xl font-semibold text-[#E0C989] mb-4">{{ title }}</h2>
+    <p class="text-white mb-6 max-w-2xl mx-auto">
+        {{ description }}
+    </p>
+    <a [routerLink]="buttonLink"
+        class="inline-block bg-[#E0C989] text-[#000000] font-semibold py-3 px-8 rounded-sm text-lg uppercase tracking-wider transition-colors hover:bg-opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300">
+        {{ buttonText }}
+    </a>
+</section>

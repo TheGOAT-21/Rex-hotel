@@ -6,16 +6,15 @@ import {
   GalleryComponent,
   RoomCardComponent,
   LoadingComponent,
-  RatingComponent,
-  AmenityBadgeComponent,
   DatepickerComponent,
-  TestimonialCardComponent
+  TestimonialCardComponent,
+  AmenityCardComponent
 } from '../../../shared/components';
 import { AuthService } from '../../../core/services/auth.service';
 import { RoomService } from '../../../core/services/room.service';
 import { Room, Amenity, Testimonial } from '../../../core/models';
 import { ROOMS, AMENITIES, TESTIMONIALS } from '../../../core/mock/mock-data';
-import { QuickBookingComponent } from "../../../shared/components/quick-booking/quick-booking.component";
+import { ReservationCtaComponent } from "../../../shared/components/reservation-cta/reservation-cta.component";
 
 @Component({
   selector: 'app-home-page',
@@ -27,11 +26,10 @@ import { QuickBookingComponent } from "../../../shared/components/quick-booking/
     GalleryComponent,
     RoomCardComponent,
     LoadingComponent,
-    RatingComponent,
-    AmenityBadgeComponent,
     DatepickerComponent,
-    QuickBookingComponent,
-    TestimonialCardComponent
+    TestimonialCardComponent,
+    AmenityCardComponent,
+    ReservationCtaComponent
 ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
@@ -44,6 +42,7 @@ export class HomePageComponent implements OnInit {
   endDate: Date | null = null;
   selectedGuests = 1;
   testimonials: Testimonial[] = [];
+  dateRange: { start: Date | null, end: Date | null } = { start: new Date(), end: null };
 
   
   // Featured amenities using mock data
@@ -102,9 +101,10 @@ export class HomePageComponent implements OnInit {
     });
   }
   
-  onDateRangeSelected(range: {start: Date, end: Date | null}): void {
-    this.startDate = range.start;
-    this.endDate = range.end;
+  onDateRangeSelected(range: { start: Date | null, end: Date | null }): void {
+    if (range.start) {
+      this.dateRange = range;
+    }
   }
   
   updateGuestCount(count: number): void {

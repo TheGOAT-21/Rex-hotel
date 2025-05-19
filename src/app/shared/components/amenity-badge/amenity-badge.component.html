@@ -1,6 +1,6 @@
 <div class="amenity-badge bg-[#000000] bg-opacity-10 border border-[#E0C989] border-opacity-30 text-[#E0C989] rounded px-3 py-2 inline-flex items-center transition-all duration-300 hover:bg-opacity-20" [ngClass]="size">
   <div class="amenity-icon mr-2 flex items-center justify-center">
-    <i class="fa" [ngClass]="getIconClass()" aria-hidden="true"></i>
+    <fa-icon [icon]="getIcon()"></fa-icon>
   </div>
   <span class="amenity-name text-sm font-medium">{{ amenity.name }}</span>
 </div>

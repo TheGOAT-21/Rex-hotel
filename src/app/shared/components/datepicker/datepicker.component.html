@@ -1,89 +1,66 @@
-<div class="relative w-full" (clickOutside)="closeCalendar()">
+<div class="datepicker-container" (clickOutside)="closeCalendar()">
   <!-- Input Fields -->
-  <div class="w-full relative" [ngClass]="{'flex flex-col md:flex-row md:items-end md:gap-4': isRange}">
+  <div class="input-container" [ngClass]="{'range': isRange}">
     <!-- Single Date Input -->
-    <div *ngIf="!isRange" class="relative flex items-center">
+    <div *ngIf="!isRange" class="date-input-wrapper">
       <input 
         type="text" 
-        class="w-full py-3 px-4 pr-10 bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white text-sm transition-colors duration-200 focus:border-[--rex-gold] focus:outline-none"
+        class="date-input" 
         [placeholder]="placeholder" 
         [ngModel]="startDateFormatted" 
         readonly
         (click)="toggleCalendar()"
-        aria-label="Select date"
-        [attr.aria-expanded]="isOpen"
       />
-      <button 
-        *ngIf="selectedDate" 
-        class="absolute right-10 top-1/2 transform -translate-y-1/2 bg-transparent border-none p-0 cursor-pointer flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors duration-200"
-        (click)="clearSelection(); $event.stopPropagation()"
-        aria-label="Clear date selection"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+      <button *ngIf="selectedDate" class="clear-btn" (click)="clearSelection(); $event.stopPropagation()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="clear-icon">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
         </svg>
       </button>
-      <div 
-        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[--rex-gold] cursor-pointer" 
-        (click)="toggleCalendar()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+      <div class="calendar-icon" (click)="toggleCalendar()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
         </svg>
       </div>
     </div>
     
     <!-- Range Date Inputs -->
-    <div *ngIf="isRange" class="flex flex-col md:flex-row items-center gap-2 w-full">
-      <div class="w-full md:w-auto flex-1">
-        <label class="block text-xs text-[--rex-gold] mb-1">{{ rangeStartLabel }}</label>
-        <div class="relative">
+    <div *ngIf="isRange" class="date-range-wrapper">
+      <div class="date-input-group">
+        <label class="date-label">{{ rangeStartLabel }}</label>
+        <div class="date-input-container">
           <input 
             type="text" 
-            class="w-full py-3 px-4 bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white text-sm transition-colors duration-200 focus:border-[--rex-gold] focus:outline-none"
+            class="date-input" 
             placeholder="JJ/MM/AAAA" 
             [ngModel]="startDateFormatted" 
             readonly
             (click)="toggleCalendar()"
-            aria-label="Select start date"
           />
         </div>
       </div>
       
-      <div class="hidden md:flex items-center justify-center text-[--rex-gold] py-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+      <div class="date-separator">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="arrow-icon">
           <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
         </svg>
       </div>
       
-      <div class="flex md:hidden items-center justify-center w-full text-[--rex-gold] py-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transform rotate-90">
-          <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      
-      <div class="w-full md:w-auto flex-1">
-        <label class="block text-xs text-[--rex-gold] mb-1">{{ rangeEndLabel }}</label>
-        <div class="relative">
+      <div class="date-input-group">
+        <label class="date-label">{{ rangeEndLabel }}</label>
+        <div class="date-input-container">
           <input 
             type="text" 
-            class="w-full py-3 px-4 bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white text-sm transition-colors duration-200 focus:border-[--rex-gold] focus:outline-none"
+            class="date-input" 
             placeholder="JJ/MM/AAAA" 
             [ngModel]="endDateFormatted" 
             readonly
             (click)="toggleCalendar()"
-            aria-label="Select end date"
           />
         </div>
       </div>
       
-      <button 
-        *ngIf="selectedDate || selectedEndDate" 
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 md:static md:transform-none bg-transparent border-none p-2 cursor-pointer flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors duration-200"
-        (click)="clearSelection(); $event.stopPropagation()"
-        aria-label="Clear date range"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+      <button *ngIf="selectedDate || selectedEndDate" class="clear-btn range-clear" (click)="clearSelection(); $event.stopPropagation()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="clear-icon">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
         </svg>
       </button>
@@ -91,134 +68,86 @@
   </div>
   
   <!-- Calendar Dropdown -->
-  <div 
-    *ngIf="isOpen" 
-    class="absolute top-full left-0 mt-2 w-full max-h-[32rem] overflow-y-auto bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm shadow-lg z-10 p-4 transform origin-top transition-all duration-200 ease-out"
-    [ngClass]="{'opacity-100 scale-100': isOpen, 'opacity-0 scale-95': !isOpen}"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Date Picker"
-  >
-    <!-- Predefined Ranges (new feature) -->
-    <div *ngIf="isRange && showQuickRanges" class="mb-4 pb-4 border-b border-[--rex-dark-gray]">
-      <div class="flex flex-wrap gap-2">
-        <button 
-          *ngFor="let range of quickRanges" 
-          (click)="selectQuickRange(range.value)" 
-          class="py-1 px-3 text-xs border border-[--rex-dark-gray] rounded-sm text-white hover:border-[--rex-gold] hover:bg-opacity-10 hover:bg-[--rex-gold] transition-colors duration-200"
-          [ngClass]="{'border-[--rex-gold] bg-[--rex-gold] bg-opacity-10': isActiveQuickRange(range.value)}"
-        >
-          {{ range.label }}
-        </button>
-      </div>
-    </div>
-    
+  <div *ngIf="isOpen" class="calendar-dropdown">
     <!-- Multi-month calendars -->
-    <div class="flex flex-wrap gap-4">
+    <div class="calendars-container">
       <!-- For each month to show -->
-      <div *ngFor="let monthDays of calendarDays; let mIdx = index" class="flex-1 min-w-[280px] max-w-[350px] mx-auto">
+      <div *ngFor="let monthDays of calendarDays; let mIdx = index" class="calendar">
         <!-- Calendar Header -->
-        <div class="flex items-center justify-between mb-4">
-          <button 
-            *ngIf="mIdx === 0" 
-            class="p-1 w-8 h-8 flex items-center justify-center rounded-full text-white hover:bg-[--rex-dark-gray] hover:text-[--rex-gold] transition-colors duration-200"
-            (click)="prevMonth()"
-            aria-label="Previous month"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <div class="calendar-header">
+          <button class="month-nav prev" *ngIf="mIdx === 0" (click)="prevMonth()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
             </svg>
           </button>
           
-          <div class="font-semibold text-base text-[--rex-gold] uppercase tracking-wider">
+          <div class="month-year">
             {{ getMonthName((currentMonth + mIdx) % 12) }} {{ getYearForMonth(mIdx) }}
           </div>
           
-          <button 
-            *ngIf="mIdx === calendarDays.length - 1" 
-            class="p-1 w-8 h-8 flex items-center justify-center rounded-full text-white hover:bg-[--rex-dark-gray] hover:text-[--rex-gold] transition-colors duration-200"
-            (click)="nextMonth()"
-            aria-label="Next month"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+          <button class="month-nav next" *ngIf="mIdx === calendarDays.length - 1" (click)="nextMonth()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
             </svg>
           </button>
         </div>
         
         <!-- Calendar Weekdays -->
-        <div class="grid grid-cols-7 mb-2">
-          <div *ngFor="let day of weekDays" class="text-center text-xs font-semibold text-[--rex-gold] uppercase py-2">
-            {{ day }}
-          </div>
+        <div class="calendar-weekdays">
+          <div *ngFor="let day of weekDays" class="weekday">{{ day }}</div>
         </div>
         
         <!-- Calendar Days -->
-        <div class="grid grid-cols-7 gap-[2px]">
+        <div class="calendar-days">
           <div 
             *ngFor="let day of monthDays" 
-            class="relative flex items-center justify-center h-10 cursor-pointer rounded-sm text-sm transition-all duration-200"
+            class="day" 
             [ngClass]="{
-              'text-gray-500': !day.isCurrentMonth,
-              'font-bold text-[--rex-gold]': day.isToday,
-              'bg-[--rex-gold] text-[--rex-black] font-bold': day.isSelected,
-              'bg-[--rex-gold] bg-opacity-20': day.isInRange,
-              'opacity-50 cursor-not-allowed': day.isDisabled,
-              'rounded-r-none': isRangeStart(day),
-              'rounded-l-none': isRangeEnd(day),
-              'bg-[--rex-gold] bg-opacity-5 text-gray-300': highlightWeekends && isWeekend(day.date) && !day.isSelected && !day.isInRange
+              'other-month': !day.isCurrentMonth,
+              'today': day.isToday,
+              'selected': day.isSelected,
+              'in-range': day.isInRange,
+              'disabled': day.isDisabled,
+              'range-start': isRangeStart(day),
+              'range-end': isRangeEnd(day),
+              'weekend': highlightWeekends && isWeekend(day.date)
             }"
             (click)="selectDay(day)"
             [attr.aria-disabled]="day.isDisabled"
-            [attr.aria-label]="formatDateForAriaLabel(day.date)"
-            [attr.aria-selected]="day.isSelected"
-            [attr.title]="day.isDisabled ? 'Date non disponible' : formatDate(day.date)"
+            [attr.title]="day.isDisabled ? 'Date non disponible' : ''"
           >
             {{ day.day }}
-            <div *ngIf="day.isDisabled" class="absolute inset-0 flex items-center justify-center">
-              <div class="absolute w-full h-px bg-red-500 opacity-30 transform rotate-[-45deg]"></div>
-            </div>
+            <div *ngIf="day.isDisabled" class="disabled-indicator"></div>
           </div>
         </div>
       </div>
     </div>
     
-    <!-- Legend -->
-    <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-[--rex-dark-gray]">
-      <div class="flex items-center gap-2">
-        <div class="w-4 h-4 rounded-sm bg-red-500 bg-opacity-5 relative">
-          <div class="absolute w-full h-px bg-red-500 opacity-30 transform rotate-[-45deg] top-1/2"></div>
-        </div>
-        <span class="text-xs text-gray-400">Non disponible</span>
+    <!-- Légende (Nouveau) -->
+    <div class="calendar-legend">
+      <div class="legend-item">
+        <div class="legend-color disabled-color"></div>
+        <span class="legend-text">Non disponible</span>
       </div>
-      <div *ngIf="highlightWeekends" class="flex items-center gap-2">
-        <div class="w-4 h-4 rounded-sm bg-[--rex-gold] bg-opacity-5"></div>
-        <span class="text-xs text-gray-400">Weekend</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <div class="w-4 h-4 rounded-sm bg-[--rex-gold] bg-opacity-20"></div>
-        <span class="text-xs text-gray-400">Plage sélectionnée</span>
+      <div class="legend-item" *ngIf="highlightWeekends">
+        <div class="legend-color weekend-color"></div>
+        <span class="legend-text">Weekend</span>
       </div>
     </div>
     
     <!-- Range Selection Info -->
-    <div *ngIf="isRange && (tempStartDate || tempEndDate)" class="flex flex-wrap justify-between mt-4 pt-4 border-t border-[--rex-dark-gray] text-sm">
-      <div *ngIf="tempStartDate" class="flex items-center mr-4">
-        <span class="font-semibold text-[--rex-gold] mr-2">{{ rangeStartLabel }}:</span>
-        <span class="text-white">{{ formatDate(tempStartDate) }}</span>
+    <div *ngIf="isRange && (tempStartDate || tempEndDate)" class="range-info">
+      <div *ngIf="tempStartDate" class="range-date">
+        <span class="range-label">{{ rangeStartLabel }}:</span>
+        <span class="range-value">{{ formatDate(tempStartDate) }}</span>
       </div>
-      <div *ngIf="tempEndDate" class="flex items-center">
-        <span class="font-semibold text-[--rex-gold] mr-2">{{ rangeEndLabel }}:</span>
-        <span class="text-white">{{ formatDate(tempEndDate) }}</span>
+      <div *ngIf="tempEndDate" class="range-date">
+        <span class="range-label">{{ rangeEndLabel }}:</span>
+        <span class="range-value">{{ formatDate(tempEndDate) }}</span>
       </div>
-      <div *ngIf="!tempEndDate && tempStartDate" class="w-full text-center text-sm text-gray-400 mt-2">
+      <div *ngIf="!tempEndDate && tempStartDate" class="range-prompt">
         Sélectionnez la date de {{ rangeEndLabel.toLowerCase() }}
       </div>
-    </div>
-    
-    <!-- Duration Display (new feature) -->
-    <div *ngIf="isRange && tempStartDate && tempEndDate" class="mt-2 text-center font-medium text-[--rex-gold]">
-      {{ getDurationText() }}
     </div>
   </div>
 </div>

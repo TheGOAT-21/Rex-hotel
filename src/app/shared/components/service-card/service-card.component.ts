@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { GalleryComponent } from '../../../../shared/components';
+import { GalleryComponent } from '..';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
   faUtensils, faSwimmingPool, faBuildingColumns, 

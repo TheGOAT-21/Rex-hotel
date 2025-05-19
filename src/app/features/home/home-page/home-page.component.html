@@ -5,44 +5,40 @@
   <!-- Hero Section with Gallery -->
   <section class="relative h-[80vh] max-h-[800px] min-h-[500px] overflow-hidden">
     <app-gallery [showThumbnails]="false" [autoPlay]="true" [autoPlayInterval]="5000"></app-gallery>
-        
+
     <!-- Overlay -->
     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-2"></div>
 
-    
-    
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
+
+
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-2 text-white shadow-text">REX HOTEL</h1>
-      <p class="text-lg md:text-xl lg:text-2xl text-[#E0C989] font-medium tracking-widest mb-6 shadow-text">ÉLÉGANCE & CONFORT</p>
-      <p class="text-base md:text-lg max-w-[600px] mx-auto shadow-text">Bénéficiez d'un traitement VIP grâce au service exclusif 4 étoiles</p>
+      <p class="text-lg md:text-xl lg:text-2xl text-[#E0C989] font-medium tracking-widest mb-6 shadow-text">ÉLÉGANCE &
+        CONFORT</p>
+      <p class="text-base md:text-lg max-w-[600px] mx-auto shadow-text">Bénéficiez d'un traitement VIP grâce au service
+        exclusif 4 étoiles</p>
     </div>
   </section>
-  
+
   <!-- Quick Booking Section -->
   <section class="bg-[#1D1D1D] py-8 relative z-10 -mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-6 uppercase tracking-wider">Réservez votre séjour</h2>
-      
+      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-6 uppercase tracking-wider">Réservez votre séjour
+      </h2>
+
       <div class="bg-[#000000] p-6 rounded shadow-xl border border-[#1D1D1D] flex flex-col md:flex-row items-end gap-4">
         <div class="w-full md:flex-2">
-          <app-datepicker 
-            [isRange]="true" 
-            [selectedDate]="startDate" 
-            [selectedEndDate]="endDate"
-            [rangeStartLabel]="'Arrivée'"
-            [rangeEndLabel]="'Départ'"
-            (rangeSelected)="onDateRangeSelected($event)"
-          ></app-datepicker>
+          <app-datepicker [isRange]="true" [selectedDate]="startDate" [selectedEndDate]="endDate"
+            [rangeStartLabel]="'Arrivée'" [rangeEndLabel]="'Départ'"
+            (rangeSelected)="onDateRangeSelected($event)"></app-datepicker>
         </div>
-        
+
         <div class="w-full md:flex-1">
           <label for="guests" class="block text-sm text-[#E0C989] mb-1">Personnes</label>
-          <select 
-            id="guests" 
+          <select id="guests"
             class="w-full bg-[#000000] border border-[#1D1D1D] rounded text-white py-3 px-4 appearance-none focus:border-[#E0C989] focus:outline-none focus:ring-1 focus:ring-[#E0C989]"
-            [(ngModel)]="selectedGuests"
-            (ngModelChange)="updateGuestCount($event)"
-          >
+            [(ngModel)]="selectedGuests" (ngModelChange)="updateGuestCount($event)">
             <option [value]="1">1 personne</option>
             <option [value]="2">2 personnes</option>
             <option [value]="3">3 personnes</option>
@@ -50,37 +46,40 @@
             <option [value]="5">5+ personnes</option>
           </select>
         </div>
-        
-        <button 
-          (click)="navigateToSearch()" 
-          class="w-full md:w-auto bg-[#E0C989] text-[#000000] font-semibold py-3 px-6 rounded uppercase tracking-wider transition-colors hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#E0C989] focus:ring-opacity-50"
-        >
+
+        <button (click)="navigateToSearch()"
+          class="w-full md:w-auto bg-[#E0C989] text-[#000000] font-semibold py-3 px-6 rounded uppercase tracking-wider transition-colors hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#E0C989] focus:ring-opacity-50">
           Rechercher
         </button>
       </div>
     </div>
   </section>
-  
+
   <!-- Featured Rooms Section -->
   <section class="py-16 bg-[#000000]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos chambres d'exception</h2>
-      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Découvrez l'élégance et le confort qui font la renommée du REX HOTEL</p>
-      
+      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos chambres
+        d'exception</h2>
+      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Découvrez l'élégance et le confort qui font la
+        renommée du REX HOTEL</p>
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let room of featuredRooms" class="transform transition-transform hover:-translate-y-2 duration-300">
+        <div *ngFor="let room of featuredRooms"
+          class="transform transition-transform hover:-translate-y-2 duration-300">
           <app-room-card [room]="room" [isFeatured]="true"></app-room-card>
         </div>
       </div>
-      
+
       <div class="text-center mt-10">
-        <a 
-          routerLink="/rooms" 
-          class="inline-flex items-center border border-[#E0C989] text-[#E0C989] hover:bg-[#E0C989] hover:text-[#000000] py-3 px-6 rounded transition-colors duration-300"
-        >
+        <a routerLink="/rooms"
+          class="inline-flex items-center border border-[#E0C989] text-[#E0C989] hover:bg-[#E0C989] hover:text-[#000000] py-3 px-6 rounded transition-colors duration-300">
           Voir toutes nos chambres
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
           </svg>
         </a>
       </div>
@@ -88,108 +87,50 @@
   </section>
 
 
-  
+
   <!-- Amenities Section-->
   <section class="py-16 bg-[#1D1D1D]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos services exclusifs</h2>
-      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Tout le nécessaire pour un séjour exceptionnel</p>
-      
+      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos services exclusifs
+      </h2>
+      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Tout le nécessaire pour un séjour exceptionnel
+      </p>
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let amenity of hotelAmenities" class="bg-[#000000] p-6 rounded shadow-lg transition-transform duration-300 hover:-translate-y-2 text-center">
-          <div class="w-16 h-16 bg-[#1D1D1D] rounded-full flex items-center justify-center text-[#E0C989] mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path *ngIf="amenity.icon === 'wifi'" d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-              <path *ngIf="amenity.icon === 'breakfast'" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-              <path *ngIf="amenity.icon === 'parking'" d="M13 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2v-7M13 3l5 5m-5-5v5h5"></path>
-              <path *ngIf="amenity.icon === 'pool'" d="M2 12h20M7 21l5-5m-5 5l5 5m3-10l5-5m-5 5l5 5"></path>
-              <path *ngIf="amenity.icon === 'restaurant'" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-              <path *ngIf="amenity.icon === 'ac'" d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"></path>
-              <path *ngIf="amenity.icon === 'tv'" d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10"></path>
-              <path *ngIf="amenity.icon === 'balcony'" d="M5 20h14 M10 12v8 M14 12v8 M10 12h4 M18 8V6a2 2 0 00-2-2H8a2 2 0 00-2 2v2"></path>
-              <path *ngIf="amenity.icon === 'conference'" d="M12 2v6M12 22v-6M4.93 10.93l4.24 4.24M14.83 10.93l-4.24 4.24M2 16h6M16 16h6"></path>
-              <path *ngIf="amenity.icon === 'meeting'" d="M12 2v6M12 22v-6M4.93 10.93l4.24 4.24M14.83 10.93l-4.24 4.24M2 16h6M16 16h6"></path>
-              <path *ngIf="amenity.icon === 'child'" d="M12 2v6M12 22v-6M4.93 10.93l4.24 4.24M14.83 10.93l-4.24 4.24M2 16h6M16 16h6"></path>
-              <path *ngIf="amenity.icon === 'terrace'" d="M3 18h12M4 15h12M5 12h12M6 9h12"></path>
-              <path *ngIf="amenity.icon === 'minibar'" d="M10 2v7.31M14 9V5a2 2 0 00-4 0v4a2 2 0 104 0zM8.5 2h7M8.5 7h7M19 11v9a2 2 0 01-2 2H7a2 2 0 01-2-2v-9l2-4h10l2 4zM6 11h12"></path>
-              <path *ngIf="amenity.icon === 'safe'" d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"></path>
-              <path *ngIf="amenity.icon === 'bathtub'" d="M4 12V5a2 2 0 012-2h12a2 2 0 012 2v7M4 12h16M2 16h20M5 21h14M12 12v3"></path>
-            </svg>
-          </div>
-          <h3 class="text-white font-medium text-xl mb-4">{{ amenity.name }}</h3>
-          <app-amenity-badge [amenity]="amenity" [size]="'large'"></app-amenity-badge>
-        </div>
+        <app-amenity-card *ngFor="let amenity of hotelAmenities" [amenity]="amenity"
+          [showDescription]="true"></app-amenity-card>
       </div>
     </div>
   </section>
-  
+
   <!-- Promotional Banner -->
   <section class="py-12 bg-[#E0C989]">
     <div class="max-w-4xl mx-auto px-4 text-center">
       <h2 class="text-3xl md:text-4xl font-bold text-[#000000] mb-3 tracking-wide">WIFI GRATUIT</h2>
-      <p class="text-xl md:text-2xl text-[#000000] font-medium">Profitez d'une connexion haut débit gratuite dans tout l'établissement</p>
+      <p class="text-xl md:text-2xl text-[#000000] font-medium">Profitez d'une connexion haut débit gratuite dans tout
+        l'établissement</p>
     </div>
   </section>
-  
+
   <!-- Testimonials Section  -->
   <section class="py-16 bg-[#000000]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-10 uppercase tracking-wider">Ce que disent nos clients</h2>
-      
+      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-10 uppercase tracking-wider">Ce que disent nos
+        clients</h2>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div *ngFor="let testimonial of testimonials" class="bg-[#1D1D1D] p-6 rounded shadow-lg border-l-4 border-[#E0C989] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-          <app-testimonial-card 
-            [testimonial]="testimonial"
-            [variant]="'default'"
-          ></app-testimonial-card>
+        <div *ngFor="let testimonial of testimonials"
+          class="bg-[#1D1D1D] p-6 rounded shadow-lg border-l-4 border-[#E0C989] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+          <app-testimonial-card [testimonial]="testimonial" [variant]="'default'"></app-testimonial-card>
         </div>
       </div>
     </div>
   </section>
-  
-  
-  <!-- CTA Section with parallax effect -->
-  <section class="py-20 bg-black bg-opacity-70 bg-blend-overlay bg-fixed bg-center bg-cover" style="background-image: url('/assets/images/hotel/cta-background.jpg')">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-[#E0C989] mb-4">Une expérience unique vous attend</h2>
-      <p class="text-xl text-white mb-10 max-w-2xl mx-auto">Réservez dès maintenant et profitez d'un séjour inoubliable au cœur de Yamoussoukro</p>
-      <a 
-        routerLink="/reservation" 
-        class="inline-block bg-[#E0C989] text-[#000000] font-semibold py-4 px-8 rounded text-lg uppercase tracking-wider transition-colors hover:bg-opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300"
-      >
-        Réserver maintenant
-      </a>
-    </div>
-  </section>
-</div>
 
 
-<div class="py-8 bg-black min-h-screen">
-  <div class="max-w-7xl mx-auto px-4">
-    <h1 class="text-4xl text-white font-bold mb-8">Démonstration du Quick Booking</h1>
-    
-    <h2 class="text-2xl text-[#E0C989] font-semibold mb-4">1. Style standard</h2>
-    <app-quick-booking></app-quick-booking>
-    
-    <h2 class="text-2xl text-[#E0C989] font-semibold mt-12 mb-4">2. Style flottant</h2>
-    <div class="relative mb-16">
-      <!-- Image de fond -->
-      <div class="h-[400px] rounded-sm overflow-hidden">
-        <img src="assets/images/ConferenceRoom/conference.png" alt="REX HOTEL" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
-        <div class="absolute inset-0 flex flex-col justify-center z-10 p-8">
-          <h3 class="text-4xl font-bold text-white mb-2">Bienvenue au REX HOTEL</h3>
-          <p class="text-xl text-white max-w-2xl">Vivez une expérience inoubliable dans notre hôtel de luxe.</p>
-        </div>
-      </div>
-      
-      <!-- Composant QuickBooking flottant -->
-      <div class="container mx-auto px-4">
-        <app-quick-booking [isFloating]="true"></app-quick-booking>
-      </div>
-    </div>
-    
-    <h2 class="text-2xl text-[#E0C989] font-semibold mt-16 mb-4">3. Style compact</h2>
-    <app-quick-booking [isCompact]="true" [showTitle]="false"></app-quick-booking>
+  <!-- CTA Section-->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <app-reservation-cta></app-reservation-cta>
   </div>
+
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { 
   BreadcrumbsComponent, 
@@ -17,6 +17,7 @@ import { RoomType, Amenity } from '../../../core/models';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterModule,
     BreadcrumbsComponent,
@@ -95,6 +96,8 @@ export class ReservationSearchComponent implements OnInit {
     }
   ];
 
+  dateRange: { start: Date | null, end: Date | null } = { start: new Date(), end: null };
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -171,9 +174,10 @@ export class ReservationSearchComponent implements OnInit {
     return this.selectedAmenities.includes(amenityId);
   }
   
-  onDateRangeSelected(range: { start: Date, end: Date | null }): void {
-    this.startDate = range.start;
-    this.endDate = range.end;
+  onDateRangeSelected(range: { start: Date | null, end: Date | null }): void {
+    if (range.start) {
+      this.dateRange = range;
+    }
   }
   
   searchRooms(): void {

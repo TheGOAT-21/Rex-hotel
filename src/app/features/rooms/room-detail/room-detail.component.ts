@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import {
   GalleryComponent,
   PriceDisplayComponent,
@@ -18,6 +19,7 @@ import { Room, RoomAvailability, RoomType } from '../../../core/models';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     GalleryComponent,
     PriceDisplayComponent,
@@ -49,6 +51,8 @@ export class RoomDetailComponent implements OnInit {
 
   averageRating: number = 4.5; // Example average rating
   reviewCount: number = 12; // Example number of reviews
+
+  dateRange: { start: Date | null, end: Date | null } = { start: new Date(), end: null };
 
   constructor(
     private route: ActivatedRoute,
@@ -125,11 +129,9 @@ export class RoomDetailComponent implements OnInit {
     });
   }
 
-  onDateRangeSelected(range: { start: Date, end: Date | null }): void {
-    this.startDate = range.start;
-    this.endDate = range.end;
-    if (this.startDate && this.endDate) {
-      this.checkAvailability();
+  onDateRangeSelected(range: { start: Date | null, end: Date | null }): void {
+    if (range.start) {
+      this.dateRange = range;
     }
   }
 

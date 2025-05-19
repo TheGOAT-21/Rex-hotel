@@ -5,9 +5,10 @@ import {
   LoadingComponent,
   BreadcrumbsComponent
 } from '../../../shared/components';
-import { ServiceCardComponent } from '../components/service-card/service-card.component';
-import { TestimonialSliderComponent } from '../components/testimonial-slider/testimonial-slider.component';
+import { ServiceCardComponent } from '../../../shared/components/service-card/service-card.component';
+import { TestimonialCardComponent } from '../../../shared/components';
 import { RoomService } from '../../../core/services/room.service';
+import { ReservationCtaComponent } from "../../../shared/components/reservation-cta/reservation-cta.component";
 
 @Component({
   selector: 'app-services-page',
@@ -18,8 +19,9 @@ import { RoomService } from '../../../core/services/room.service';
     LoadingComponent,
     BreadcrumbsComponent,
     ServiceCardComponent,
-    TestimonialSliderComponent
-  ],
+    TestimonialCardComponent,
+    ReservationCtaComponent
+],
   templateUrl: './services-page.component.html',
   styleUrl: './services-page.component.css'
 })

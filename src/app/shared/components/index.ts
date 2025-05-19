@@ -28,8 +28,6 @@ export * from './room-card/room-card.component';
 export * from './testimonial-card/testimonial-card.component';
 export * from './amenity-card/amenity-card.component';
 
-
-
 // Composants utilitaires
 export * from './loading/loading.component';
 export * from './modal/modal.component';

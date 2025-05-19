@@ -1,19 +1,19 @@
 <div 
-  class="quick-booking-container"
+  class="relative w-full"
   [ngClass]="{
-    'floating': isFloating,
+    'z-10': isFloating,
     'compact': isCompact,
     'expanded': isExpanded
   }"
 >
   <!-- Container -->
   <div 
-    class="bg-[#1D1D1D] rounded-sm shadow-xl border border-[#1D1D1D] overflow-hidden transition-all duration-300"
+    class="bg-[--rex-dark-gray] rounded-sm shadow-xl border border-[--rex-dark-gray] overflow-hidden transition-all duration-300"
     [ngClass]="isFloating ? 'lg:backdrop-blur-sm lg:bg-opacity-90' : ''"
   >
     <!-- Title -->
-    <div *ngIf="showTitle" class="px-6 py-4 bg-black bg-opacity-50 border-b border-[#1D1D1D]">
-      <h2 class="text-xl font-semibold text-[#E0C989] text-center">Réservez votre séjour</h2>
+    <div *ngIf="showTitle" class="px-6 py-4 bg-[--rex-black] bg-opacity-50 border-b border-[--rex-dark-gray]">
+      <h2 class="text-xl font-semibold text-[--rex-gold] text-center">Réservez votre séjour</h2>
     </div>
     
     <!-- Form Content -->
@@ -21,7 +21,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
         <!-- Dates Selection -->
         <div class="col-span-1" [ngClass]="{'lg:col-span-2': isCompact && showRoomType}">
-          <label class="block text-[#E0C989] text-sm font-medium mb-2 flex items-center">
+          <label class="block text-[--rex-gold] text-sm font-medium mb-2 flex items-center">
             <fa-icon [icon]="faCalendarAlt" class="mr-2"></fa-icon>
             Dates
           </label>
@@ -38,7 +38,7 @@
         
         <!-- Guests Selection -->
         <div>
-          <label for="guests" class="block text-[#E0C989] text-sm font-medium mb-2 flex items-center">
+          <label for="guests" class="block text-[--rex-gold] text-sm font-medium mb-2 flex items-center">
             <fa-icon [icon]="faUser" class="mr-2"></fa-icon>
             Personnes
           </label>
@@ -46,21 +46,21 @@
             <select 
               id="guests" 
               [(ngModel)]="selectedGuests"
-              class="w-full bg-black border border-[#1D1D1D] rounded-sm text-white py-3 px-4 appearance-none focus:border-[#E0C989] focus:outline-none focus:ring-1 focus:ring-[#E0C989]"
+              class="w-full bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white py-3 px-4 appearance-none focus:border-[--rex-gold] focus:outline-none focus:ring-1 focus:ring-[--rex-gold]"
             >
               <option *ngFor="let i of [1,2,3,4,5,6]" [value]="i">
                 {{ i }} {{ i > 1 ? 'personnes' : 'personne' }}
               </option>
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <fa-icon [icon]="faChevronDown" class="text-[#E0C989]"></fa-icon>
+              <fa-icon [icon]="faChevronDown" class="text-[--rex-gold]"></fa-icon>
             </div>
           </div>
         </div>
         
         <!-- Room Type Selection (optional) -->
         <div *ngIf="showRoomType">
-          <label for="roomType" class="block text-[#E0C989] text-sm font-medium mb-2 flex items-center">
+          <label for="roomType" class="block text-[--rex-gold] text-sm font-medium mb-2 flex items-center">
             <fa-icon [icon]="faBed" class="mr-2"></fa-icon>
             Type de chambre
           </label>
@@ -68,12 +68,12 @@
             <select 
               id="roomType" 
               [(ngModel)]="selectedRoomType"
-              class="w-full bg-black border border-[#1D1D1D] rounded-sm text-white py-3 px-4 appearance-none focus:border-[#E0C989] focus:outline-none focus:ring-1 focus:ring-[#E0C989]"
+              class="w-full bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white py-3 px-4 appearance-none focus:border-[--rex-gold] focus:outline-none focus:ring-1 focus:ring-[--rex-gold]"
             >
               <option *ngFor="let type of roomTypes" [value]="type.id">{{ type.name }}</option>
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <fa-icon [icon]="faChevronDown" class="text-[#E0C989]"></fa-icon>
+              <fa-icon [icon]="faChevronDown" class="text-[--rex-gold]"></fa-icon>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@
         <div>
           <button 
             (click)="searchRooms()" 
-            class="w-full bg-[#E0C989] text-[#000000] font-semibold py-3 px-6 rounded-sm hover:bg-opacity-90 transition-colors duration-300 flex items-center justify-center"
+            class="w-full bg-[--rex-gold] text-[--rex-black] font-semibold py-3 px-6 rounded-sm hover:bg-opacity-90 transition-colors duration-300 flex items-center justify-center"
           >
             <fa-icon [icon]="faSearch" class="mr-2"></fa-icon>
             <span>Rechercher</span>
@@ -94,7 +94,7 @@
       <div class="md:hidden mt-4 text-center">
         <button 
           (click)="toggleExpand()" 
-          class="text-[#E0C989] text-sm focus:outline-none"
+          class="text-[--rex-gold] text-sm focus:outline-none"
         >
           {{ isExpanded ? 'Masquer les options' : 'Plus d\'options' }}
           <fa-icon [icon]="faChevronDown" class="ml-1 transition-transform duration-300" [ngClass]="{'transform rotate-180': isExpanded}"></fa-icon>
@@ -104,10 +104,11 @@
       <!-- Additional Options for Mobile (when expanded) -->
       <div 
         *ngIf="isExpanded && isCompact" 
-        class="mt-4 md:hidden grid grid-cols-1 gap-4 animate-fadeIn"
+        class="mt-4 md:hidden grid grid-cols-1 gap-4 opacity-0 transform -translate-y-2 transition duration-300"
+        [ngClass]="{'opacity-100 translate-y-0': isExpanded}"
       >
         <div *ngIf="!showRoomType">
-          <label for="mobileRoomType" class="block text-[#E0C989] text-sm font-medium mb-2 flex items-center">
+          <label for="mobileRoomType" class="block text-[--rex-gold] text-sm font-medium mb-2 flex items-center">
             <fa-icon [icon]="faBed" class="mr-2"></fa-icon>
             Type de chambre
           </label>
@@ -115,12 +116,12 @@
             <select 
               id="mobileRoomType" 
               [(ngModel)]="selectedRoomType"
-              class="w-full bg-black border border-[#1D1D1D] rounded-sm text-white py-3 px-4 appearance-none focus:border-[#E0C989] focus:outline-none focus:ring-1 focus:ring-[#E0C989]"
+              class="w-full bg-[--rex-black] border border-[--rex-dark-gray] rounded-sm text-white py-3 px-4 appearance-none focus:border-[--rex-gold] focus:outline-none focus:ring-1 focus:ring-[--rex-gold]"
             >
               <option *ngFor="let type of roomTypes" [value]="type.id">{{ type.name }}</option>
             </select>
             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <fa-icon [icon]="faChevronDown" class="text-[#E0C989]"></fa-icon>
+              <fa-icon [icon]="faChevronDown" class="text-[--rex-gold]"></fa-icon>
             </div>
           </div>
         </div>
@@ -131,6 +132,6 @@
   <!-- Decorative element for floating variant -->
   <div 
     *ngIf="isFloating" 
-    class="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#E0C989] via-[#E0C989] to-[#E0C989] opacity-70"
+    class="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[--rex-gold] via-[--rex-gold] to-[--rex-gold] opacity-70"
   ></div>
 </div>
