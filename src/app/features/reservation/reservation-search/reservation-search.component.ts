@@ -5,10 +5,16 @@ import {
   BreadcrumbsComponent, 
   AmenityCardComponent,
   FilterComponent,
-  LoadingComponent
+  LoadingComponent,
+  RoomCardComponent
 } from '../../../shared/components';
 import { RoomService } from '../../../core/services/room.service';
-import { RoomFilter, RoomType, Amenity } from '../../../core/models';
+import { RoomFilter, Room } from '../../../core/models';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { 
+  faSearch, faUser, faBed, faChevronDown, faChevronUp
+} from '@fortawesome/free-solid-svg-icons';
+import { PaginationComponent } from "../../../shared/components/pagination/pagination.component";
 
 @Component({
   selector: 'app-reservation-search',
@@ -19,14 +25,27 @@ import { RoomFilter, RoomType, Amenity } from '../../../core/models';
     BreadcrumbsComponent,
     AmenityCardComponent,
     FilterComponent,
-    LoadingComponent
-  ],
+    LoadingComponent,
+    RoomCardComponent,
+    FontAwesomeModule,
+    PaginationComponent
+],
   templateUrl: './reservation-search.component.html',
   styleUrl: './reservation-search.component.css'
 })
 export class ReservationSearchComponent implements OnInit {
   isLoading: boolean = false;
   currentFilter: RoomFilter = {};
+  filteredRooms: Room[] = [];
+  hasSearched: boolean = false;
+  totalRooms: number = 0;
+  
+  // Font Awesome icons
+  faSearch = faSearch;
+  faUser = faUser;
+  faBed = faBed;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
   
   // Services mis en avant
   featuredServices = [
@@ -103,58 +122,46 @@ export class ReservationSearchComponent implements OnInit {
       views: [],
       bedTypes: [],
       hasBalcony: undefined,
-      floor: undefined
+      floor: undefined,
+      page: 1,
+      limit: 6
     };
   }
   
   onFilterChange(filter: RoomFilter): void {
-    this.currentFilter = filter;
+    this.currentFilter = {
+      ...filter,
+      page: 1, // Réinitialiser à la première page lors d'un changement de filtre
+      limit: 6
+    };
     this.searchRooms();
   }
   
   searchRooms(): void {
     this.isLoading = true;
+    this.hasSearched = true;
     
-    // Préparer les paramètres de recherche pour la navigation
-    const queryParams: any = {};
+    this.roomService.getAllRooms(this.currentFilter).subscribe({
+      next: (response) => {
+        this.filteredRooms = response.items;
+        this.totalRooms = response.total;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la recherche des chambres:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+  
+  onPageChange(page: number): void {
+    this.currentFilter.page = page;
+    this.searchRooms();
     
-    // Ajouter les dates si disponibles
-    if (this.currentFilter.startDate && this.currentFilter.endDate) {
-      queryParams.startDate = this.currentFilter.startDate.toISOString();
-      queryParams.endDate = this.currentFilter.endDate.toISOString();
-    }
-    
-    // Ajouter le nombre de personnes
-    if (this.currentFilter.capacityMin) {
-      queryParams.guests = this.currentFilter.capacityMin;
-    }
-    
-    // Ajouter le type de chambre
-    if (this.currentFilter.types && this.currentFilter.types.length > 0) {
-      queryParams.type = this.currentFilter.types[0];
-    }
-    
-    // Ajouter le prix maximum
-    if (this.currentFilter.priceMax) {
-      queryParams.maxPrice = this.currentFilter.priceMax;
-    }
-    
-    // Ajouter le balcon
-    if (this.currentFilter.hasBalcony !== undefined) {
-      queryParams.balcony = this.currentFilter.hasBalcony;
-    }
-    
-    // Ajouter les équipements
-    if (this.currentFilter.amenities && this.currentFilter.amenities.length > 0) {
-      queryParams.amenities = this.currentFilter.amenities.join(',');
-    }
-    
-    // Simuler un délai de recherche
+    // Scroll vers les résultats
     setTimeout(() => {
-      this.isLoading = false;
-      // Rediriger vers la page de résultats avec les paramètres
-      this.router.navigate(['/rooms'], { queryParams });
-    }, 1000);
+      document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   }
   
   toggleFaq(index: number): void {
