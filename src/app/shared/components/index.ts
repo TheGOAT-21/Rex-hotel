@@ -28,6 +28,8 @@ export * from './rating/rating.component';
 export * from './room-card/room-card.component';
 export * from './testimonial-card/testimonial-card.component';
 export * from './amenity-card/amenity-card.component';
+export * from './service-card/service-card.component';
+export * from './reservation-cta/reservation-cta.component';
 
 // Composants utilitaires
 export * from './loading/loading.component';

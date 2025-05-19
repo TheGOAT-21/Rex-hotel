@@ -1,0 +1,62 @@
+:host {
+    --rex-gold: #E0C989;
+    --rex-black: #000000;
+    --rex-dark-gray: #1D1D1D;
+    --rex-beige: #F5EFE0;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .rex-overlay {
+    background: linear-gradient(to bottom, 
+      rgba(0, 0, 0, 0.3) 0%, 
+      rgba(0, 0, 0, 0.7) 50%, 
+      rgba(0, 0, 0, 0.9) 100%);
+  }
+  
+  .text-rex-gold {
+    color: var(--rex-gold);
+  }
+  
+  .text-rex-black {
+    color: var(--rex-black);
+  }
+  
+  .text-rex-beige {
+    color: var(--rex-beige);
+  }
+  
+  .bg-rex-gold {
+    background-color: var(--rex-gold);
+  }
+  
+  .bg-rex-black {
+    background-color: var(--rex-black);
+  }
+  
+  .bg-rex-dark-gray {
+    background-color: var(--rex-dark-gray);
+  }
+  
+  .border-rex-gold {
+    border-color: var(--rex-gold);
+  }
+  
+  .hover\:bg-rex-beige:hover {
+    background-color: var(--rex-beige);
+  }
+  
+  .hover\:text-rex-gold:hover {
+    color: var(--rex-gold);
+  }
+  
+  .focus\:ring-rex-gold:focus {
+    --tw-ring-color: var(--rex-gold);
+  }

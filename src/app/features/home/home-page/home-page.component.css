@@ -5,35 +5,28 @@
   --rex-beige: #F5EFE0;
 }
 
-.shadow-text {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
+.bg-rex-gold { background-color: var(--rex-gold); }
+.bg-rex-black { background-color: var(--rex-black); }
+.bg-rex-dark-gray { background-color: var(--rex-dark-gray); }
+.bg-rex-beige { background-color: var(--rex-beige); }
 
-/* Custom styling for gallery component */
-:host ::ng-deep .gallery-container .main-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.text-rex-gold { color: var(--rex-gold); }
+.text-rex-black { color: var(--rex-black); }
+.text-rex-dark-gray { color: var(--rex-dark-gray); }
+.text-rex-beige { color: var(--rex-beige); }
 
-:host ::ng-deep .gallery-container .gallery-controls {
-  z-index: 10;
-}
+.border-rex-gold { border-color: var(--rex-gold); }
+.border-rex-black { border-color: var(--rex-black); }
+.border-rex-dark-gray { border-color: var(--rex-dark-gray); }
+.border-rex-beige { border-color: var(--rex-beige); }
 
-/* Custom styling for datepicker */
-:host ::ng-deep .datepicker-container {
-  width: 100%;
-}
+/* Classes pour les états de survol */
+.hover\:bg-rex-gold:hover { background-color: var(--rex-gold); }
+.hover\:bg-rex-black:hover { background-color: var(--rex-black); }
+.hover\:bg-rex-dark-gray:hover { background-color: var(--rex-dark-gray); }
+.hover\:bg-rex-beige:hover { background-color: var(--rex-beige); }
 
-/* Custom styling for room cards */
-:host ::ng-deep .room-card:hover {
-  transform: translateY(-8px);
-  transition: transform 0.3s ease;
-}
-
-/* Custom styling for amenity badges */
-:host ::ng-deep .amenity-badge {
-  background-color: rgba(224, 201, 137, 0.1);
-  border: 1px solid rgba(224, 201, 137, 0.3);
-  color: var(--rex-gold);
-}
+.hover\:text-rex-gold:hover { color: var(--rex-gold); }
+.hover\:text-rex-black:hover { color: var(--rex-black); }
+.hover\:text-rex-dark-gray:hover { color: var(--rex-dark-gray); }
+.hover\:text-rex-beige:hover { color: var(--rex-beige); }

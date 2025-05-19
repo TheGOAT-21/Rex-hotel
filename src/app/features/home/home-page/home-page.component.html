@@ -1,67 +1,77 @@
-<div class="bg-[#000000] text-white min-h-screen">
+<div [ngClass]="'bg-rex-black text-rex-beige min-h-screen'">
   <!-- Loading Screen -->
   <app-loading *ngIf="isLoading" [fullScreen]="true" [overlay]="true" message="Chargement..."></app-loading>
 
-  <!-- Hero Section with Gallery -->
-  <section class="relative md:h-[80vh] max-h-[900px] min-h-[387px] overflow-hidden">
-    <app-gallery [showThumbnails]="false" [autoPlay]="true" [autoPlayInterval]="5000"></app-gallery>
 
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-2"></div>
+  <!-- Hero Section -->
+  <app-hero-banner title="REX HOTEL" subtitle="Découvrez l'élégance et le confort au cœur de Yamoussoukro"
+    tagline="ÉLÉGANCE & CONFORT" imageUrl="assets/images/hotel/exterior.jpg" primaryButtonText="RÉSERVER MAINTENANT"
+    primaryButtonLink="/reservation" secondaryButtonText="DÉCOUVRIR" secondaryButtonLink="/rooms">
+  </app-hero-banner>
 
-
-
-    <div
-      class="absolute top-1/2 md:top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-[90%] max-w-[800px]">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-2 text-white shadow-text">REX HOTEL</h1>
-      <p class="text-lg md:text-xl lg:text-2xl text-[#E0C989] font-medium tracking-widest mb-6 shadow-text">ÉLÉGANCE &
-        CONFORT</p>
-      <p class="text-base md:text-lg max-w-[600px] mx-auto shadow-text">Bénéficiez d'un traitement VIP grâce au service
-        exclusif 4 étoiles</p>
-    </div>
-  </section>
-
-  <!-- Quick Booking Section -->
-  <section class="bg-[#1D1D1D] py-8 relative z-10 -mt-12">
+  <!-- Feature Showcase -->
+  <section class="pt-16 pb-8" [ngClass]="'bg-rex-dark-gray'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-6 uppercase tracking-wider">Réservez votre séjour
-      </h2>
 
-      <div class="bg-[#000000] p-6 rounded shadow-xl border border-[#1D1D1D] flex flex-col md:flex-row items-end gap-4">
-        <div class="w-full md:flex-2">
-          <app-datepicker [isRange]="true" [selectedDate]="startDate" [selectedEndDate]="endDate"
-            [rangeStartLabel]="'Arrivée'" [rangeEndLabel]="'Départ'"
-            (rangeSelected)="onDateRangeSelected($event)"></app-datepicker>
+      <div class="flex flex-wrap -mx-4">
+        <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+          <div class="text-center p-6 rounded-lg h-full" [ngClass]="'bg-rex-black'">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+              [ngClass]="'bg-rex-dark-gray'">
+              <span class="text-2xl font-bold" [ngClass]="'text-rex-gold'">84</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" [ngClass]="'text-rex-gold'">Chambres luxueuses</h3>
+            <p class="opacity-80" [ngClass]="'text-rex-beige'">Des espaces élégants et confortables avec toutes les
+              commodités modernes.</p>
+          </div>
         </div>
 
-        <div class="w-full md:flex-1">
-          <label for="guests" class="block text-sm text-[#E0C989] mb-1">Personnes</label>
-          <select id="guests"
-            class="w-full bg-[#000000] border border-[#1D1D1D] rounded text-white py-3 px-4 appearance-none focus:border-[#E0C989] focus:outline-none focus:ring-1 focus:ring-[#E0C989]"
-            [(ngModel)]="selectedGuests" (ngModelChange)="updateGuestCount($event)">
-            <option [value]="1">1 personne</option>
-            <option [value]="2">2 personnes</option>
-            <option [value]="3">3 personnes</option>
-            <option [value]="4">4 personnes</option>
-            <option [value]="5">5+ personnes</option>
-          </select>
+        <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+          <div class="text-center p-6 rounded-lg h-full" [ngClass]="'bg-rex-black'">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+              [ngClass]="'bg-rex-dark-gray'">
+              <span class="text-2xl font-bold" [ngClass]="'text-rex-gold'">3</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" [ngClass]="'text-rex-gold'">Restaurants gastronomiques</h3>
+            <p class="opacity-80" [ngClass]="'text-rex-beige'">Une expérience culinaire exceptionnelle avec une cuisine
+              locale et internationale.</p>
+          </div>
         </div>
 
-        <button (click)="navigateToSearch()"
-          class="w-full md:w-auto bg-[#E0C989] text-[#000000] font-semibold py-3 px-6 rounded uppercase tracking-wider transition-colors hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#E0C989] focus:ring-opacity-50">
-          Rechercher
-        </button>
+        <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+          <div class="text-center p-6 rounded-lg h-full" [ngClass]="'bg-rex-black'">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+              [ngClass]="'bg-rex-dark-gray'">
+              <span class="text-2xl font-bold" [ngClass]="'text-rex-gold'">8</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" [ngClass]="'text-rex-gold'">Salles événementielles</h3>
+            <p class="opacity-80" [ngClass]="'text-rex-beige'">Des espaces modernes et flexibles pour vos réunions et
+              célébrations.</p>
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+          <div class="text-center p-6 rounded-lg h-full" [ngClass]="'bg-rex-black'">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+              [ngClass]="'bg-rex-dark-gray'">
+              <span class="text-2xl font-bold" [ngClass]="'text-rex-gold'">5</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" [ngClass]="'text-rex-gold'">Bars & Lounges</h3>
+            <p class="opacity-80" [ngClass]="'text-rex-beige'">Des espaces élégants pour vous détendre et savourer des
+              boissons raffinées.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Featured Rooms Section -->
-  <section class="py-16 bg-[#000000]">
+  <section class="py-16" [ngClass]="'bg-rex-black'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos chambres
-        d'exception</h2>
-      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Découvrez l'élégance et le confort qui font la
-        renommée du REX HOTEL</p>
+      <h2 class="text-center text-2xl font-semibold mb-2 uppercase tracking-wider" [ngClass]="'text-rex-gold'">Nos
+        chambres d'exception</h2>
+      <p class="text-center text-lg max-w-3xl mx-auto mb-12" [ngClass]="'text-rex-beige'">Découvrez l'élégance et le
+        confort qui font la renommée du REX HOTEL</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div *ngFor="let room of featuredRooms"
@@ -72,7 +82,7 @@
 
       <div class="text-center mt-10">
         <a routerLink="/rooms"
-          class="inline-flex items-center border border-[#E0C989] text-[#E0C989] hover:bg-[#E0C989] hover:text-[#000000] py-3 px-6 rounded transition-colors duration-300">
+          [ngClass]="'inline-flex items-center border border-rex-gold text-rex-gold hover:bg-rex-gold hover:text-rex-black py-3 px-6 rounded transition-colors duration-300'">
           Voir toutes nos chambres
           <svg xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 20 20"
@@ -86,15 +96,13 @@
     </div>
   </section>
 
-
-
   <!-- Amenities Section-->
-  <section class="py-16 bg-[#1D1D1D]">
+  <section class="py-16" [ngClass]="'bg-rex-dark-gray'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-2 uppercase tracking-wider">Nos services exclusifs
-      </h2>
-      <p class="text-center text-lg text-white max-w-3xl mx-auto mb-12">Tout le nécessaire pour un séjour exceptionnel
-      </p>
+      <h2 class="text-center text-2xl font-semibold mb-2 uppercase tracking-wider" [ngClass]="'text-rex-gold'">Nos
+        services exclusifs</h2>
+      <p class="text-center text-lg max-w-3xl mx-auto mb-12" [ngClass]="'text-rex-beige'">Tout le nécessaire pour un
+        séjour exceptionnel</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <app-amenity-card *ngFor="let amenity of hotelAmenities" [amenity]="amenity"
@@ -104,33 +112,31 @@
   </section>
 
   <!-- Promotional Banner -->
-  <section class="py-12 bg-[#E0C989]">
+  <section class="py-12" [ngClass]="'bg-rex-gold'">
     <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-[#000000] mb-3 tracking-wide">WIFI GRATUIT</h2>
-      <p class="text-xl md:text-2xl text-[#000000] font-medium">Profitez d'une connexion haut débit gratuite dans tout
-        l'établissement</p>
+      <h2 class="text-3xl md:text-4xl font-bold mb-3 tracking-wide" [ngClass]="'text-rex-black'">WIFI GRATUIT</h2>
+      <p class="text-xl md:text-2xl font-medium" [ngClass]="'text-rex-black'">Profitez d'une connexion haut débit
+        gratuite dans tout l'établissement</p>
     </div>
   </section>
 
   <!-- Testimonials Section  -->
-  <section class="py-16 bg-[#000000]">
+  <section class="py-16" [ngClass]="'bg-rex-black'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-2xl font-semibold text-[#E0C989] mb-10 uppercase tracking-wider">Ce que disent nos
-        clients</h2>
+      <h2 class="text-center text-2xl font-semibold mb-10 uppercase tracking-wider" [ngClass]="'text-rex-gold'">Ce que
+        disent nos clients</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let testimonial of testimonials"
-          class="bg-[#1D1D1D] p-6 rounded shadow-lg border-l-4 border-[#E0C989] transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+          [ngClass]="'bg-rex-dark-gray p-6 rounded shadow-lg border-l-4 border-rex-gold transition-all duration-300 hover:shadow-xl hover:-translate-y-1'">
           <app-testimonial-card [testimonial]="testimonial" [variant]="'default'"></app-testimonial-card>
         </div>
       </div>
     </div>
   </section>
 
-
   <!-- CTA Section-->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
     <app-reservation-cta></app-reservation-cta>
   </div>
-
 </div>

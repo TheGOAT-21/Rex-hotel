@@ -23,6 +23,11 @@ export const routes: Routes = [
         title: 'Nos Services | REX HOTEL'
       },
       {
+        path: 'services/:id',
+        loadComponent: () => import('./features/services/service-detail/service-detail.component').then(c => c.ServiceDetailComponent),
+        title: 'Service | REX HOTEL'
+      },
+      {
         path: 'contact',
         loadComponent: () => import('./features/contact/contact-page/contact-page.component').then(c => c.ContactPageComponent),
         title: 'Contact | REX HOTEL'

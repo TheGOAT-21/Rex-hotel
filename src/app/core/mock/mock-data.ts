@@ -59,7 +59,7 @@ export const ROOMS: Room[] = [
   },
   {
     id: '2',
-    name: 'Chambre Deluxe',
+    name: 'Chambre  de luxe',
     type: 'deluxe',
     price: 150,
     capacity: 2,
@@ -119,7 +119,7 @@ export const ROOMS: Room[] = [
   },
   {
     id: '4',
-    name: 'Suite Deluxe',
+    name: 'Suite de luxe',
     type: 'suite',
     price: 200,
     capacity: 2,

@@ -1,0 +1,122 @@
+<div class="bg-black min-h-screen text-white pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <!-- Breadcrumbs -->
+        <div class="mb-6">
+            <app-breadcrumbs [items]="breadcrumbs"></app-breadcrumbs>
+        </div>
+
+        <!-- Loading state -->
+        <div *ngIf="isLoading" class="flex justify-center py-20">
+            <app-loading [size]="'large'" [message]="'Chargement du service...'"></app-loading>
+        </div>
+
+        <!-- Service detail content -->
+        <div *ngIf="!isLoading && service" class="service-detail">
+
+            <div class="flex justify-between items-center pb-6">
+                <!-- Service header -->
+                <div>
+                    <h1 class="text-3xl font-bold text-[#E0C989] mb-2">{{ service.name }}</h1>
+                </div>
+
+                <!-- Back button -->
+                <div>
+                    <a routerLink="/services"
+                        class="inline-flex items-center text-white hover:text-[#E0C989] transition-colors duration-200">
+                        <fa-icon [icon]="faArrowLeft" class="mr-2"></fa-icon>
+                        Retour à tous les services
+                    </a>
+                </div>
+            </div>
+
+            <!-- Image gallery -->
+            <div class="mb-10">
+                <app-gallery [images]="service.images" [showThumbnails]="true" [enableKeyboardNavigation]="true"
+                    [autoPlay]="false" [zoomEnabled]="true"></app-gallery>
+            </div>
+
+            <!-- Service info grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Description and features -->
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-semibold text-[#E0C989] mb-4">Description</h2>
+                    <p class="text-white mb-8 leading-relaxed">{{ service.description }}</p>
+
+                    <!-- Features -->
+                    <div *ngIf="service.features && service.features.length > 0">
+                        <h2 class="text-2xl font-semibold text-[#E0C989] mb-4">Caractéristiques</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div *ngFor="let feature of service.features" class="flex items-start">
+                                <fa-icon [icon]="faCheck" class="text-[#E0C989] mt-1 mr-3 flex-shrink-0"></fa-icon>
+                                <span>{{ feature }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service details sidebar -->
+                <div>
+                    <div class="bg-[#1D1D1D] p-6 rounded-sm border border-[#1D1D1D] shadow-lg">
+                        <h3 class="text-xl font-semibold text-[#E0C989] mb-4">Informations</h3>
+
+                        <div class="space-y-4">
+                            <!-- Opening hours -->
+                            <div *ngIf="service.openingHours" class="flex items-start">
+                                <fa-icon [icon]="faClock" class="text-[#E0C989] mt-1 mr-3 flex-shrink-0"></fa-icon>
+                                <div>
+                                    <p class="font-medium">Horaires d'ouverture</p>
+                                    <p class="text-gray-400">{{ service.openingHours }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Capacity -->
+                            <div *ngIf="service.capacity" class="flex items-start">
+                                <fa-icon [icon]="faUsers" class="text-[#E0C989] mt-1 mr-3 flex-shrink-0"></fa-icon>
+                                <div>
+                                    <p class="font-medium">Capacité</p>
+                                    <p class="text-gray-400">{{ service.capacity }} personnes</p>
+                                </div>
+                            </div>
+
+                            <!-- Location info -->
+                            <div class="flex items-start">
+                                <fa-icon [icon]="faBuilding" class="text-[#E0C989] mt-1 mr-3 flex-shrink-0"></fa-icon>
+                                <div>
+                                    <p class="font-medium">Emplacement</p>
+                                    <p class="text-gray-400">REX HOTEL - Yamoussoukro</p>
+                                </div>
+                            </div>
+
+                            <!-- Contact info -->
+                            <div class="pt-4 mt-4 border-t border-gray-800">
+                                <p class="text-center">Pour plus d'informations ou pour une réservation,<br>veuillez
+                                    contacter notre équipe</p>
+                                <a href="tel:+22527306450"
+                                    class="block text-center mt-4 py-3 px-4 bg-[#E0C989] text-black font-medium rounded-sm hover:bg-opacity-90 transition-colors duration-300">
+                                    Contacter +225 27 30 64 50 50
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related services -->
+            <div *ngIf="relatedServices && relatedServices.length > 0" class="mb-16">
+                <h2 class="text-2xl font-semibold text-[#E0C989] mb-6">Services similaires</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div *ngFor="let relatedService of relatedServices"
+                        class="transform transition-transform hover:-translate-y-2 duration-300">
+                        <app-service-card [service]="relatedService" [showDetails]="true"
+                            [orientation]="'vertical'"></app-service-card>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <app-reservation-cta [title]="'Prêt à profiter de votre séjour?'"
+                [description]="'Découvrez nos chambres luxueuses et réservez votre séjour dès maintenant pour profiter de tous nos services exceptionnels.'"
+                [buttonText]="'Réserver une chambre'" [buttonLink]="'/rooms'"></app-reservation-cta>
+        </div>
+    </div>
+</div>

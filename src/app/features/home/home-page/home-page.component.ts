@@ -15,6 +15,7 @@ import { RoomService } from '../../../core/services/room.service';
 import { Room, Amenity, Testimonial } from '../../../core/models';
 import { ROOMS, AMENITIES, TESTIMONIALS } from '../../../core/mock/mock-data';
 import { ReservationCtaComponent } from "../../../shared/components/reservation-cta/reservation-cta.component";
+import { HeroBannerComponent } from "../components/hero-banner/hero-banner.component";
 
 @Component({
   selector: 'app-home-page',
@@ -23,13 +24,12 @@ import { ReservationCtaComponent } from "../../../shared/components/reservation-
     CommonModule,
     RouterModule,
     FormsModule,
-    GalleryComponent,
     RoomCardComponent,
     LoadingComponent,
-    DatepickerComponent,
     TestimonialCardComponent,
     AmenityCardComponent,
-    ReservationCtaComponent
+    ReservationCtaComponent,
+    HeroBannerComponent
 ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'

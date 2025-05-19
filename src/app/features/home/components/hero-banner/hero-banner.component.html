@@ -1,1 +1,60 @@
-<p>hero-banner works!</p>
+<section 
+  class="relative hero-section"
+  [ngClass]="{'h-screen': fullHeight, 'h-96 md:h-140': !fullHeight}"
+>
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img [src]="imageUrl" [alt]="title" class="w-full h-full object-cover">
+    
+    <!-- Dark Overlay pour meilleure lisibilité -->
+    <div class="absolute inset-0 rex-overlay"></div>
+  </div>
+  
+  <!-- Hero Content -->
+  <div class="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center text-center">
+    <div class="animate-fadeIn">
+      <div *ngIf="tagline" class="text-rex-gold font-semibold text-xl mb-4 drop-shadow-lg">{{ tagline }}</div>
+      
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-title font-bold text-rex-gold mb-6 drop-shadow-lg">{{ title }}</h1>
+      
+      <p *ngIf="subtitle" class="text-rex-beige text-lg md:text-2xl max-w-3xl mx-auto mb-10 drop-shadow-lg font-light">{{ subtitle }}</p>
+      
+      <!-- CTA Buttons -->
+      <div *ngIf="primaryButtonText || secondaryButtonText" class="flex flex-col sm:flex-row justify-center gap-6">
+        <a 
+          *ngIf="primaryButtonText" 
+          [routerLink]="primaryButtonLink || '/'" 
+          class="bg-rex-gold text-rex-black font-bold uppercase px-8 py-4 rounded hover:bg-rex-beige transition-colors text-lg shadow-lg"
+        >
+          {{ primaryButtonText }}
+        </a>
+        
+        <a 
+          *ngIf="secondaryButtonText" 
+          [routerLink]="secondaryButtonLink || '/'" 
+          class="bg-rex-black/20 backdrop-blur-sm text-rex-beige border-2 border-rex-gold font-bold uppercase px-8 py-4 rounded hover:bg-rex-gold/30 transition-colors text-lg shadow-lg"
+        >
+          {{ secondaryButtonText }}
+        </a>
+      </div>
+      
+      <!-- Optional Content Slot -->
+      <div class="mt-10">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator (only if fullHeight) -->
+  <div *ngIf="fullHeight && showScrollIndicator" class="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+    <button 
+      (click)="scrollDown()" 
+      class="text-rex-beige hover:text-rex-gold focus:outline-none focus:ring-2 focus:ring-rex-gold rounded-full p-2 transition-colors bg-rex-black/30 backdrop-blur-sm"
+      aria-label="Scroll down"
+    >
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </button>
+  </div>
+</section>
